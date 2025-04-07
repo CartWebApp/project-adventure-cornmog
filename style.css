@@ -1,8 +1,15 @@
-/* To change the background to black to have a white border */
+/* To change the background to black and to have a white border */
 body{
      background-color:  black;
 }
+
+#imgResize{
+     width: 100px;
+     height: 100px;
+}
+
 #imagebox{
+border-color: bold white 100px;
 
     
 }
