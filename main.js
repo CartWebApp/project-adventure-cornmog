@@ -44,7 +44,7 @@ const enemyCombat = {
         { name: "slash", type: "damage", amount: 2 },
         { name: "dodge", type: "evasion", turns: 2 }
     ], 
-    tarantulaMoves: [
+    tarantulaMoves: [   
         { name: "bite", type: "damage", amount: 15 },
         { name: "poison2", type: "damage", amount: 10, poison: true }
     ],

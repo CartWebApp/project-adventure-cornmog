@@ -1,5 +1,7 @@
+@import url("https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap");
+
 /* To change the background to black and to have a white border */
-body{
+:root{
      background-color:  black;
 }
 
@@ -8,29 +10,81 @@ body{
      height: 100px;
 }
 
-#imagebox{
+#imageBox{
+     padding: 18rem;
+     margin-right: 6rem;
+     margin-left: 6rem;
+     border-top: 5px solid white;
+     border-bottom: 5px solid white;
+     border-right: 5px solid white;
+     border-left: 5px solid white;
 
-border-color: bold white 100px;
-
-    
 }
 
-#interface{
+#interFace{
 
 }
 #dialogueBox{
-
-
+     margin-top: -6.5rem;
+     margin-right: 10rem;
+     margin-left: 10rem;
+     padding: 9rem;
+     border-top: 5px solid white;
+     border-bottom: 5px solid white;
+     border-right: 5px solid white;
+     border-left: 5px solid white;
 }
 
 #actionsBox{
+     margin-top: 2rem;
+     display: flex;
+     justify-content: space-around;
+}
+#actionsBox button{
+     /* TEXT STYLING */
+     color: white;
+     font-family: "Pixelify Sans", sans-serif;
+     font-size: 40px;
 
+     /* BUTTON STYLING */
+     background-color: green;
+     padding: 3rem;
+     padding-left: 7rem;
+     padding-right: 7rem;
 }
 
-#act{
+#actionsBox button:hover{
+     transition-duration: 0.2s;
+     color: black;
+     background-color: yellow;
+}
 
+#actionsBox button:focus{
+     transition-duration: 0.2s;
+     color: black;
+     background-color: yellow;
+     border: 2px solid white;
+}
+
+/* #act{
+     font-size: 40px;
 }
 
 #eat{
+     font-size: 40px;
 
 }
+
+#talk{
+     font-size: 40px;
+
+}
+
+#combat{
+     font-size: 30px;
+
+}
+
+#inventory{
+     font-size: 30px;
+} */
