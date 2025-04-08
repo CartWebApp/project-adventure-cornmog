@@ -6,11 +6,30 @@
          actions: [act, eat, talk, combat],
          caveActions: ["explore", "continue"],
          finalActions:["follow", "plunge down", "get back"],
-            PlayerDeath: function(){
+            playerDeath: function(){
                 if (Player.health == 0){
                     console.log("You have fallen..."); 
                 }
+            },
+
+            writeText:function(){
+                var i = 0;
+                var txt = 'Your name is Red. You are a redwing bird who lives in a forest full of other redwing families. Your father and brother go on a quest with a flock of scout birds to find a safe place to migrate.';
+                var speed = 50;
+                if (i < txt.length) {
+                    document.getElementById('text').innerHTML += txt.charAt(i);
+                    i++;
+                    setTimeout(write, speed);
+                  }
             }
+            // switchScene: function(){
+                
+            // }
+            // switchText: function(){
+
+            // }
+            // document.getElementById('dialogueBox').addEventListener('click', switchText);
+
     };
     
 // ---------------------------------------------------------------------------------------
@@ -68,9 +87,24 @@ const enemyCombat = {
             this.enemyMoves = enemyCombat[moveKey] || [];
             this.dodgeTurnsRemaining = 0;
         }
+        applyMoveEffect(move) {
+            if (move.type === "damage") {
+                // Apply damage to player (you can implement player-specific logic here)
+            } 
+            else if (move.type === "healing") {
+                this.health += move.amount;
+            } 
+            else if (move.type === "evasion") {
+                this.dodgeTurnsRemaining = move.turns;
+            }
+            if (move.poison) {
+                // You can handle poison effects here (e.g., reduce player health over turns)
+            }
+        }
+    
             EnemyDeath(){
                 if (this.health <= 0){ 
-                    // ENEMY SHOULD DIE
+                     // Handle enemy death (e.g., trigger animations, drop loot, etc.)
                 }
         }
         attack() {
@@ -78,13 +112,11 @@ const enemyCombat = {
     
             // Check if the move is a special one like "thunderbolt"
             if (randomMove.name === "thunderbolt" && this.enemyName !== "Strong Falcon") {
-                console.log(`${this.enemyName} cannot use thunderbolt!`);
                 return; // Prevent "thunderbolt" unless it's the specific enemy
             }
     
             // If dodge is active, avoid attack
             if (this.dodgeTurnsRemaining > 0) {
-                console.log(`${this.enemyName} is dodging attacks for ${this.dodgeTurnsRemaining} more turns!`);
                 this.dodgeTurnsRemaining--;
                 return; // Skip attack
             }
