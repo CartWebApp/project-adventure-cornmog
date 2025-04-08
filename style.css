@@ -90,3 +90,31 @@
 #inventory{
      font-size: 30px;
 } */
+
+#gameTitle{
+     display: flex;
+     color: whitesmoke;
+     justify-content: center;
+     padding: 11.5rem;
+     font-size: xxx-large;
+}
+
+ a:link{
+     text-decoration: none;
+     color: white;
+}
+a:visited {
+     color: white;
+}
+
+#start {
+     display: flex;
+     justify-content: center;
+     justify-self: center;
+     color: white;
+    font-family: "Pixelify Sans", sans-serif;
+    font-size: 40px;
+    background-color: green;
+    width: 20rem;
+    padding: 1rem;
+}
