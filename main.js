@@ -45,7 +45,7 @@ const enemyCombat = {
         { name: "dodge", type: "evasion", turns: 2 }
     ], 
     tarantulaMoves: [   
-        { name: "bite", type: "damage", amount: 15 },
+        { name: "bite", type: "damage", amount: 2 },
         { name: "poison2", type: "damage", amount: 10, poison: true }
     ],
     giantTarantulaMoves: [
@@ -75,10 +75,24 @@ const enemyCombat = {
         }
         attack() {
             const randomMove = this.enemyMoves[Math.floor(Math.random() * this.enemyMoves.length)];
-            console.log(`${this.enemyName} uses ${randomMove}!`);
-            // Logic for applying damage to the player or whatever entity they are fighting.
+    
+            // Check if the move is a special one like "thunderbolt"
+            if (randomMove.name === "thunderbolt" && this.enemyName !== "Strong Falcon") {
+                console.log(`${this.enemyName} cannot use thunderbolt!`);
+                return; // Prevent "thunderbolt" unless it's the specific enemy
+            }
+    
+            // If dodge is active, avoid attack
+            if (this.dodgeTurnsRemaining > 0) {
+                console.log(`${this.enemyName} is dodging attacks for ${this.dodgeTurnsRemaining} more turns!`);
+                this.dodgeTurnsRemaining--;
+                return; // Skip attack
+            }
+    
+            console.log(`${this.enemyName} uses ${randomMove.name}!`);
+            this.applyMoveEffect(randomMove);
         }
-      }
+    }
 
 // ---------------------------------------------------------------------------------------
 //   ~FALCON~  
