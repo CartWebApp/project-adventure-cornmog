@@ -12,25 +12,35 @@
                 }
             },
 
-            writeText:function(){
-                var i = 0;
-                var txt = 'Your name is Red. You are a redwing bird who lives in a forest full of other redwing families. Your father and brother go on a quest with a flock of scout birds to find a safe place to migrate.';
-                var speed = 50;
-                if (i < txt.length) {
-                    document.getElementById('text').innerHTML += txt.charAt(i);
-                    i++;
-                    setTimeout(write, speed);
-                  }
-            }
+            i: 0,
+            txt: 'Your name is Red. You are a redwing bird who lives in a forest full of other redwing families. Your father and brother go on a quest with a flock of scout birds to find a safe place to migrate.',
+            speed: 30,
+            
+            writeText: function() {
+                    if (this.i < this.txt.length) {
+                        document.getElementById('text').innerHTML += this.txt.charAt(this.i);
+                        this.i++;
+                        setTimeout(() => this.writeText(), this.speed);
+                    }
+                }
+            
+                
             // switchScene: function(){
                 
             // }
             // switchText: function(){
 
             // }
-            // document.getElementById('dialogueBox').addEventListener('click', switchText);
 
     };
+        document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('nextButton').addEventListener('click', function() {
+                // Optional: reset each time button is clicked
+                story.i = 0;
+                document.getElementById('text').innerHTML = '';
+                story.writeText();
+            });
+        });
     
 // ---------------------------------------------------------------------------------------
 //   ~PLAYER LOGIC~
