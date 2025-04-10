@@ -12,27 +12,68 @@
                 }
             },
 
-            i: 0,
-            txt: 'Your name is Red. You are a redwing bird who lives in a forest full of other redwing families. Your father and brother go on a quest with a flock of scout birds to find a safe place to migrate.',
+            i: 0, // typewriter index
+            textIndex: 0, // which paragraph to show
             speed: 30,
-            
-            writeText: function() {
-                    if (this.i < this.txt.length) {
-                        document.getElementById('text').innerHTML += this.txt.charAt(this.i);
-                        this.i++;
-                        setTimeout(() => this.writeText(), this.speed);
+            isTyping: false, // prevent skipping while typing
+        
+            gameText: {
+                introText: [
+                    {
+                        name: "introText1",
+                        text: 'Your name is Red. You are a redwing bird who lives in a forest full of other redwing families. Your father and brother go on a quest with a flock of scout birds to find a safe place to migrate.'
+                    },
+                    {
+                        name: "introText2",
+                        text: "The squadron does not return for two months. Your mother is worried about your father and brother. Rumors spread throughout the forest about the missing redwings."
+                    },
+                    {
+                        name: "introText3",
+                        text: "One day, an owl arrives. He flies down to your nest and greets you and your mother. The owl then tells you that he knows where your father and brother are and calls you to go with him and find them."
                     }
+                ]
+            },
+        
+            writeText: function () {
+                if (this.textIndex >= this.gameText.introText.length) return; // nothing left to display
+        
+                const fullText = this.gameText.introText[this.textIndex].text;
+        
+                if (this.i < fullText.length) {
+                    this.isTyping = true;
+                    document.getElementById('text').innerHTML += fullText.charAt(this.i);
+                    this.i++;
+                    setTimeout(() => this.writeText(), this.speed);
+                } else {
+                    this.isTyping = false; // finished typing
                 }
-            
-                
-            // switchScene: function(){
-                
-            // }
-            // switchText: function(){
-
-            // }
-
-    };
+            },
+        
+            nextText: function () {
+                if (this.isTyping) return; // wait until current text finishes typing
+        
+                this.textIndex++;
+                this.i = 0;
+        
+                if (this.textIndex < this.gameText.introText.length) {
+                    document.getElementById('text').innerHTML = '';
+                    this.writeText();
+                } else {
+                    document.getElementById('text').innerHTML = "The end of the intro!";
+                    // Optionally hide the button or start the next scene
+                }
+            }
+        };
+        
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('nextButton').addEventListener('click', function () {
+                if (story.isTyping) return; // prevent skipping
+                story.nextText();
+            });
+        
+            // Start with the first text
+            story.writeText();
+        });
         document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('nextButton').addEventListener('click', function() {
                 // Optional: reset each time button is clicked

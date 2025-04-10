@@ -7,11 +7,23 @@
      background-color:  black;
 }
 
+
+/* Change the font style for the game title */
+#gameTitle{
+     display: flex;
+     color: red;
+     font-family: "Jacquard 12";
+     justify-content: center;
+     padding: 11.5rem;
+     font-size: 120px;
+}
+
 #imgResize{
      width: 100px;
      height: 100px;
 }
 
+/* Content box for images and scene changes */
 #imageBox{
      padding: 18rem;
      margin-right: 6rem;
@@ -26,6 +38,7 @@
 #interFace{
 
 }
+/* Content box for text and scene changes in dialogue, as well as scene descriptions */
 #dialogueBox{
      margin-top: -6.5rem;
      margin-right: 10rem;
@@ -91,20 +104,26 @@
      font-size: 30px;
 } */
 
-#gameTitle{
-     display: flex;
-     color: whitesmoke;
-     justify-content: center;
-     padding: 11.5rem;
-     font-size: xxx-large;
-}
-
  a:link{
      text-decoration: none;
      color: white;
+     background-color: green;
+     padding: 1rem;
 }
 a:visited {
      color: white;
+}
+a:hover{
+     transition-duration: 1s;
+     background-color: yellow;
+     color: black;
+}
+
+a:focus{
+     transition-duration: 0.2s;
+     color: black;
+     background-color: yellow;
+     border: 2px solid white;
 }
 
 #start {
@@ -114,7 +133,5 @@ a:visited {
      color: white;
     font-family: "Pixelify Sans", sans-serif;
     font-size: 40px;
-    background-color: green;
     width: 20rem;
-    padding: 1rem;
 }
