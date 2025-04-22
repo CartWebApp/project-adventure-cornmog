@@ -36,8 +36,9 @@
 }
 
 #interFace{
-
+     display: flex;
 }
+
 /* Content box for text and scene changes in dialogue, as well as scene descriptions */
 #dialogueBox{
      margin-top: -6.5rem;
