@@ -21,8 +21,17 @@
 #imgResize{
      width: 100px;
      height: 100px;
+     
 }
 
+div.fixed {
+     position: fixed;
+     bottom: 0;
+     right: 0;
+     width: 300px;
+     border: 3px solid #73AD21;
+          
+}
 /* Content box for images and scene changes */
 #imageBox{
      padding: 18rem;
@@ -37,6 +46,7 @@
 
 #interFace{
      display: flex;
+     
 }
 
 /* Content box for text and scene changes in dialogue, as well as scene descriptions */
