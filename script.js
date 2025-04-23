@@ -405,7 +405,7 @@
         document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('nextButton').addEventListener('click', function() {
                 // Optional: reset each time button is clicked
-                // story.i = 0;
+                story.i = 0;
                 document.getElementById('text').innerHTML = '';
                 story.writeText();
             });
