@@ -340,7 +340,24 @@
                 ],
                 
                 // Upon choosing the "follow" option from finalActions, the user will see this text:
-
+                "follow": [
+                {
+                    "name": "crossToSafety",
+                    "text": "If you choose the follow option, you Follow the rest and cross to the other side. You return home a hero. All of the redwing families thank you for saving their children and relatives, and many birds from the forest begin to visit your nest frequently."
+                },
+                {
+                    "name": "homecoming",
+                    "text": "You make many friends and spend quality time with Featherfoot, your father, and your mother, who is forever indebted to you for saving her husband, as well as her son."
+                },
+                {
+                    "name": "mentorBond",
+                    "text": "In all of this, Soaren becomes your full-time mentor, who teaches you new techniques, and tells you stories. You become best friends with him."
+                },
+                {
+                    "name": "peaceAtLast",
+                    "text": "You are happy to have met him, and you are glad that you and your family are safe and sound, without a single tarantula or falcon in sight. You are at peace."
+                }
+                ] 
             },
 
             
