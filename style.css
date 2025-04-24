@@ -44,7 +44,7 @@
 
 /* Content box for text and scene changes in dialogue, as well as scene descriptions */
 #dialogueBox{
-     margin-top: -6.5rem;
+     margin-top: -0.3rem;
      margin-right: 10rem;
      margin-left: 10rem;
      padding: 9rem;
