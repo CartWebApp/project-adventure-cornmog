@@ -20,7 +20,7 @@
             // OBJECT FOR GAME TEXT
             gameText: {
                 "introText": [
-                    {
+                    {   
                       "name": "introText1",
                       "text": "Your name is Red. You are a redwing bird who lives in a forest full of other redwing families. Your father and brother go on a quest with a flock of scout birds to find a safe place to migrate."
                     },
@@ -426,41 +426,58 @@
 
         // ────────── UI Helpers (separate) ──────────
         const actionsBox   = document.getElementById('actionsBox');
-        const nextButton   = document.getElementById('nextButton');
         const choiceHolder = document.createElement('div');
         choiceHolder.id    = 'choiceHolder';
-        document.body.appendChild(choiceHolder);
+
+        // Put choiceHolder directly below your main text area
+        document.getElementById('text').after(choiceHolder);
 
         function toggleContinue(show) {
         nextButton.style.display = show ? '' : 'none';
         }
 
-        function toggleActionsBox(show) {
-        actionsBox.style.display = show ? '' : 'none';
-        }
+         
 
         function showChoices(choicesArray, onChoice) {
-        toggleActionsBox(false);
-        toggleContinue(false);
+        // Step 1: Hide old UI
+        toggleActionsBox(false);            // hide the whole box
+        actionsBox.innerHTML = '';          // clear old content (if needed)
+
+        // Step 2: Clear and rebuild choices
         choiceHolder.innerHTML = '';
         choicesArray.forEach(choice => {
             const btn = document.createElement('button');
             btn.textContent = choice;
-            btn.addEventListener('click', () => onChoice(choice));
+            btn.addEventListener('click', () => {
+            choiceHolder.innerHTML = '';   // remove buttons after choice
+            onChoice(choice);
+            });
             choiceHolder.appendChild(btn);
         });
+
+        // Step 3: Show the new buttons
+        toggleActionsBox(true); // show again after adding buttons
         }
 
         // ────────── Scene‐specific wiring ──────────
         function onCallToAction() {
-        showChoices(story.startChoices, choice => {
-            choiceHolder.innerHTML = '';
-            if (choice === 'accept')       enterRouteOfAcceptance();
-            else if (choice === 'decline') enterRejectingTheCall();
-            else if (choice === 'think about it') enterPathOfContemplation();
-            toggleContinue(true);
-        });
-        }
+            showChoices(story.startChoices, choice => {
+              if (choice === 'accept') {
+                goToRouteOfAcceptance();  // or enterRouteOfAcceptance() — use your actual function name
+              } else if (choice === 'decline') {
+                goToRejectingTheCall();
+              } else if (choice === 'think about it') {
+                goToPathOfContemplation();
+              }
+          
+              // Show "continue" if you want the next button to reappear
+              toggleContinue(true);
+          
+              // If you want the original action buttons back after a choice:
+              // toggleActionsBox(true);
+            });
+          }          
+          
 
         // … later, when you render the callToAction text …    
 // ---------------------------------------------------------------------------------------

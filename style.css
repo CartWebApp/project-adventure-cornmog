@@ -140,3 +140,24 @@ a:focus{
     font-size: 40px;
     width: 20rem;
 }
+
+#choiceHolder {
+     margin-top: 1em;
+     display: flex;
+     gap: 1em;
+     justify-content: center;
+   }
+   
+   #choiceHolder button {
+     padding: 0.5em 1em;
+     background: #222;
+     color: white;
+     border: none;
+     border-radius: 8px;
+     cursor: pointer;
+     font-size: 1em;
+   }
+   
+   #choiceHolder button:hover {
+     background: #444;
+   }
