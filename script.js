@@ -35,6 +35,10 @@
                     {
                       "name": "callToAction",
                       "text": "What is your next move?"
+                    },
+                    {
+                        "name": "playerChoice",
+                        "text": "(CHOOSE AN ACTION)"
                     }
                   ],
                 //   If the player chooses "ACCEPT" in startChoices, then this text will apply
@@ -362,33 +366,42 @@
 
             
         
-            writeText: function () {
-                if (this.textIndex >= this.gameText.introText.length) return; // nothing left to display
-        
-                const fullText = this.gameText.introText[this.textIndex].text;
-        
+            writeText: function () { 
+                if (this.textIndex >= this.gameText.introText.length) return;
+            
+                const currentEntry = this.gameText.introText[this.textIndex];
+                const fullText = currentEntry.text;
+            
                 if (this.i < fullText.length) {
                     this.isTyping = true;
                     document.getElementById('text').innerHTML += fullText.charAt(this.i);
                     this.i++;
                     setTimeout(() => this.writeText(), this.speed);
                 } else {
-                    this.isTyping = false; // finished typing
+                    this.isTyping = false;
+            
+                    // Move callToAction logic HERE, after text has fully typed
+                    if (currentEntry.key === 'callToAction') {
+                        toggleContinue(false);
+                        onCallToAction();
+                    } else {
+                        toggleContinue(true);
+                    }
                 }
             },
         
             nextText: function () {
-                if (this.isTyping) return; // wait until current text finishes typing
-        
+                if (this.isTyping) return;
+            
                 this.textIndex++;
                 this.i = 0;
-        
+            
                 if (this.textIndex < this.gameText.introText.length) {
                     document.getElementById('text').innerHTML = '';
                     this.writeText();
                 } else {
                     document.getElementById('text').innerHTML = "The end of the intro!";
-                    // Optionally hide the button or start the next scene
+                    toggleContinue(false);
                 }
             }
         };
@@ -410,7 +423,46 @@
                 story.writeText();
             });
         });
-    
+
+        // ────────── UI Helpers (separate) ──────────
+        const actionsBox   = document.getElementById('actionsBox');
+        const nextButton   = document.getElementById('nextButton');
+        const choiceHolder = document.createElement('div');
+        choiceHolder.id    = 'choiceHolder';
+        document.body.appendChild(choiceHolder);
+
+        function toggleContinue(show) {
+        nextButton.style.display = show ? '' : 'none';
+        }
+
+        function toggleActionsBox(show) {
+        actionsBox.style.display = show ? '' : 'none';
+        }
+
+        function showChoices(choicesArray, onChoice) {
+        toggleActionsBox(false);
+        toggleContinue(false);
+        choiceHolder.innerHTML = '';
+        choicesArray.forEach(choice => {
+            const btn = document.createElement('button');
+            btn.textContent = choice;
+            btn.addEventListener('click', () => onChoice(choice));
+            choiceHolder.appendChild(btn);
+        });
+        }
+
+        // ────────── Scene‐specific wiring ──────────
+        function onCallToAction() {
+        showChoices(story.startChoices, choice => {
+            choiceHolder.innerHTML = '';
+            if (choice === 'accept')       enterRouteOfAcceptance();
+            else if (choice === 'decline') enterRejectingTheCall();
+            else if (choice === 'think about it') enterPathOfContemplation();
+            toggleContinue(true);
+        });
+        }
+
+        // … later, when you render the callToAction text …    
 // ---------------------------------------------------------------------------------------
 //   ~PLAYER LOGIC~
   
