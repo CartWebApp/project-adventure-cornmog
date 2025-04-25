@@ -141,7 +141,7 @@ a:focus{
     width: 20rem;
 }
 
-#choiceHolder {
+/* #choiceHolder {
      margin-top: 1em;
      display: flex;
      gap: 1em;
@@ -160,9 +160,5 @@ a:focus{
    
    #choiceHolder button:hover {
      background: #444;
-   }
-
-   .hidden {
-     display: none !important;
-   }
+   } */
 
