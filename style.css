@@ -8,7 +8,7 @@
 }
 
 
-/* Change the font style for the game title */
+/* This contains the title color and its shadow */
 #gameTitle{
      display: flex;
      color: white;
@@ -16,7 +16,8 @@
      justify-content: center;
      padding: 11.5rem;
      font-size: 120px;
-     text-shadow: 12px 12px red, 0 0 25px
+     text-shadow: 12px 12px red;
+
 }
 
 /* #imgResize{
