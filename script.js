@@ -381,7 +381,7 @@
                     this.isTyping = false;
             
                     // Move callToAction logic HERE, after text has fully typed
-                    if (currentEntry.key === 'callToAction') {
+                    if (currentEntry.id === 'callToAction') {
                         toggleContinue(false);
                         onCallToAction();
                     } else {
@@ -424,6 +424,8 @@
             });
         });
 
+        
+
         // ────────── UI Helpers (separate) ──────────
         const actionsBox   = document.getElementById('actionsBox');
         const choiceHolder = document.createElement('div');
@@ -436,8 +438,10 @@
         nextButton.style.display = show ? '' : 'none';
         }
 
-         
-
+        function toggleActionsBox(show) {
+            actionsBox.classList.toggle('hidden', !show);
+          }
+          
         function showChoices(choicesArray, onChoice) {
         // Step 1: Hide old UI
         toggleActionsBox(false);            // hide the whole box
