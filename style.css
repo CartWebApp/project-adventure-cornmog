@@ -161,3 +161,8 @@ a:focus{
    #choiceHolder button:hover {
      background: #444;
    }
+
+   .hidden {
+     display: none !important;
+   }
+
