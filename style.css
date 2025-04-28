@@ -163,3 +163,11 @@ a:focus{
      background: #444;
    } */
 
+.darryl-img>img{
+     height: 5px;
+}
+.darryl-img{
+     position: absolute;
+     left: 12%;
+     top: 9.7%;
+}
