@@ -509,3 +509,5 @@ const enemyCombat = {
 // ---------------------------------------------------------------------------------------
 //   ~FALCON~  
       const falcon = new Enemy("Falcon", 10, falconMoves);
+
+      document.getElementById("darryl-img").addEventListener("click",()=>{})

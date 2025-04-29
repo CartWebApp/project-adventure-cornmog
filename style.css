@@ -178,10 +178,10 @@ a:focus{
      background: #444;
    } */
 
-.darryl-img>img{
+#darryl-img>img{
      height: 5px;
 }
-.darryl-img{
+#darryl-img{
      position: absolute;
      left: 44%;
      top: 9.3%;
