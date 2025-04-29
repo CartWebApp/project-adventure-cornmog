@@ -20,6 +20,17 @@
 
 }
 
+#nextButton {
+     user-select: none;
+     -webkit-user-select: none; /* For Safari/old browsers */
+     -ms-user-select: none; /* For older IE */
+ }
+
+ #nextButton:hover{
+     transition-duration: 0.5s;
+     background-color: yellow;
+ }
+
 /* #imgResize{
      width: 100px;
      height: 100px;
@@ -72,6 +83,10 @@
      padding: 3rem;
      padding-left: 7rem;
      padding-right: 7rem;
+
+     user-select: none;
+     -webkit-user-select: none; /* For Safari/old browsers */
+     -ms-user-select: none; /* For older IE */
 }
 
 #actionsBox button:hover{

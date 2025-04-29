@@ -12,15 +12,16 @@
                 }
             },
 
-            i: 0, // typewriter index
-            textIndex: 0, // which paragraph to show
+            i: 0,
+            textIndex: 0,
             speed: 30,
-            isTyping: false, // prevent skipping while typing
+            isTyping: false,
+            typingTimeout: null, // stores the setTimeout reference
             
             // OBJECT FOR GAME TEXT
             gameText: {
                 "introText": [
-                    {   
+                    {
                       "name": "introText1",
                       "text": "Your name is Red. You are a redwing bird who lives in a forest full of other redwing families. Your father and brother go on a quest with a flock of scout birds to find a safe place to migrate."
                     },
@@ -35,10 +36,6 @@
                     {
                       "name": "callToAction",
                       "text": "What is your next move?"
-                    },
-                    {
-                        "name": "playerChoice",
-                        "text": "(CHOOSE AN ACTION)"
                     }
                   ],
                 //   If the player chooses "ACCEPT" in startChoices, then this text will apply
@@ -105,7 +102,22 @@
                     {
                     "name": "rejectStart",
                     "text": "If you decline the owl’s request to go with him, he flies away, but not before giving you directions on where you can find him if you change your mind. In two days, you decide to follow the owl."
+                    }
+                ],
+
+                //   If the player chooses "THINK ABOUT IT" in startChoices, then this text will apply:
+                "pathOfContemplation": [
+                    {
+                    "name": "contemplationIntro",
+                    "text": "If you instead choose to 'think about it,' you exit the scene, leaving the owl and your mother behind, to take a 'stroll' and get some fresh air while you contemplate the owl’s request."
                     },
+                    {
+                    "name": "falconAmbushDuringContemplation",
+                    "text": "You are currently flying, when suddenly, a falcon swoops down to attack you."
+                    }
+                ],
+                // The next scenes are the same for both "Think About it" and "DECLINE"
+                "mergingPaths": [
                     {
                         "name": "falconAmbushDuringContemplation",
                         "text": "You are currently flying, when suddenly, a falcon swoops down to attack you."
@@ -199,17 +211,6 @@
                     "text": "A falcon suddenly attacks. 'WATCH OUT!!!' yells Soaren. The falcon strikes first. Win and gain 10 XP, or fall."
                     }
                 ],  
-                //   If the player chooses "THINK ABOUT IT" in startChoices, then this text will apply:
-                "pathOfContemplation": [
-                    {
-                    "name": "contemplationIntro",
-                    "text": "If you instead choose to 'think about it,' you exit the scene, leaving the owl and your mother behind, to take a 'stroll' and get some fresh air while you contemplate the owl’s request."
-                    },
-                    {
-                    "name": "falconAmbushDuringContemplation",
-                    "text": "You are currently flying, when suddenly, a falcon swoops down to attack you."
-                    }
-                ],
                 // Text for The Cave Scene:
                     "theCaveScene": [
                     {
@@ -328,110 +329,89 @@
                     }
                     ],
                 // Upon choosing the "plungeDown" option from finalActions, the user will see this text:
-                "plungeDown": [
-                {
-                    "name": "plungeIntoHole",
-                    "text": "If you choose the plunge down option, you plunge down into the hole beneath you. The tree falls with a loud thump, covering the hole. You are safe inside, but there is no light. You call out for help, but no one hears you. After crying out for about an hour, you decide to explore the hole. It turns out to be a cave system."
-                },
-                {
-                    "name": "meetGlydeAndClancy",
-                    "text": "After exploring for a while, you find an old owl and a crow.\n“Greetings, little one,” says the owl, “I am Glyde, brother of Soaren. And this crow sitting in front of me is Clancy, my companion. We have been waiting for someone important to arrive.”"
-                },
-                {
-                    "name": "stayInCave",
-                    "text": "“Yes,” says the crow, “we’ve been sitting here, in this cave, for two months now, with no sunlight, and we are quite lonesome. You look like a friendly fellow. Would you care to stay with us until our awaited traveler returns?”\nYou decide to keep them company and stay with them until the traveler comes back."
-                }
-                ],
+                    "plungeDown": [
+                    {
+                        "name": "plungeIntoHole",
+                        "text": "If you choose the plunge down option, you plunge down into the hole beneath you. The tree falls with a loud thump, covering the hole. You are safe inside, but there is no light. You call out for help, but no one hears you. After crying out for about an hour, you decide to explore the hole. It turns out to be a cave system."
+                    },
+                    {
+                        "name": "meetGlydeAndClancy",
+                        "text": "After exploring for a while, you find an old owl and a crow.\n“Greetings, little one,” says the owl, “I am Glyde, brother of Soaren. And this crow sitting in front of me is Clancy, my companion. We have been waiting for someone important to arrive.”"
+                    },
+                    {
+                        "name": "stayInCave",
+                        "text": "“Yes,” says the crow, “we’ve been sitting here, in this cave, for two months now, with no sunlight, and we are quite lonesome. You look like a friendly fellow. Would you care to stay with us until our awaited traveler returns?”\nYou decide to keep them company and stay with them until the traveler comes back."
+                    }
+                    ],
                 
                 // Upon choosing the "follow" option from finalActions, the user will see this text:
-                "follow": [
-                {
-                    "name": "crossToSafety",
-                    "text": "If you choose the follow option, you Follow the rest and cross to the other side. You return home a hero. All of the redwing families thank you for saving their children and relatives, and many birds from the forest begin to visit your nest frequently."
-                },
-                {
-                    "name": "homecoming",
-                    "text": "You make many friends and spend quality time with Featherfoot, your father, and your mother, who is forever indebted to you for saving her husband, as well as her son."
-                },
-                {
-                    "name": "mentorBond",
-                    "text": "In all of this, Soaren becomes your full-time mentor, who teaches you new techniques, and tells you stories. You become best friends with him."
-                },
-                {
-                    "name": "peaceAtLast",
-                    "text": "You are happy to have met him, and you are glad that you and your family are safe and sound, without a single tarantula or falcon in sight. You are at peace."
-                }
-                ] 
+
             },
 
-            
+            writeText: function () {
+                const currentArray = this.activeText || this.gameText.introText;
         
-            writeText: function () { 
-                if (this.textIndex >= this.gameText.introText.length) return;
-            
-                const currentEntry = this.gameText.introText[this.textIndex];
-                const fullText = currentEntry.text;
-            
+                if (this.textIndex >= currentArray.length) {
+                    if (
+                        this.activeText === this.gameText.rejectingTheCall ||
+                        this.activeText === this.gameText.pathOfContemplation
+                    ) {
+                        specialFunctionForEndOfDeclineOrThink();
+                    }
+                    return;
+                }
+        
+                const fullText = currentArray[this.textIndex].text;
+        
                 if (this.i < fullText.length) {
                     this.isTyping = true;
                     document.getElementById('text').innerHTML += fullText.charAt(this.i);
                     this.i++;
-                    setTimeout(() => this.writeText(), this.speed);
+                    this.typingTimeout = setTimeout(() => this.writeText(), this.speed);
                 } else {
                     this.isTyping = false;
-            
-                    // Move callToAction logic HERE, after text has fully typed
-                    if (currentEntry.id === 'callToAction') {
-                        toggleContinue(false);
-                        onCallToAction();
-                    } else {
-                        toggleContinue(true);
-                    }
                 }
             },
         
-            nextText: function () {
-                if (this.isTyping) return;
-            
-                this.textIndex++;
-                this.i = 0;
-            
-                if (this.textIndex < this.gameText.introText.length) {
-                    document.getElementById('text').innerHTML = '';
-                    this.writeText();
-                } else {
-                    document.getElementById('text').innerHTML = "The end of the intro!";
-                    toggleContinue(false);
+            skipOrNext: function () {
+                const currentArray = this.activeText || this.gameText.introText;
+        
+                // Case 1: Skipping the typewriter animation
+                if (this.isTyping) {
+                    clearTimeout(this.typingTimeout);
+                    const fullText = currentArray[this.textIndex].text;
+                    document.getElementById('text').innerHTML = fullText;
+                    this.i = fullText.length;
+                    this.isTyping = false;
+                } 
+                // Case 2: Going to the next sentence
+                else {
+                    this.textIndex++;
+                    this.i = 0;
+        
+                    if (this.textIndex < currentArray.length) {
+                        document.getElementById('text').innerHTML = '';
+                        this.writeText();
+                    } else {
+                        document.getElementById('text').innerHTML = "Choose an option from ACT";
+                    }
                 }
             }
         };
         
+        function specialFunctionForEndOfDeclineOrThink() {
+            console.log("Extra logic after decline or think path finishes.");
+        }
+        
         document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('nextButton').addEventListener('click', function () {
-                if (story.isTyping) return; // prevent skipping
-                story.nextText();
+                story.skipOrNext();
             });
         
-            // Start with the first text
+            // Start with initial text (can be set dynamically)
             story.writeText();
         });
-        document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('nextButton').addEventListener('click', function() {
-                // Optional: reset each time button is clicked
-                story.i = 0;
-                document.getElementById('text').innerHTML = '';
-                story.writeText();
-            });
-        });
-
-        // Put choiceHolder directly below your main text area
-        document.getElementById('text').after(choiceHolder);
-
-        function toggleContinue(show) {
-        nextButton.style.display = show ? '' : 'none';
-        }        
-          
-        // … later, when you render the callToAction text …    
+    
 // ---------------------------------------------------------------------------------------
 //   ~PLAYER LOGIC~
   
