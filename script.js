@@ -1,11 +1,15 @@
 // ---------------------------------------------------------------------------------------
 //   ~STORY LOGIC~
     const story = {
-         startChoices: ["Accept the owl's request", "Decline the owl's request", "Think about it"], 
+         activeText: null, // This will be set to the current text array
+// FAST --> These choices were integrated with the gameText object, please review those changes.        
+         //startChoices: ["Accept the owl's request", "Decline the owl's request", "Think about it"], 
          combat: [],
          actions: [act, combat, inventory],
+// FAST --> These actions need to be folded into the gameText object where apporpriate for your story         
          caveActions: ["explore", "continue"],
          finalActions:["follow", "plunge down", "get back"],
+// FAST --> End of actions in need of change         
             playerDeath: function(){
                 if (Player.health == 0){
                     console.log("You have fallen..."); 
@@ -42,7 +46,9 @@
                     },
                     {
                       "name": "callToAction",
-                      "text": "What is your next move? (Choose an option from ACT)"
+                      "text": "What is your next move? (Choose an option from ACT)",
+//  FAST ---> This is where the choices will be defined. Syntax: [["Choice text", "gameText Key"]]. Repeat for each callToAction in your story.
+                      choices: [["Accept the owl's request", "routeOfAcceptance"],["Decline the owl's request", "rejectingTheCall"],["Think about it", "pathOfContemplation"]]
                     }
                   ],
                 //   If the player chooses "Accept the owl's request" in startChoices, then this text will apply
@@ -363,6 +369,8 @@
                         this.activeText === this.gameText.rejectingTheCall ||
                         this.activeText === this.gameText.pathOfContemplation
                     ) {
+// FAST --> Checking for logic error, you may remove this console.log                        
+                        console.log("You have reached the end of the 'Decline' or 'Think' path.");
                         specialFunctionForEndOfDeclineOrThink();
                     }
                     else if (
@@ -529,26 +537,46 @@
             actOptions.innerHTML = ""; // Clear previous options
             const currentArray = story.activeText || story.gameText.introText;
             const currentEntry = currentArray[story.textIndex];
+            console.log(currentEntry.choices); // Check the current entry's choices
 
             let optionsToShow = [];
-
+// FAST --> Your previous code for reference.
             // Use currentEntry.name to decide which choices to show
+            // if (currentEntry && currentEntry.name === "callToAction") {
+            //     optionsToShow = story.startChoices;
+            // }
+
+// FAST --> I modified this to use the new variable currentEntry.choices instead of the hard-coded story.startChoices
             if (currentEntry && currentEntry.name === "callToAction") {
-                optionsToShow = story.startChoices;
+                optionsToShow = currentEntry.choices;
             }
 
             // Reusable logic to add buttons
             if (optionsToShow.length > 0) {
                 optionsToShow.forEach(choice => {
                     const button = document.createElement("button");
-                    button.textContent = choice;
+                    // button.textContent = choice;
+// FAST --> I modified this to use the new variable choice[0] to show the text and not both the text and destination key from the new choices array on your story objects.                    
+                    button.textContent = choice[0]; 
                     button.classList.add("act-option");
                     button.addEventListener("click", () => {
-                        // Do something when the choice is clicked
-                        console.log(`Player chose: ${choice}`);
+                        // console.log(`Player chose: ${choice}`);
+// FAST --> I modified this to use choice as an array variable to show the text and destination key from the new choices array on your story objects.                        
+                        console.log(`Player chose: ${choice[0]}; goto --> ${choice[1]}`);
+                        // Hide the act display
                         actDisplay.style.display = "none";
-                        // Here you can trigger branching logic like:
-                        // if (choice === "Accept the owl's request") { ... }
+                        
+// FAST --> I modified this section to use the new variable choice[1] to go to the destination key from the choices array on your story objects.
+                        if (story.gameText[choice[1]]) { //check if the destination key exists
+                            story.activeText = story.gameText[choice[1]]; // Set the active text to the new destination key
+                            story.textIndex = 0; // Reset text index
+                            story.i = 0; // Reset character index
+                            document.getElementById('text').innerHTML = ''; // Clear previous text
+                            story.writeText(); // Update the active text
+                        } else {
+                            // Error handling fpr when the destination key doesn't exist
+                            console.error(`No text found for ${choice[1]}`);
+                        }
                     });
                     actOptions.appendChild(button);
                 });
@@ -649,7 +677,8 @@ const enemyCombat = {
 
 // ---------------------------------------------------------------------------------------
 //   ~FALCON~  
-      const falcon = new Enemy("Falcon", 10, falconMoves);
+      // FAST --> I commented out the falcon instance creation to avoid errors since it was not used in the provided code.  
+      //const falcon = new Enemy("Falcon", 10, falconMoves);
 
     //  clickable easter egg
       document.getElementById("darryl-img").addEventListener("click",()=>{})
