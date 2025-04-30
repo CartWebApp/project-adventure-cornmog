@@ -38,7 +38,12 @@
         <button id="nextButton">Continue</button>
     </article>
 
-        <!-- Inventory Display -->
+    <article id="actionsBox">
+        <button id="act" class="disabled">ACT</button>
+        <button id="combat" class="disabled">COMBAT</button>
+        <button id="inventory">INVENTORY</button>
+
+            <!-- Inventory Display -->
     <article id="inventoryDisplay" style="display: none;">
         <section id="inventoryContent">
         <h3>Player Stats</h3>
@@ -53,15 +58,12 @@
         </section>
     </article>
 
+    <!-- Act Display -->
     <div id="actDisplay" style="display: none; padding: 10px; border: 2px solid white; background: black; color: white; border-radius: 8px; margin-bottom: 12px;">
         <div id="actOptions"></div>
         <button id="closeActDisplay">X</button>
     </div>
 
-    <article id="actionsBox">
-        <button id="act" class="disabled">ACT</button>
-        <button id="combat" class="disabled">COMBAT</button>
-        <button id="inventory">INVENTORY</button>
     </article>  
     <script src="script.js"></script>
 </body>
