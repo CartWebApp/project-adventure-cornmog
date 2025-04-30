@@ -38,10 +38,28 @@
         <button id="nextButton">Continue</button>
     </article>
 
+        <!-- Inventory Display -->
+    <article id="inventoryDisplay" style="display: none;">
+        <section id="inventoryContent">
+        <h3>Player Stats</h3>
+        <p id="playerHealth"></p>
+        <p id="playerExp"></p>
+        <p id="playerStrength"></p>
+    
+        <h3>Items</h3>
+        <ul id="playerItems"></ul>
+    
+        <button id="closeInventory">X</button>
+        </section>
+    </article>
+
+    <div id="actDisplay" style="display: none; padding: 10px; border: 2px solid white; background: black; color: white; border-radius: 8px; margin-bottom: 12px;">
+        <div id="actOptions"></div>
+        <button id="closeActDisplay" style="margin-top: 8px;">X</button>
+    </div>
+
     <article id="actionsBox">
         <button id="act">ACT</button>
-        <button id="eat">EAT</button>
-        <button id="talk">TALK</button>
         <button id="combat">COMBAT</button>
         <button id="inventory">INVENTORY</button>
     </article>  

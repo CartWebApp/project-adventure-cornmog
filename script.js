@@ -1,9 +1,9 @@
 // ---------------------------------------------------------------------------------------
 //   ~STORY LOGIC~
     const story = {
-         startChoices: ["accept", "decline", "think about it"], 
+         startChoices: ["Accept the owl's request", "Decline the owl's request", "Think about it"], 
          combat: [],
-         actions: [act, eat, talk, combat],
+         actions: [act, combat, inventory],
          caveActions: ["explore", "continue"],
          finalActions:["follow", "plunge down", "get back"],
             playerDeath: function(){
@@ -18,6 +18,13 @@
             isTyping: false,
             typingTimeout: null, // stores the setTimeout reference
             
+
+            // List of special text node names where the CONTINUE button should hide
+            nodesThatHideContinue: ["callToAction"],
+            // List of special text node names where the CONTINUE button should hide
+
+
+
             // OBJECT FOR GAME TEXT
             gameText: {
                 "introText": [
@@ -35,10 +42,10 @@
                     },
                     {
                       "name": "callToAction",
-                      "text": "What is your next move?"
+                      "text": "What is your next move? (Choose an option from ACT)"
                     }
                   ],
-                //   If the player chooses "ACCEPT" in startChoices, then this text will apply
+                //   If the player chooses "Accept the owl's request" in startChoices, then this text will apply
                   "routeOfAcceptance": [
                     {
                     "name": "acceptStart",
@@ -97,7 +104,7 @@
                     "text": "Once you successfully defeat the strong falcon, you fly the last few meters to the mountain range. It is now dark."
                     }
                 ],
-                //   If the player chooses "DECLINE" in startChoices, then this text will apply:
+                //   If the player chooses "Decline the owl's request" in startChoices, then this text will apply:
                 "rejectingTheCall": [
                     {
                     "name": "rejectStart",
@@ -105,7 +112,7 @@
                     }
                 ],
 
-                //   If the player chooses "THINK ABOUT IT" in startChoices, then this text will apply:
+                //   If the player chooses "Think about it" in startChoices, then this text will apply:
                 "pathOfContemplation": [
                     {
                     "name": "contemplationIntro",
@@ -116,7 +123,7 @@
                     "text": "You are currently flying, when suddenly, a falcon swoops down to attack you."
                     }
                 ],
-                // The next scenes are the same for both "Think About it" and "DECLINE"
+                // The next scenes are the same for both "Think about it" and "Decline the owl's request"
                 "mergingPaths": [
                     {
                         "name": "falconAmbushDuringContemplation",
@@ -358,11 +365,26 @@
                     ) {
                         specialFunctionForEndOfDeclineOrThink();
                     }
+                    else if (
+                        this.activeText === this.gameText.routeOfAcceptance
+                    ) {
+                        routeOfAcceptanceLogic();
+                    }
                     return;
                 }
-        
-                const fullText = currentArray[this.textIndex].text;
-        
+                
+                const currentEntry = currentArray[this.textIndex];
+
+                // ⬇ HIDE continue button if current text entry is in the "hide list"
+                const nextButton = document.getElementById("nextButton");
+                if (story.nodesThatHideContinue.includes(currentEntry.name)) {
+                    nextButton.style.display = "none";
+                } else {
+                    nextButton.style.display = "flex"; 
+                }
+
+                const fullText = currentEntry.text;
+
                 if (this.i < fullText.length) {
                     this.isTyping = true;
                     document.getElementById('text').innerHTML += fullText.charAt(this.i);
@@ -392,39 +414,158 @@
                     if (this.textIndex < currentArray.length) {
                         document.getElementById('text').innerHTML = '';
                         this.writeText();
-                    } else {
-                        document.getElementById('text').innerHTML = "Choose an option from ACT";
-                    }
+                    } 
                 }
             }
         };
         
+        function routeOfAcceptanceLogic() {
+            console.log("Extra logic after decline or think path finishes.");
+        }
+
         function specialFunctionForEndOfDeclineOrThink() {
             console.log("Extra logic after decline or think path finishes.");
         }
+
         
-        document.addEventListener('DOMContentLoaded', function () {
-            document.getElementById('nextButton').addEventListener('click', function () {
-                story.skipOrNext();
-            });
         
-            // Start with initial text (can be set dynamically)
-            story.writeText();
-        });
+        // document.addEventListener('DOMContentLoaded', function () {
+        //     document.getElementById('nextButton').addEventListener('click', function () {
+        //         story.skipOrNext();
+        //     });
+        
+        //     // Start with initial text (can be set dynamically)
+        //     story.writeText();
+        // });
     
 // ---------------------------------------------------------------------------------------
 //   ~PLAYER LOGIC~
   
     class Player{
         constructor(){
+            this.maxHealth = 10; 
             this.health = 10; 
-            this.health = 0; 
+            this.strength = 0; 
             this.exp = 0; 
-            this.inventory = []; 
+            this.inventory = [];
             this.canUseVenom = false;
             this.canUseFlight = false;
         }
        }
+
+       const player = new Player();
+
+
+       document.addEventListener('DOMContentLoaded', function () {
+        // === OTHER BUTTONS ===
+        document.getElementById('nextButton').addEventListener('click', function () {
+            story.skipOrNext();
+        });
+
+        story.writeText();
+
+        // === INVENTORY LOGIC ===
+        const inventoryButton = document.getElementById("inventory");
+        const closeInventoryButton = document.getElementById("closeInventory");
+        const inventoryDisplay = document.getElementById("inventoryDisplay");
+
+        inventoryButton.addEventListener("click", function () {
+            // Update stat values
+            document.getElementById("playerExp").textContent = `EXP: ${player.exp}`;
+            document.getElementById("playerStrength").textContent = `Strength: ${player.strength}`;
+        
+            // Calculate health ratio
+            const healthRatio = player.health / player.maxHealth;
+            const healthElement = document.getElementById("playerHealth");
+            healthElement.textContent = `Health: ${player.health}`;
+        
+            // Set color based on ratio
+            if (healthRatio >= 0.8) {
+                healthElement.style.color = "chartreuse";
+            } else if (healthRatio >= 0.35) {
+                healthElement.style.color = "yellow";
+            } else {
+                healthElement.style.color = "red";
+            }
+        
+            // Update inventory items
+            const itemsList = document.getElementById("playerItems");
+            itemsList.innerHTML = "";
+
+            if (player.inventory.length > 0) {
+                player.inventory.forEach(item => {
+                    const li = document.createElement("li");
+                    const button = document.createElement("button");
+                    button.textContent = item;
+                    button.classList.add("inventory-item");
+                    // You can add functionality here later
+                    li.appendChild(button);
+                    itemsList.appendChild(li);
+                });
+            } else {
+                const li = document.createElement("li");
+                const button = document.createElement("button");
+                button.textContent = "(Empty)";
+                button.classList.add("inventory-item");
+                li.appendChild(button);
+                itemsList.appendChild(li);
+            }
+        
+            // Show the inventory
+            inventoryDisplay.style.display = "block";
+        });
+
+        closeInventoryButton.addEventListener("click", function () {
+            inventoryDisplay.style.display = "none";
+        });
+
+        // === ACT BUTTON SETUP ===
+        const actButton = document.getElementById("act");
+        const actDisplay = document.getElementById("actDisplay");
+        const actOptions = document.getElementById("actOptions");
+        const closeActDisplay = document.getElementById("closeActDisplay");
+
+        actButton.addEventListener("click", function () {
+            actOptions.innerHTML = ""; // Clear previous options
+            const currentArray = story.activeText || story.gameText.introText;
+            const currentEntry = currentArray[story.textIndex];
+
+            let optionsToShow = [];
+
+            // Use currentEntry.name to decide which choices to show
+            if (currentEntry && currentEntry.name === "callToAction") {
+                optionsToShow = story.startChoices;
+            }
+
+            // Reusable logic to add buttons
+            if (optionsToShow.length > 0) {
+                optionsToShow.forEach(choice => {
+                    const button = document.createElement("button");
+                    button.textContent = choice;
+                    button.classList.add("act-option");
+                    button.addEventListener("click", () => {
+                        // Do something when the choice is clicked
+                        console.log(`Player chose: ${choice}`);
+                        actDisplay.style.display = "none";
+                        // Here you can trigger branching logic like:
+                        // if (choice === "Accept the owl's request") { ... }
+                    });
+                    actOptions.appendChild(button);
+                });
+                } else {
+                    const empty = document.createElement("button");
+                    empty.textContent = "(No actions available)";
+                    empty.classList.add("act-option");
+                    actOptions.appendChild(empty);
+                }
+
+                actDisplay.style.display = "block";
+            });
+
+        closeActDisplay.addEventListener("click", function () {
+            actDisplay.style.display = "none";
+        });
+    });
 
 // ---------------------------------------------------------------------------------------
 //   ~Soaren~
