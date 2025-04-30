@@ -232,15 +232,8 @@
                     },
                     {
                     "name": "newActions",
-                    "text": "You are now presented with two new actions, separate from the regular ones: 'Explore the cave' and 'Continue.'"
-                    },
-                    {
-                    "name": "exploreCave",
-                    "text": "Upon selecting the 'Explore the cave' option, you look around. You find a chest with a bundle of seeds (an item which is now stored in your inventory) and a book (also added to inventory). The book allows you to use 'flight,' which can only be used once the player reaches a certain xp threshold."
-                    },
-                    {
-                    "name": "continueCave",
-                    "text": "Upon selecting the 'Continue' option, you move through the cave and skip to the next scene."
+                    "text": "You are now presented with two new actions, separate from the regular ones: 'Explore the cave' and 'Continue.'",
+                    caveActions: [["Explore", "Upon selecting the 'Explore the cave' option, you look around. You find a chest with a bundle of seeds (an item which is now stored in your inventory) and a book (also added to inventory). The book allows you to use 'flight,' which can only be used once the player reaches a certain xp threshold."],["Continue", "Upon selecting the 'Continue' option, you move through the cave and skip to the next scene."]]
                     }
                 ],
                 // Text for Giant Tarantula Bossfight:
@@ -290,16 +283,13 @@
                 },
                 {
                 "name": "climaxVictoryEscape",
-                "text": "And then… the crowd goes wild. The captive redwings are now free! You saved them all! You are a HERO!\nEveryone flies to you and Soaren, lifting you up from the ground and tossing you into the air. The crowd chants: “Hoorah for Little Red! Hoorah for Little Red!”\n“I’m very proud of you, son,” says your father, “you saved your brethren, and we are grateful for your bravery and determination.”\n“Yeah, Red,” says Featherfoot, “That was sick! I didn’t know you were so good at fighting!”\n“I knew you could do it, little redwing,” says Soaren, “after everything we’ve been through together, this was one of the greatest battles we’ve ever fought. Well done!”\nAs the crowd thanks you, you are reminded of the fact that the tall trees surrounding you are still burning. They are like tall towers, imposing themselves over you and your friends.\nAnd then, realization hits you… the trees are collapsing. \n“THE TREES!” shouts Featherfoot “THEY ARE FALLING ON US!”\nThe flock starts to panic, but in the same instant, everyone goes airborne.\n“Hurry, son!” your father shouts. \nYou follow suit.\nEvery tree in the forest is now crashing, one by one. However, your flock is led by Soaren, who is a master at maneuvering. He directs everyone to follow his movements:\n“This way!” he shouts, as you approach the exit.\nYou are following close behind everybody, and your brother and father are right in front of you. Suddenly, a colossal conifer begins to topple over everyone.\n“HURRY!” shouts the owl, “WE CAN STILL MAKE IT!”\nEverybody gets away, to the other side, but you are behind everybody, trying the best you can to get close to the group, but you are too slow. \nYOU NOW SEE THE TREE FALLING ON YOU. You can still make it across, but you also see a hole in the ground beneath you. \nYOU HAVE SIX SECONDS TO MAKE YOUR NEXT MOVE.\nYou are now presented with three options: you can either get back and fly in the opposite direction, away from the flock; you can plunge down into the hole beneath you, or you can follow the rest and cross to the other side."
+                "text": "And then… the crowd goes wild. The captive redwings are now free! You saved them all! You are a HERO!\nEveryone flies to you and Soaren, lifting you up from the ground and tossing you into the air. The crowd chants: “Hoorah for Little Red! Hoorah for Little Red!”\n“I’m very proud of you, son,” says your father, “you saved your brethren, and we are grateful for your bravery and determination.”\n“Yeah, Red,” says Featherfoot, “That was sick! I didn’t know you were so good at fighting!”\n“I knew you could do it, little redwing,” says Soaren, “after everything we’ve been through together, this was one of the greatest battles we’ve ever fought. Well done!”\nAs the crowd thanks you, you are reminded of the fact that the tall trees surrounding you are still burning. They are like tall towers, imposing themselves over you and your friends.\nAnd then, realization hits you… the trees are collapsing. \n“THE TREES!” shouts Featherfoot “THEY ARE FALLING ON US!”\nThe flock starts to panic, but in the same instant, everyone goes airborne.\n“Hurry, son!” your father shouts. \nYou follow suit.\nEvery tree in the forest is now crashing, one by one. However, your flock is led by Soaren, who is a master at maneuvering. He directs everyone to follow his movements:\n“This way!” he shouts, as you approach the exit.\nYou are following close behind everybody, and your brother and father are right in front of you. Suddenly, a colossal conifer begins to topple over everyone.\n“HURRY!” shouts the owl, “WE CAN STILL MAKE IT!”\nEverybody gets away, to the other side, but you are behind everybody, trying the best you can to get close to the group, but you are too slow. \nYOU NOW SEE THE TREE FALLING ON YOU. You can still make it across, but you also see a hole in the ground beneath you. \nYOU HAVE SIX SECONDS TO MAKE YOUR NEXT MOVE.\nYou are now presented with three options: you can either get back and fly in the opposite direction, away from the flock; you can plunge down into the hole beneath you, or you can follow the rest and cross to the other side.",
+                finalActions:[["Follow", "If you choose the get back option, you evade the falling tree just in time. It crashes with a loud thump, and a branch from the tree breaks off and hurts you. You faint.\nSuddenly you hear a voice.\n“Wake up.”"], ["Plunge down",] ["Get back"]]
                 }
                 ],
                 // Text for THE FINALE:
                 // Upon choosing the "getBack" option from finalActions, the user will see this text:
                 "getBack": [
-                    {
-                        "name": "evadeTree",
-                        "text": "If you choose the get back option, you evade the falling tree just in time. It crashes with a loud thump, and a branch from the tree breaks off and hurts you. You faint.\nSuddenly you hear a voice.\n“Wake up.”"
-                    },
                     {
                         "name": "wakeInFire",
                         "text": "You open your eyes, and your vision is blurred. You can make out, however, that you are surrounded by flames. You are coughing.\n“The smoke is really hitting you, huh?” says the voice.\nYour vision clears and you try to get a closer look at the speaker.\nIt is a falcon.\nWhat should you do?"
