@@ -525,8 +525,12 @@
                 itemsList.appendChild(li);
             }
         
-            // Show the inventory
-            inventoryDisplay.style.display = "block";
+            // check if inventory is open and act accordingly
+            if (inventoryDisplay.style.display === "block") {
+                inventoryDisplay.style.display = "none"; // Hide the inventory display if it is open
+            } else {
+                inventoryDisplay.style.display = "block"; // Show the inventory display if it is not open
+            }
         });
 
         closeInventoryButton.addEventListener("click", function () {
@@ -594,10 +598,12 @@
                     actOptions.appendChild(empty);
                 }
 
-                if(actButton.classList.contains("disabled")) { 
-                    // do not show actDisplay if actButton is disabled
-                } else {
-                    actDisplay.style.display = "block"; // Show the act display
+                if(!actButton.classList.contains("disabled")) { // only proceed if actButton is not disabled
+                    if (actDisplay.style.display === "block") {
+                        actDisplay.style.display = "none"; // Hide the act display if it is open
+                    } else {
+                        actDisplay.style.display = "block"; // Show the act display if it is hidden
+                    }
                 }
             });
 
