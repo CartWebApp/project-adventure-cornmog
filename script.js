@@ -385,8 +385,14 @@
 
                 // ⬇ HIDE continue button if current text entry is in the "hide list"
                 const nextButton = document.getElementById("nextButton");
+                let actButton = document.getElementById("act");
                 if (story.nodesThatHideContinue.includes(currentEntry.name)) {
                     nextButton.style.display = "none";
+                    if (currentEntry.name === "callToAction") {
+                        actButton.classList.remove("disabled");
+                    }
+                    // add additional if condition for combat here
+                
                 } else {
                     nextButton.style.display = "flex"; 
                 }
@@ -573,6 +579,7 @@
                             story.i = 0; // Reset character index
                             document.getElementById('text').innerHTML = ''; // Clear previous text
                             story.writeText(); // Update the active text
+                            actButton.classList.add("disabled"); // Disable the act button
                         } else {
                             // Error handling fpr when the destination key doesn't exist
                             console.error(`No text found for ${choice[1]}`);
@@ -587,12 +594,18 @@
                     actOptions.appendChild(empty);
                 }
 
-                actDisplay.style.display = "block";
+                if(actButton.classList.contains("disabled")) { 
+                    // do not show actDisplay if actButton is disabled
+                } else {
+                    actDisplay.style.display = "block"; // Show the act display
+                }
             });
 
         closeActDisplay.addEventListener("click", function () {
             actDisplay.style.display = "none";
         });
+        // === COMBAT BUTTON SETUP ===
+        const combatButton = document.getElementById("combat");
     });
 
 // ---------------------------------------------------------------------------------------
