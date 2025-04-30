@@ -284,7 +284,7 @@
                 {
                 "name": "climaxVictoryEscape",
                 "text": "And then… the crowd goes wild. The captive redwings are now free! You saved them all! You are a HERO!\nEveryone flies to you and Soaren, lifting you up from the ground and tossing you into the air. The crowd chants: “Hoorah for Little Red! Hoorah for Little Red!”\n“I’m very proud of you, son,” says your father, “you saved your brethren, and we are grateful for your bravery and determination.”\n“Yeah, Red,” says Featherfoot, “That was sick! I didn’t know you were so good at fighting!”\n“I knew you could do it, little redwing,” says Soaren, “after everything we’ve been through together, this was one of the greatest battles we’ve ever fought. Well done!”\nAs the crowd thanks you, you are reminded of the fact that the tall trees surrounding you are still burning. They are like tall towers, imposing themselves over you and your friends.\nAnd then, realization hits you… the trees are collapsing. \n“THE TREES!” shouts Featherfoot “THEY ARE FALLING ON US!”\nThe flock starts to panic, but in the same instant, everyone goes airborne.\n“Hurry, son!” your father shouts. \nYou follow suit.\nEvery tree in the forest is now crashing, one by one. However, your flock is led by Soaren, who is a master at maneuvering. He directs everyone to follow his movements:\n“This way!” he shouts, as you approach the exit.\nYou are following close behind everybody, and your brother and father are right in front of you. Suddenly, a colossal conifer begins to topple over everyone.\n“HURRY!” shouts the owl, “WE CAN STILL MAKE IT!”\nEverybody gets away, to the other side, but you are behind everybody, trying the best you can to get close to the group, but you are too slow. \nYOU NOW SEE THE TREE FALLING ON YOU. You can still make it across, but you also see a hole in the ground beneath you. \nYOU HAVE SIX SECONDS TO MAKE YOUR NEXT MOVE.\nYou are now presented with three options: you can either get back and fly in the opposite direction, away from the flock; you can plunge down into the hole beneath you, or you can follow the rest and cross to the other side.",
-                finalActions:[["Follow", "If you choose the get back option, you evade the falling tree just in time. It crashes with a loud thump, and a branch from the tree breaks off and hurts you. You faint.\nSuddenly you hear a voice.\n“Wake up.”"], ["Plunge down",] ["Get back"]]
+                finalActions:[["Follow", "If you choose the get back option, you evade the falling tree just in time. It crashes with a loud thump, and a branch from the tree breaks off and hurts you. You faint.\nSuddenly you hear a voice.\n“Wake up.”"], ["Plunge down", "If you choose the plunge down option, you plunge down into the hole beneath you. The tree falls with a loud thump, covering the hole. You are safe inside, but there is no light. You call out for help, but no one hears you. After crying out for about an hour, you decide to explore the hole. It turns out to be a cave system."] ["Get back", "If you choose the follow option, you follow the rest and cross to the other side. You return home a hero. All of the redwing families thank you for saving their children and relatives, and many birds from the forest begin to visit your nest frequently."]]
                 }
                 ],
                 // Text for THE FINALE:
@@ -334,10 +334,6 @@
                 // Upon choosing the "plungeDown" option from finalActions, the user will see this text:
                     "plungeDown": [
                     {
-                        "name": "plungeIntoHole",
-                        "text": "If you choose the plunge down option, you plunge down into the hole beneath you. The tree falls with a loud thump, covering the hole. You are safe inside, but there is no light. You call out for help, but no one hears you. After crying out for about an hour, you decide to explore the hole. It turns out to be a cave system."
-                    },
-                    {
                         "name": "meetGlydeAndClancy",
                         "text": "After exploring for a while, you find an old owl and a crow.\n“Greetings, little one,” says the owl, “I am Glyde, brother of Soaren. And this crow sitting in front of me is Clancy, my companion. We have been waiting for someone important to arrive.”"
                     },
@@ -348,6 +344,24 @@
                     ],
                 
                 // Upon choosing the "follow" option from finalActions, the user will see this text:
+                "follow": [
+                    {
+                        "name": "followEnding1",
+                        "text": "If you choose the follow option, you follow the rest and cross to the other side. You return home a hero. All of the redwing families thank you for saving their children and relatives, and many birds from the forest begin to visit your nest frequently."
+                    },
+                    {
+                        "name": "followEnding2",
+                        "text": "You make many friends and spend quality time with Featherfoot, your father, and your mother, who is forever indebted to you for saving her husband, as well as her son."
+                    },
+                    {
+                        "name": "followEnding3",
+                        "text": "In all of this, Soaren becomes your full-time mentor, who teaches you new techniques, and tells you stories. You become best friends with him."
+                    },
+                    {
+                        "name": "followEnding4",
+                        "text": "You are happy to have met him, and you are glad that you and your family are safe and sound, without a single tarantula or falcon in sight. You are at peace."
+                    }
+                ]
 
             },
 
