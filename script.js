@@ -7,8 +7,8 @@
          combat: [],
          actions: [act, combat, inventory],
 // FAST --> These actions need to be folded into the gameText object where apporpriate for your story         
-         caveActions: ["explore", "continue"],
-         finalActions:["follow", "plunge down", "get back"],
+        //  caveActions: ["explore", "continue"],
+        //  finalActions:["follow", "plunge down", "get back"],
 // FAST --> End of actions in need of change         
             playerDeath: function(){
                 if (Player.health == 0){
@@ -24,7 +24,7 @@
             
 
             // List of special text node names where the CONTINUE button should hide
-            nodesThatHideContinue: ["callToAction"],
+            nodesThatHideContinue: ["callToAction", "callToActionFalconFight", "tarantulaFightCallToAction", "strongFalconCallToAction"],
             // List of special text node names where the CONTINUE button should hide
 
 
@@ -42,7 +42,19 @@
                     },
                     {
                       "name": "introText3",
-                      "text": "One day, an owl arrives. He flies down to your nest and greets you and your mother. The owl then tells you that he knows where your father and brother are and calls you to go with him and find them."
+                      "text": "One day, an owl arrives. He flies down to your nest and greets you and your mother. The owl then tells you that he knows where your father and brother are and calls you to go with him and find them:"
+                    },
+                    {
+                      "name": "soarenIntroduction",
+                      "text": "'I know where your brethren reside. Come with me, and we shall find them together.'"
+                    },
+                    {
+                      "name": "motherTalk",
+                      "text": "'Yes, Red,' says your mother. 'Mr. Owl seems like a trustworthy fellow. You should go with him. But pray you keep my child safe, Mr. Owl!'"
+                    },
+                    {
+                      "name": "soarenAnswer",
+                      "text": "'Mrs. Redwing, I can assure you that your son will be safe with me. So, what do you say, little redwing,'  asks the owl, 'will you join me in this journey?'"
                     },
                     {
                       "name": "callToAction",
@@ -51,20 +63,35 @@
                       choices: [["Accept the owl's request", "routeOfAcceptance"],["Decline the owl's request", "rejectingTheCall"],["Think about it", "pathOfContemplation"]]
                     }
                   ],
-                //   If the player chooses "Accept the owl's request" in startChoices, then this text will apply
+                //   If the player chooses "Accept the owl's request" in choices (see array above), then this text will apply
                   "routeOfAcceptance": [
                     {
                     "name": "acceptStart",
-                    "text": "If you accept the owl’s request and decide to go on this adventure, then your journey begins."
+                    "text": "You accept the owl’s request and your journey begins."
                     },
                     {
                     "name": "locationReveal",
-                    "text": "You ask the owl where the missing redwings are hidden. He tells you that they are in a forest that lies beyond a mountain range."
+                    "text": "You leave your nest and say farewell to your mother. You fly for a few meters, and once you exit your forest, you ask the owl where the missing redwings are hidden."
+                    },
+                    {
+                    "name": "soarenLine1",
+                    "text": "'They are beyond a vast mountain range,' answers the owl. 'in a lush evergreen forest.'"
+                    },
+                    {
+                    "name": "soarenLine2",
+                    "text": "'Worry not, young redwing. I am sure that we will find your father and brother by midnight.'"
                     },
                     {
                     "name": "falconFightIntro",
                     "text": "As soon as the owl says that, a falcon swoops in and a fight breaks out."
                     },
+                    // DISABLE CONTINUE BUTTON
+                    {
+                      "name": "callToActionFalconFight",
+                      "text": "Defend yourself! (Choose a combat move from COMBAT or use an item in INVENTORY.)",
+                    },
+                    // ENABLE CONTINUE BUTTON
+
                     {
                     "name": "falconWinOutcome",
                     "text": "If the falcon manages to bring you down to 0 hp, then the game ends with one of its possible endings: 'You Have Fallen.'"
@@ -81,6 +108,13 @@
                     "name": "tarantulaFightIntro",
                     "text": "Soaren then suggests that you stop to get some rest. When you settle under the shade of a tall tree, you spot a tarantula, who crawls up to you, preparing to attack."
                     },
+                    // DISABLE CONTINUE BUTTON
+                    {
+                    "name": "tarantulaFightCallToAction",
+                    "text": "Defend yourself! (Choose a combat move from COMBAT or use an item in INVENTORY.)",
+                    },
+                    // ENABLE CONTINUE BUTTON
+
                     {
                     "name": "tarantulaFightOutcomeFail",
                     "text": "If the tarantula manages to bring you down to 0 hp, then the game finishes with the 'You Have Fallen' ending."
@@ -100,11 +134,18 @@
                     {
                     "name": "soarenEncourages",
                     "text": "Soaren reveals that the reason why he didn’t explain this earlier was because he didn’t want you to get scared, but the owl encourages you and tells you to cheer up: there is still hope."
-                    },
+                    },                    
                     {
                     "name": "strongFalconBattleIntro",
                     "text": "Suddenly you see a strong falcon approaching. Unlike in other battles, Soaren deals the first blow to the enemy."
                     },
+                    // DISABLE CONTINUE BUTTON
+                    {
+                    "name": "strongFalconCallToAction",
+                    "text": "Defend yourself! (Choose a combat move from COMBAT or use an item in INVENTORY.)",
+                    },
+                    // ENABLE CONTINUE BUTTON
+
                     {
                     "name": "strongFalconBattleOutcome",
                     "text": "Once you successfully defeat the strong falcon, you fly the last few meters to the mountain range. It is now dark."
@@ -122,7 +163,7 @@
                 "pathOfContemplation": [
                     {
                     "name": "contemplationIntro",
-                    "text": "If you instead choose to 'think about it,' you exit the scene, leaving the owl and your mother behind, to take a 'stroll' and get some fresh air while you contemplate the owl’s request."
+                    "text": "You exit the scene, leaving the owl and your mother behind, to take a 'stroll' and get some fresh air while you contemplate the owl’s request."
                     },
                     {
                     "name": "falconAmbushDuringContemplation",
@@ -295,14 +336,6 @@
                         "text": "You open your eyes, and your vision is blurred. You can make out, however, that you are surrounded by flames. You are coughing.\n“The smoke is really hitting you, huh?” says the voice.\nYour vision clears and you try to get a closer look at the speaker.\nIt is a falcon.\nWhat should you do?"
                     },
                     {
-                        "name": "combatBlocked",
-                        "text": "If you choose combat, the dialogue box tells you that you cannot fight because your strength is at zero. The game takes you back to “actions.”"
-                    },
-                    {
-                        "name": "eatBlocked",
-                        "text": "If you choose to eat, the dialogue box tells you that you are too weak to make any movements (this will still be the case if you choose the “seeds” item from your inventory)"
-                    },
-                    {
                         "name": "actFails",
                         "text": "If you choose to act, you try to get up, but you tremble and fall back to the ground.\n“Don’t try that,” says the falcon, “you are too weak. But you will soon be strengthened. Come with me.”"
                     },
@@ -390,16 +423,26 @@
                 // ⬇ HIDE continue button if current text entry is in the "hide list"
                 const nextButton = document.getElementById("nextButton");
                 let actButton = document.getElementById("act");
+                let combatButton = document.getElementById("combat");
                 if (story.nodesThatHideContinue.includes(currentEntry.name)) {
                     nextButton.style.display = "none";
+                    
                     if (currentEntry.name === "callToAction") {
                         actButton.classList.remove("disabled");
                     }
-                    // add additional if condition for combat here
+                
+                    if (
+                        currentEntry.name === "callToActionFalconFight" ||
+                        currentEntry.name === "tarantulaFightCallToAction" ||
+                        currentEntry.name === "strongFalconCallToAction"
+                    ) {
+                        combatButton.classList.remove("disabled");
+                    }
                 
                 } else {
-                    nextButton.style.display = "flex"; 
+                    nextButton.style.display = "flex";
                 }
+                    // add additional if condition for combat here
 
                 const fullText = currentEntry.text;
 
@@ -459,17 +502,19 @@
 // ---------------------------------------------------------------------------------------
 //   ~PLAYER LOGIC~
   
-    class Player{
-        constructor(){
-            this.maxHealth = 10; 
-            this.health = 10; 
-            this.strength = 0; 
-            this.exp = 0; 
-            this.inventory = [];
-            this.canUseVenom = false;
-            this.canUseFlight = false;
+        class Player {
+            constructor() {
+                this.level = 1; 
+                this.maxHealth = 10;
+                this.health = 10;
+                this.strength = 0;
+                this.exp = 0;
+                this.inventory = [];
+                this.canUseVenom = false;
+                this.canUseFlight = false;
+                this.dodgeTurns = 0; // Also recommended for tracking "flight"
+            }
         }
-       }
 
        const player = new Player();
 
@@ -614,8 +659,7 @@
         closeActDisplay.addEventListener("click", function () {
             actDisplay.style.display = "none";
         });
-        // === COMBAT BUTTON SETUP ===
-        const combatButton = document.getElementById("combat");
+        // === COMBAT  SETUP ===
     });
 
 // ---------------------------------------------------------------------------------------
