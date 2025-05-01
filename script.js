@@ -514,10 +514,156 @@
                 this.canUseFlight = false;
                 this.dodgeTurns = 0; // Also recommended for tracking "flight"
             }
+            levelUp() {
+                const newLevel = Math.floor(this.exp / 10) + 1;
+                if (newLevel > this.level) {
+                    const gainedLevels = newLevel - this.level;
+                    this.level = newLevel;
+                    this.maxHealth += 2 * gainedLevels;
+                    this.health = this.maxHealth; // Optional: heal on level-up
+                    console.log(`Leveled up to ${this.level}! Max Health is now ${this.maxHealth}`);
+                    
+                    if (this.level >= 5) this.canUseFlight = true;
+                    if (this.level >= 6) this.canUseVenom = true;
+                }
+            }
         }
+        
+        // == COMBAT MOVES Based on Inventory and XP Level ==
+        const playerCombatMoves = {
+            peck: {
+                name: "Peck",
+                type: "damage",
+                baseDamage: 2,
+                execute: (enemy) => {
+                    const damage = 2 + player.strength;
+                    enemy.health -= damage;
+                    console.log(`Player used Peck! Dealt ${damage} damage.`);
+                }
+            },
+            song: {
+                name: "Song",
+                type: "healing",
+                execute: () => {
+                    player.health = player.maxHealth;
+                    console.log("Player used Song! Healed to max health.");
+                }
+            },
+            poison: {
+                name: "Poison",
+                type: "poison",
+                turns: 3,
+                damage: 2,
+                execute: (enemy) => {
+                    enemy.poison = { turns: 3, damage: 2 + player.strength };
+                    console.log(`Player used Poison! Enemy will take ${2 + player.strength} damage for 3 turns.`);
+                }
+            },
+            venom: {
+                name: "Venom",
+                type: "damage",
+                baseDamage: 7,
+                execute: (enemy) => {
+                    const damage = 7 + player.strength;
+                    enemy.health -= damage;
+                    console.log(`Player used Venom! Dealt ${damage} damage.`);
+                }
+            },
+            flight: {
+                name: "Flight",
+                type: "evasion",
+                execute: () => {
+                    player.dodgeTurns = 2;
+                    console.log("Player used Flight! Dodging next two attacks.");
+                }
+            }
+        };
 
        const player = new Player();
 
+        function getPlayerCombatMoves(player) {
+            const moves = [playerCombatMoves.peck]; // Always available
+        
+            if (player.inventory.includes("songBook")) {
+                moves.push(playerCombatMoves.song);
+            }
+            if (player.inventory.includes("poison tusk")) {
+                moves.push(playerCombatMoves.poison);
+            }
+            if (player.inventory.includes("birdGuidebook") && player.canUseFlight) {
+                moves.push(playerCombatMoves.flight);
+            }
+            if (player.inventory.includes("venom tusk") && player.canUseVenom) {
+                moves.push(playerCombatMoves.venom);
+            }
+        
+            return moves;
+        }
+
+        function addItemToInventory(itemName) {
+            if (!player.inventory.includes(itemName)) {
+                player.inventory.push(itemName);
+            }
+            updateCombatAndInventoryDisplays();
+        }
+        
+        function updateCombatAndInventoryDisplays() {
+            const moves = getPlayerCombatMoves(player);
+            renderCombatOptions(moves);
+            renderInventory(player.inventory);
+        }
+
+        function renderCombatOptions(moves) {
+            const container = document.getElementById("combatMovesContainer");
+            container.innerHTML = "";
+        
+            // Ensure "peck" is always included
+            const uniqueMoves = new Set(["peck", ...moves.map(m => m.name.toLowerCase())]);
+        
+            uniqueMoves.forEach(moveKey => {
+                const move = playerCombatMoves[moveKey];
+                if (move) {
+                    const btn = document.createElement("button");
+                    btn.textContent = move.name;
+                    btn.classList.add("combat-move-button");
+                    btn.addEventListener("click", () => {
+                        if (currentEnemy) {
+                            move.execute(currentEnemy);
+                            if (currentEnemy.health <= 0) {
+                                endCombat(currentEnemy);
+                            } else {
+                                enemyTurn();
+                            }
+                            updateCombatDisplay();
+                        }
+                    });
+                    container.appendChild(btn);
+                }
+            });
+        }
+        
+        function renderInventory(inventory) {
+            const itemsList = document.getElementById("playerItems");
+            itemsList.innerHTML = "";
+        
+            if (inventory.length > 0) {
+                inventory.forEach(item => {
+                    const li = document.createElement("li");
+                    const button = document.createElement("button");
+                    button.textContent = item;
+                    button.classList.add("inventory-item");
+                    li.appendChild(button);
+                    itemsList.appendChild(li);
+                });
+            } else {
+                const li = document.createElement("li");
+                const button = document.createElement("button");
+                button.textContent = "(Empty)";
+                button.classList.add("inventory-item");
+                li.appendChild(button);
+                itemsList.appendChild(li);
+            }
+        }
 
        document.addEventListener('DOMContentLoaded', function () {
         // === OTHER BUTTONS ===
@@ -561,8 +707,32 @@
                     const button = document.createElement("button");
                     button.textContent = item;
                     button.classList.add("inventory-item");
-                    // You can add functionality here later
-                    li.appendChild(button);
+                    // Connect Inventory Items to Combat
+                    button.addEventListener("click", () => {
+                        let move;
+                        switch(item) {
+                            case "songBook":
+                                move = playerCombatMoves.song;
+                                break;
+                            case "poison tusk":
+                                move = playerCombatMoves.poison;
+                                break;
+                            case "birdGuidebook":
+                                if (player.canUseFlight) move = playerCombatMoves.flight;
+                                break;
+                            case "venom tusk":
+                                if (player.canUseVenom) move = playerCombatMoves.venom;
+                                break;
+                            default:
+                                return;
+                        }
+                    
+                        if (move && currentEnemy) {
+                            move.execute(currentEnemy);
+                            enemyTurn();
+                            updateCombatDisplay();
+                        }
+                    });                    li.appendChild(button);
                     itemsList.appendChild(li);
                 });
             } else {
@@ -659,7 +829,98 @@
         closeActDisplay.addEventListener("click", function () {
             actDisplay.style.display = "none";
         });
-        // === COMBAT  SETUP ===
+            // === COMBAT SETUP ===
+    let currentEnemy = null;
+    
+    function startCombat(enemyInstance) {
+        currentEnemy = enemyInstance;
+        console.log(`A wild ${enemyInstance.enemyName} appears!`);
+        updateCombatDisplay(); // <-- call update here
+    }
+
+    function playerTurn(moveKey) {
+        const move = playerCombatMoves[moveKey];
+        if (move && (!move.requiresUnlock || player[move.requiresUnlock])) {
+            move.execute(currentEnemy);
+            if (currentEnemy.health <= 0) {
+                endCombat(currentEnemy);
+            } else {
+                enemyTurn();
+            }
+        }
+    }
+
+    function enemyTurn() {
+        if (player.dodgeTurns > 0) {
+            console.log("Player dodged the attack!");
+            player.dodgeTurns--;
+            return;
+        }
+        currentEnemy.attack();
+        updateCombatDisplay();
+    }
+
+    function endCombat(enemy) {
+        console.log(`${enemy.enemyName} defeated!`);
+        let xpGained = 0;
+        switch(enemy.enemyName) {
+            case "Falcon": xpGained = 4; break;
+            case "Tarantula": xpGained = 5; break;
+            case "Giant Tarantula": xpGained = 20; break;
+            case "Strong Falcon": xpGained = 10; break;
+        }
+        player.exp += xpGained;
+        player.strength += 1;
+        player.levelUp();
+        currentEnemy = null;
+    }
+        function enemyTurn() {
+            if (player.dodgeTurns > 0) {
+                console.log("Player dodged the attack!");
+                player.dodgeTurns--;
+                return;
+            }
+            currentEnemy.attack();
+            updateCombatDisplay();
+        }
+
+        function endCombat(enemy) {
+            console.log(`${enemy.enemyName} defeated!`);
+            let xpGained = 0;
+            switch(enemy.enemyName) {
+                case "Falcon": xpGained = 4; break;
+                case "Tarantula": xpGained = 5; break;
+                case "Giant Tarantula": xpGained = 20; break;
+                case "Strong Falcon": xpGained = 10; break;
+            }
+            player.exp += xpGained;
+            player.strength += 1;
+            player.levelUp();
+            currentEnemy = null;
+        }
+
+        // === ⬇️ Place updateCombatDisplay() HERE ⬇️ ===
+        function updateCombatDisplay() {
+            // your full function here
+        }
+
+        // === COMBAT button logic ===
+        const combatButton = document.getElementById("combat");
+        combatButton.addEventListener("click", () => {
+            const combatMenu = document.getElementById("combatDisplay");
+            combatMenu.style.display = "block";
+        
+            // TEST ENEMY
+            const testEnemy = new Enemy("Falcon", 12, [
+                { name: "Dive Strike", damage: 3 },
+                { name: "Claw Swipe", damage: 2 }
+            ]);
+            startCombat(testEnemy);
+        });
+
+        document.getElementById("closeCombat").addEventListener("click", function () {
+            document.getElementById("combatDisplay").style.display = "none";
+        });
     });
 
 // ---------------------------------------------------------------------------------------
