@@ -612,6 +612,29 @@
             renderCombatOptions(moves);
             renderInventory(player.inventory);
         }
+        
+        function renderInventory(inventory) {
+            const itemsList = document.getElementById("playerItems");
+            itemsList.innerHTML = "";
+        
+            if (inventory.length > 0) {
+                inventory.forEach(item => {
+                    const li = document.createElement("li");
+                    const button = document.createElement("button");
+                    button.textContent = item;
+                    button.classList.add("inventory-item");
+                    li.appendChild(button);
+                    itemsList.appendChild(li);
+                });
+            } else {
+                const li = document.createElement("li");
+                const button = document.createElement("button");
+                button.textContent = "(Empty)";
+                button.classList.add("inventory-item");
+                li.appendChild(button);
+                itemsList.appendChild(li);
+            }
+        }
 
         function renderCombatOptions(moves) {
             const container = document.getElementById("combatMovesContainer");
@@ -640,29 +663,6 @@
                     container.appendChild(btn);
                 }
             });
-        }
-        
-        function renderInventory(inventory) {
-            const itemsList = document.getElementById("playerItems");
-            itemsList.innerHTML = "";
-        
-            if (inventory.length > 0) {
-                inventory.forEach(item => {
-                    const li = document.createElement("li");
-                    const button = document.createElement("button");
-                    button.textContent = item;
-                    button.classList.add("inventory-item");
-                    li.appendChild(button);
-                    itemsList.appendChild(li);
-                });
-            } else {
-                const li = document.createElement("li");
-                const button = document.createElement("button");
-                button.textContent = "(Empty)";
-                button.classList.add("inventory-item");
-                li.appendChild(button);
-                itemsList.appendChild(li);
-            }
         }
 
        document.addEventListener('DOMContentLoaded', function () {
@@ -901,7 +901,15 @@
 
         // === ⬇️ Place updateCombatDisplay() HERE ⬇️ ===
         function updateCombatDisplay() {
-            // your full function here
+            if (playerHealth && playerExp && playerStrength) {
+                playerHealth.textContent = `Health: ${player.health}`;
+                playerExp.textContent = `EXP: ${player.exp}`;
+                playerStrength.textContent = `Strength: ${player.strength}`;
+            }
+        
+            // Update combat buttons
+            const combatMoves = getPlayerCombatMoves(player);
+            renderCombatOptions(combatMoves);
         }
 
         // === COMBAT button logic ===
