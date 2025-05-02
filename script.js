@@ -1,6 +1,23 @@
 // IMPORTANT! This tracks wether combat is currently active
 let combatActive = false;
+let currentEnemy = null;
 
+// IMPORTANT! Update combat display
+function updateCombatDisplay() {
+    console.log("Updating combat display. Current enemy:", currentEnemy);
+    const combatMoves = getPlayerCombatMoves(player);
+    renderCombatOptions(combatMoves);
+
+    // Update enemy health display
+    const enemyHealthElement = document.getElementById("enemyHealth");
+    if (currentEnemy) {
+        enemyHealthElement.textContent = `Enemy Health: ${currentEnemy.health}/${currentEnemy.maxHealth}`;
+        console.log(`Enemy health updated: ${currentEnemy.health}/${currentEnemy.maxHealth}`);
+    } else {
+        enemyHealthElement.textContent = "No enemy present.";
+        console.log("No enemy present in combat display.");
+    }
+}
 // ---------------------------------------------------------------------------------------
 //   ~STORY LOGIC~
     const story = {
@@ -749,14 +766,15 @@ let combatActive = false;
                     // === COMBAT button logic ===
                     const combatButton = document.getElementById("combat");
                     combatButton.addEventListener("click", () => {
-                        // const combatDisplay = document.getElementById("combatDisplay");
+                        const combatDisplay = document.getElementById("combatDisplay");
                     
                         if (!combatButton.classList.contains("disabled")) {
                             if (combatDisplay.style.display === "block") {
                                 combatDisplay.style.display = "none";
                             } else {
-                                combatDisplay.style.display = "block";
-                                updateCombatDisplay(); // Ensure combat options are updated
+                                // ✅ TEMP: Start a test battle to ensure enemy exists
+                                const testEnemy = new Enemy("Falcon", 12, "falconMoves");
+                                startCombat(testEnemy); // This will also call updateCombatDisplay()
                             }
                         }
                     });
@@ -766,7 +784,6 @@ let combatActive = false;
                     });
 
         
-
             closeActDisplay.addEventListener("click", function () {
                 actDisplay.style.display = "none";
             });
@@ -880,8 +897,6 @@ class Enemy {
     }
 }
 
-let currentEnemy = null;
-
 function enemyTurn() {
     if (currentEnemy) {
         console.log(`${currentEnemy.enemyName}'s turn.`);
@@ -898,18 +913,22 @@ function enemyTurn() {
 
 
 function startCombat(enemyInstance) {
-    if (combatActive) return; // Prevent re-triggering combat logic
+    if (combatActive) {
+        console.log("Combat is already active. Skipping startCombat.");
+        return; // Prevent re-triggering combat logic
+    }
 
+    console.log("Starting combat...");
     const combatDisplay = document.getElementById("combatDisplay");
-    console.log("Combat menu displayed:", combatDisplay.style.display === "block");
-    console.log("Combat started. combatActive:", combatActive);
 
     currentEnemy = enemyInstance; // Set the current enemy
+    console.log("Current enemy set to:", currentEnemy); // Debugging log
     combatActive = true; // Mark combat as active
     console.log(`A wild ${enemyInstance.enemyName} appears!`);
 
     // Display the combat menu
     combatDisplay.style.display = "block";
+    console.log("Combat display set to visible.");
 
     updateCombatDisplay(); // Update combat display with enemy info
 }
@@ -979,21 +998,6 @@ function executeCallToAction(nodeName) {
         // Use writeText to display the text with typewriter functionality
         document.getElementById("text").innerHTML = ""; // Clear the dialogue box
         story.writeText();
-    }
-}
-
-// Update combat display
-function updateCombatDisplay() {
-    console.log("Updating combat display. Current enemy:", currentEnemy);
-    const combatMoves = getPlayerCombatMoves(player);
-    renderCombatOptions(combatMoves);
-
-    // Update enemy health display
-    const enemyHealthElement = document.getElementById("enemyHealth");
-    if (currentEnemy) {
-        enemyHealthElement.textContent = `Enemy Health: ${currentEnemy.health}/${currentEnemy.maxHealth}`;
-    } else {
-        enemyHealthElement.textContent = "No enemy present.";
     }
 }
 
