@@ -1,3 +1,6 @@
+// IMPORTANT! This tracks wether combat is currently active
+let combatActive = false;
+
 // ---------------------------------------------------------------------------------------
 //   ~STORY LOGIC~
     const story = {
@@ -24,7 +27,13 @@
             
 
             // List of special text node names where the CONTINUE button should hide
-            nodesThatHideContinue: ["callToAction", "callToActionFalconFight", "tarantulaFightCallToAction", "strongFalconCallToAction"],
+            nodesThatHideContinue: [
+                "callToAction",
+                "callToActionFalconFight",
+                "tarantulaFightCallToAction",
+                "strongFalconCallToAction",
+                "combatSequence"
+            ],
             // List of special text node names where the CONTINUE button should hide
 
 
@@ -400,52 +409,53 @@
 
             writeText: function () {
                 const currentArray = this.activeText || this.gameText.introText;
-        
+            
                 if (this.textIndex >= currentArray.length) {
                     if (
                         this.activeText === this.gameText.rejectingTheCall ||
                         this.activeText === this.gameText.pathOfContemplation
                     ) {
-// FAST --> Checking for logic error, you may remove this console.log                        
                         console.log("You have reached the end of the 'Decline' or 'Think' path.");
                         specialFunctionForEndOfDeclineOrThink();
-                    }
-                    else if (
-                        this.activeText === this.gameText.routeOfAcceptance
-                    ) {
+                    } else if (this.activeText === this.gameText.routeOfAcceptance) {
                         routeOfAcceptanceLogic();
                     }
                     return;
                 }
-                
+            
                 const currentEntry = currentArray[this.textIndex];
-
-                // ⬇ HIDE continue button if current text entry is in the "hide list"
+            
+                // Clear the dialogue box before displaying new text
+                if (this.i === 0) {
+                    document.getElementById("text").innerHTML = "";
+                }
+            
+                // Hide the continue button if the current node is in nodesThatHideContinue
                 const nextButton = document.getElementById("nextButton");
-                let actButton = document.getElementById("act");
-                let combatButton = document.getElementById("combat");
                 if (story.nodesThatHideContinue.includes(currentEntry.name)) {
                     nextButton.style.display = "none";
-                    
-                    if (currentEntry.name === "callToAction") {
-                        actButton.classList.remove("disabled");
-                    }
-                
-                    if (
-                        currentEntry.name === "callToActionFalconFight" ||
-                        currentEntry.name === "tarantulaFightCallToAction" ||
-                        currentEntry.name === "strongFalconCallToAction"
-                    ) {
-                        combatButton.classList.remove("disabled");
-                    }
-                
                 } else {
                     nextButton.style.display = "flex";
                 }
-                    // add additional if condition for combat here
-
+            
+                // Enable the ACT button if the current node is "callToAction"
+                const actButton = document.getElementById("act");
+                if (currentEntry.name === "callToAction") {
+                    actButton.classList.remove("disabled");
+                } else {
+                    actButton.classList.add("disabled");
+                }
+            
+                // Enable the COMBAT button if the current node is "callToActionFalconFight"
+                const combatButton = document.getElementById("combat");
+                if (currentEntry.name === "callToActionFalconFight") {
+                    combatButton.classList.remove("disabled");
+                } else {
+                    combatButton.classList.add("disabled");
+                }
+            
+                // Display the text with typewriter functionality
                 const fullText = currentEntry.text;
-
                 if (this.i < fullText.length) {
                     this.isTyping = true;
                     document.getElementById('text').innerHTML += fullText.charAt(this.i);
@@ -453,6 +463,7 @@
                     this.typingTimeout = setTimeout(() => this.writeText(), this.speed);
                 } else {
                     this.isTyping = false;
+                    this.i = 0; // Reset character index for the next entry
                 }
             },
         
@@ -481,7 +492,62 @@
         };
         
         function routeOfAcceptanceLogic() {
-            console.log("Extra logic after decline or think path finishes.");
+            const currentEntry = story.activeText[story.textIndex];
+            console.log("routeOfAcceptanceLogic triggered for:", currentEntry.name);
+        
+            if (currentEntry.name === "callToActionFalconFight") {
+                const falcon = new Enemy("Falcon", 10, "falconMoves");
+                console.log("Initializing Falcon enemy:", falcon);
+        
+                // Set up the text for "callToActionFalconFight"
+                story.activeText = [{ text: currentEntry.text }];
+                story.textIndex = 0;
+                story.i = 0;
+                story.writeText();
+        
+                // Delay combat start until after the text is displayed
+                setTimeout(() => {
+                    startCombat(falcon); // Start combat with the falcon
+                }, currentEntry.text.length * story.speed + 500); 
+            } else if (currentEntry.name === "tarantulaFightCallToAction") {
+                const tarantula = new Enemy("Tarantula", 15, "tarantulaMoves");
+                console.log("Initializing Tarantula enemy:", tarantula);
+        
+                // Set up the text for "tarantulaFightCallToAction"
+                story.activeText = [{ text: currentEntry.text }];
+                story.textIndex = 0;
+                story.i = 0;
+                story.writeText();
+        
+                // Delay combat start until after the text is displayed
+                setTimeout(() => {
+                    // Enable the combat button
+                    const combatButton = document.getElementById("combat");
+                    combatButton.classList.remove("disabled");
+        
+                    // Start the combat
+                    startCombat(tarantula);
+                }, currentEntry.text.length * story.speed + 500); // Delay based on typewriter speed
+            } else if (currentEntry.name === "strongFalconCallToAction") {
+                const strongFalcon = new Enemy("Strong Falcon", 30, "strongFalconMoves");
+                console.log("Initializing Strong Falcon enemy:", strongFalcon);
+        
+                // Set up the text for "strongFalconCallToAction"
+                story.activeText = [{ text: currentEntry.text }];
+                story.textIndex = 0;
+                story.i = 0;
+                story.writeText();
+        
+                // Delay combat start until after the text is displayed
+                setTimeout(() => {
+                    // Enable the combat button
+                    const combatButton = document.getElementById("combat");
+                    combatButton.classList.remove("disabled");
+        
+                    // Start the combat
+                    startCombat(strongFalcon);
+                }, currentEntry.text.length * story.speed + 500); // Delay based on typewriter speed
+            }
         }
 
         function specialFunctionForEndOfDeclineOrThink() {
@@ -502,442 +568,246 @@
 // ---------------------------------------------------------------------------------------
 //   ~PLAYER LOGIC~
   
-        class Player {
-            constructor() {
-                this.level = 1; 
-                this.maxHealth = 10;
-                this.health = 10;
-                this.strength = 0;
-                this.exp = 0;
-                this.inventory = [];
-                this.canUseVenom = false;
-                this.canUseFlight = false;
-                this.dodgeTurns = 0; // Also recommended for tracking "flight"
-            }
-            levelUp() {
-                const newLevel = Math.floor(this.exp / 10) + 1;
-                if (newLevel > this.level) {
-                    const gainedLevels = newLevel - this.level;
-                    this.level = newLevel;
-                    this.maxHealth += 2 * gainedLevels;
-                    this.health = this.maxHealth; // Optional: heal on level-up
-                    console.log(`Leveled up to ${this.level}! Max Health is now ${this.maxHealth}`);
-                    
-                    if (this.level >= 5) this.canUseFlight = true;
-                    if (this.level >= 6) this.canUseVenom = true;
+            class Player {
+                constructor() {
+                    this.level = 1; 
+                    this.maxHealth = 10;
+                    this.health = 10;
+                    this.strength = 0;
+                    this.exp = 0;
+                    this.inventory = [];
+                    this.canUseVenom = false;
+                    this.canUseFlight = false;
+                    this.dodgeTurns = 0; // Also recommended for tracking "flight"
+                }
+                levelUp() {
+                    const newLevel = Math.floor(this.exp / 10) + 1;
+                    if (newLevel > this.level) {
+                        const gainedLevels = newLevel - this.level;
+                        this.level = newLevel;
+                        this.maxHealth += 2 * gainedLevels;
+                        this.health = this.maxHealth; // Optional: heal on level-up
+                        console.log(`Leveled up to ${this.level}! Max Health is now ${this.maxHealth}`);
+                        
+                        if (this.level >= 5) this.canUseFlight = true;
+                        if (this.level >= 6) this.canUseVenom = true;
+                    }
                 }
             }
-        }
-        
-        // == COMBAT MOVES Based on Inventory and XP Level ==
-        const playerCombatMoves = {
-            peck: {
-                name: "Peck",
-                type: "damage",
-                baseDamage: 2,
-                execute: (enemy) => {
-                    const damage = 2 + player.strength;
-                    enemy.health -= damage;
-                    console.log(`Player used Peck! Dealt ${damage} damage.`);
+            
+            // == COMBAT MOVES Based on Inventory and XP Level ==
+            const playerCombatMoves = {
+                peck: {
+                    name: "Peck - deals 2 damage",
+                    type: "damage",
+                    baseDamage: 2,
+                    execute: (enemy) => {
+                        const damage = 2 + player.strength;
+                        enemy.health -= damage;
+                        console.log(`Player used Peck! Dealt ${damage} damage.`);
+                    }
+                },
+                song: {
+                    name: "Song",
+                    type: "healing",
+                    execute: () => {
+                        player.health = player.maxHealth;
+                        console.log("Player used Song! Healed to max health.");
+                    }
+                },
+                poison: {
+                    name: "Poison",
+                    type: "poison",
+                    turns: 3,
+                    damage: 2,
+                    execute: (enemy) => {
+                        enemy.poison = { turns: 3, damage: 2 + player.strength };
+                        console.log(`Player used Poison! Enemy will take ${2 + player.strength} damage for 3 turns.`);
+                    }
+                },
+                venom: {
+                    name: "Venom",
+                    type: "damage",
+                    baseDamage: 7,
+                    execute: (enemy) => {
+                        const damage = 7 + player.strength;
+                        enemy.health -= damage;
+                        console.log(`Player used Venom! Dealt ${damage} damage.`);
+                    }
+                },
+                flight: {
+                    name: "Flight",
+                    type: "evasion",
+                    execute: () => {
+                        player.dodgeTurns = 2;
+                        console.log("Player used Flight! Dodging next two attacks.");
+                    }
                 }
-            },
-            song: {
-                name: "Song",
-                type: "healing",
-                execute: () => {
-                    player.health = player.maxHealth;
-                    console.log("Player used Song! Healed to max health.");
-                }
-            },
-            poison: {
-                name: "Poison",
-                type: "poison",
-                turns: 3,
-                damage: 2,
-                execute: (enemy) => {
-                    enemy.poison = { turns: 3, damage: 2 + player.strength };
-                    console.log(`Player used Poison! Enemy will take ${2 + player.strength} damage for 3 turns.`);
-                }
-            },
-            venom: {
-                name: "Venom",
-                type: "damage",
-                baseDamage: 7,
-                execute: (enemy) => {
-                    const damage = 7 + player.strength;
-                    enemy.health -= damage;
-                    console.log(`Player used Venom! Dealt ${damage} damage.`);
-                }
-            },
-            flight: {
-                name: "Flight",
-                type: "evasion",
-                execute: () => {
-                    player.dodgeTurns = 2;
-                    console.log("Player used Flight! Dodging next two attacks.");
-                }
-            }
-        };
+            };
 
-       const player = new Player();
+        const player = new Player();
 
         function getPlayerCombatMoves(player) {
-            const moves = [playerCombatMoves.peck]; // Always available
-        
-            if (player.inventory.includes("songBook")) {
-                moves.push(playerCombatMoves.song);
+            const moves = [playerCombatMoves.peck]; // Always include Peck
+            
+                if (player.inventory.includes("songBook")) {
+                    moves.push(playerCombatMoves.song);
+                }
+                if (player.inventory.includes("poison tusk")) {
+                    moves.push(playerCombatMoves.poison);
+                }
+                if (player.inventory.includes("birdGuidebook") && player.canUseFlight) {
+                    moves.push(playerCombatMoves.flight);
+                }
+                if (player.inventory.includes("venom tusk") && player.canUseVenom) {
+                    moves.push(playerCombatMoves.venom);
+                }
+            
+                return moves;
             }
-            if (player.inventory.includes("poison tusk")) {
-                moves.push(playerCombatMoves.poison);
-            }
-            if (player.inventory.includes("birdGuidebook") && player.canUseFlight) {
-                moves.push(playerCombatMoves.flight);
-            }
-            if (player.inventory.includes("venom tusk") && player.canUseVenom) {
-                moves.push(playerCombatMoves.venom);
-            }
-        
-            return moves;
-        }
 
-        function addItemToInventory(itemName) {
-            if (!player.inventory.includes(itemName)) {
-                player.inventory.push(itemName);
+            function addItemToInventory(itemName) {
+                if (!player.inventory.includes(itemName)) {
+                    player.inventory.push(itemName);
+                }
+                updateCombatAndInventoryDisplays();
             }
-            updateCombatAndInventoryDisplays();
-        }
-        
-        function updateCombatAndInventoryDisplays() {
-            const moves = getPlayerCombatMoves(player);
-            renderCombatOptions(moves);
-            renderInventory(player.inventory);
-        }
-        
-        function renderInventory(inventory) {
-            const itemsList = document.getElementById("playerItems");
-            itemsList.innerHTML = "";
-        
-            if (inventory.length > 0) {
-                inventory.forEach(item => {
+
+            function renderCombatOptions(moves) {
+                const container = document.getElementById("combatMovesContainer");
+                container.innerHTML = ""; // Clear previous buttons
+            
+                const seen = new Set();
+            
+                moves.forEach(move => {
+                    if (!seen.has(move.name)) {
+                        seen.add(move.name);
+            
+                        const btn = document.createElement("button");
+                        btn.textContent = move.name;
+                        btn.classList.add("combat-move-button");
+            
+                        // Add click event listener
+                        btn.addEventListener("click", () => {
+                            if (move.execute) {
+                                if (currentEnemy) {
+                                    move.execute(currentEnemy);
+                                    if (currentEnemy.health <= 0) {
+                                        endCombat(currentEnemy);
+                                    } else {
+                                        enemyTurn(); // Call the newly defined enemyTurn function
+                                    }
+                                    updateCombatDisplay();
+                                } else {
+                                    console.log(`Used move: ${move.name}`);
+                                }
+                            }
+                        });
+            
+                        container.appendChild(btn);
+                    }
+                });
+            }
+
+            function renderInventory(inventory) {
+                const itemsList = document.getElementById("playerItems");
+                itemsList.innerHTML = "";
+            
+                if (inventory.length > 0) {
+                    inventory.forEach(item => {
+                        const li = document.createElement("li");
+                        const button = document.createElement("button");
+                        button.textContent = item;
+                        button.classList.add("inventory-item");
+                        li.appendChild(button);
+                        itemsList.appendChild(li);
+                    });
+                } else {
                     const li = document.createElement("li");
                     const button = document.createElement("button");
-                    button.textContent = item;
+                    button.textContent = "(Empty)";
                     button.classList.add("inventory-item");
                     li.appendChild(button);
                     itemsList.appendChild(li);
-                });
-            } else {
-                const li = document.createElement("li");
-                const button = document.createElement("button");
-                button.textContent = "(Empty)";
-                button.classList.add("inventory-item");
-                li.appendChild(button);
-                itemsList.appendChild(li);
-            }
-        }
-
-        function renderCombatOptions(moves) {
-            const container = document.getElementById("combatMovesContainer");
-            container.innerHTML = "";
-        
-            // Ensure "peck" is always included
-            const uniqueMoves = new Set(["peck", ...moves.map(m => m.name.toLowerCase())]);
-        
-            uniqueMoves.forEach(moveKey => {
-                const move = playerCombatMoves[moveKey];
-                if (move) {
-                    const btn = document.createElement("button");
-                    btn.textContent = move.name;
-                    btn.classList.add("combat-move-button");
-                    btn.addEventListener("click", () => {
-                        if (currentEnemy) {
-                            move.execute(currentEnemy);
-                            if (currentEnemy.health <= 0) {
-                                endCombat(currentEnemy);
-                            } else {
-                                enemyTurn();
-                            }
-                            updateCombatDisplay();
-                        }
-                    });
-                    container.appendChild(btn);
                 }
-            });
-        }
-
-       document.addEventListener('DOMContentLoaded', function () {
-        // === OTHER BUTTONS ===
-        document.getElementById('nextButton').addEventListener('click', function () {
-            story.skipOrNext();
-        });
-
-        story.writeText();
-
-        // === INVENTORY LOGIC ===
-        const inventoryButton = document.getElementById("inventory");
-        const closeInventoryButton = document.getElementById("closeInventory");
-        const inventoryDisplay = document.getElementById("inventoryDisplay");
-
-        inventoryButton.addEventListener("click", function () {
-            // Update stat values
-            document.getElementById("playerExp").textContent = `EXP: ${player.exp}`;
-            document.getElementById("playerStrength").textContent = `Strength: ${player.strength}`;
-        
-            // Calculate health ratio
-            const healthRatio = player.health / player.maxHealth;
-            const healthElement = document.getElementById("playerHealth");
-            healthElement.textContent = `Health: ${player.health}`;
-        
-            // Set color based on ratio
-            if (healthRatio >= 0.8) {
-                healthElement.style.color = "chartreuse";
-            } else if (healthRatio >= 0.35) {
-                healthElement.style.color = "yellow";
-            } else {
-                healthElement.style.color = "red";
             }
-        
-            // Update inventory items
-            const itemsList = document.getElementById("playerItems");
-            itemsList.innerHTML = "";
+            
+            function updateCombatAndInventoryDisplays() {
+                const moves = getPlayerCombatMoves(player);
+                renderCombatOptions(moves);
+                renderInventory(player.inventory);  
+            }
+            
 
-            if (player.inventory.length > 0) {
-                player.inventory.forEach(item => {
-                    const li = document.createElement("li");
-                    const button = document.createElement("button");
-                    button.textContent = item;
-                    button.classList.add("inventory-item");
-                    // Connect Inventory Items to Combat
-                    button.addEventListener("click", () => {
-                        let move;
-                        switch(item) {
-                            case "songBook":
-                                move = playerCombatMoves.song;
-                                break;
-                            case "poison tusk":
-                                move = playerCombatMoves.poison;
-                                break;
-                            case "birdGuidebook":
-                                if (player.canUseFlight) move = playerCombatMoves.flight;
-                                break;
-                            case "venom tusk":
-                                if (player.canUseVenom) move = playerCombatMoves.venom;
-                                break;
-                            default:
-                                return;
-                        }
+
+                    // // === ⬇️ Place updateCombatDisplay() HERE ⬇️ ===
+                    // function updateCombatDisplay() {
+                    //     const combatMoves = getPlayerCombatMoves(player);
+                    //     renderCombatOptions(combatMoves);
+                    // }
+            
+                    // === COMBAT button logic ===
+                    const combatButton = document.getElementById("combat");
+                    combatButton.addEventListener("click", () => {
+                        // const combatDisplay = document.getElementById("combatDisplay");
                     
-                        if (move && currentEnemy) {
-                            move.execute(currentEnemy);
-                            enemyTurn();
-                            updateCombatDisplay();
-                        }
-                    });                    li.appendChild(button);
-                    itemsList.appendChild(li);
-                });
-            } else {
-                const li = document.createElement("li");
-                const button = document.createElement("button");
-                button.textContent = "(Empty)";
-                button.classList.add("inventory-item");
-                li.appendChild(button);
-                itemsList.appendChild(li);
-            }
-        
-            // check if inventory is open and act accordingly
-            if (inventoryDisplay.style.display === "block") {
-                inventoryDisplay.style.display = "none"; // Hide the inventory display if it is open
-            } else {
-                inventoryDisplay.style.display = "block"; // Show the inventory display if it is not open
-            }
-        });
-
-        closeInventoryButton.addEventListener("click", function () {
-            inventoryDisplay.style.display = "none";
-        });
-
-        // === ACT BUTTON SETUP ===
-        const actButton = document.getElementById("act");
-        const actDisplay = document.getElementById("actDisplay");
-        const actOptions = document.getElementById("actOptions");
-        const closeActDisplay = document.getElementById("closeActDisplay");
-
-        actButton.addEventListener("click", function () {
-            actOptions.innerHTML = ""; // Clear previous options
-            const currentArray = story.activeText || story.gameText.introText;
-            const currentEntry = currentArray[story.textIndex];
-            console.log(currentEntry.choices); // Check the current entry's choices
-
-            let optionsToShow = [];
-// FAST --> Your previous code for reference.
-            // Use currentEntry.name to decide which choices to show
-            // if (currentEntry && currentEntry.name === "callToAction") {
-            //     optionsToShow = story.startChoices;
-            // }
-
-// FAST --> I modified this to use the new variable currentEntry.choices instead of the hard-coded story.startChoices
-            if (currentEntry && currentEntry.name === "callToAction") {
-                optionsToShow = currentEntry.choices;
-            }
-
-            // Reusable logic to add buttons
-            if (optionsToShow.length > 0) {
-                optionsToShow.forEach(choice => {
-                    const button = document.createElement("button");
-                    // button.textContent = choice;
-// FAST --> I modified this to use the new variable choice[0] to show the text and not both the text and destination key from the new choices array on your story objects.                    
-                    button.textContent = choice[0]; 
-                    button.classList.add("act-option");
-                    button.addEventListener("click", () => {
-                        // console.log(`Player chose: ${choice}`);
-// FAST --> I modified this to use choice as an array variable to show the text and destination key from the new choices array on your story objects.                        
-                        console.log(`Player chose: ${choice[0]}; goto --> ${choice[1]}`);
-                        // Hide the act display
-                        actDisplay.style.display = "none";
-                        
-// FAST --> I modified this section to use the new variable choice[1] to go to the destination key from the choices array on your story objects.
-                        if (story.gameText[choice[1]]) { //check if the destination key exists
-                            story.activeText = story.gameText[choice[1]]; // Set the active text to the new destination key
-                            story.textIndex = 0; // Reset text index
-                            story.i = 0; // Reset character index
-                            document.getElementById('text').innerHTML = ''; // Clear previous text
-                            story.writeText(); // Update the active text
-                            actButton.classList.add("disabled"); // Disable the act button
-                        } else {
-                            // Error handling fpr when the destination key doesn't exist
-                            console.error(`No text found for ${choice[1]}`);
+                        if (!combatButton.classList.contains("disabled")) {
+                            if (combatDisplay.style.display === "block") {
+                                combatDisplay.style.display = "none";
+                            } else {
+                                combatDisplay.style.display = "block";
+                                updateCombatDisplay(); // Ensure combat options are updated
+                            }
                         }
                     });
-                    actOptions.appendChild(button);
-                });
-                } else {
-                    const empty = document.createElement("button");
-                    empty.textContent = "(No actions available)";
-                    empty.classList.add("act-option");
-                    actOptions.appendChild(empty);
-                }
+            
+                    document.getElementById("closeCombat").addEventListener("click", function () {
+                        document.getElementById("combatDisplay").style.display = "none";
+                    });
 
-                if(!actButton.classList.contains("disabled")) { // only proceed if actButton is not disabled
-                    if (actDisplay.style.display === "block") {
-                        actDisplay.style.display = "none"; // Hide the act display if it is open
-                    } else {
-                        actDisplay.style.display = "block"; // Show the act display if it is hidden
-                    }
-                }
+        
+
+            closeActDisplay.addEventListener("click", function () {
+                actDisplay.style.display = "none";
             });
-
-        closeActDisplay.addEventListener("click", function () {
-            actDisplay.style.display = "none";
-        });
-            // === COMBAT SETUP ===
-    let currentEnemy = null;
-    
-    function startCombat(enemyInstance) {
-        currentEnemy = enemyInstance;
-        console.log(`A wild ${enemyInstance.enemyName} appears!`);
-        updateCombatDisplay(); // <-- call update here
-    }
-
-    function playerTurn(moveKey) {
-        const move = playerCombatMoves[moveKey];
-        if (move && (!move.requiresUnlock || player[move.requiresUnlock])) {
-            move.execute(currentEnemy);
-            if (currentEnemy.health <= 0) {
-                endCombat(currentEnemy);
-            } else {
-                enemyTurn();
-            }
-        }
-    }
-
-    function enemyTurn() {
-        if (player.dodgeTurns > 0) {
-            console.log("Player dodged the attack!");
-            player.dodgeTurns--;
-            return;
-        }
-        currentEnemy.attack();
-        updateCombatDisplay();
-    }
-
-    function endCombat(enemy) {
-        console.log(`${enemy.enemyName} defeated!`);
-        let xpGained = 0;
-        switch(enemy.enemyName) {
-            case "Falcon": xpGained = 4; break;
-            case "Tarantula": xpGained = 5; break;
-            case "Giant Tarantula": xpGained = 20; break;
-            case "Strong Falcon": xpGained = 10; break;
-        }
-        player.exp += xpGained;
-        player.strength += 1;
-        player.levelUp();
-        currentEnemy = null;
-    }
-        function enemyTurn() {
-            if (player.dodgeTurns > 0) {
-                console.log("Player dodged the attack!");
-                player.dodgeTurns--;
-                return;
-            }
-            currentEnemy.attack();
-            updateCombatDisplay();
-        }
-
-        function endCombat(enemy) {
-            console.log(`${enemy.enemyName} defeated!`);
-            let xpGained = 0;
-            switch(enemy.enemyName) {
-                case "Falcon": xpGained = 4; break;
-                case "Tarantula": xpGained = 5; break;
-                case "Giant Tarantula": xpGained = 20; break;
-                case "Strong Falcon": xpGained = 10; break;
-            }
-            player.exp += xpGained;
-            player.strength += 1;
-            player.levelUp();
-            currentEnemy = null;
-        }
-
-        // === ⬇️ Place updateCombatDisplay() HERE ⬇️ ===
-        function updateCombatDisplay() {
-            if (playerHealth && playerExp && playerStrength) {
-                playerHealth.textContent = `Health: ${player.health}`;
-                playerExp.textContent = `EXP: ${player.exp}`;
-                playerStrength.textContent = `Strength: ${player.strength}`;
-            }
-        
-            // Update combat buttons
-            const combatMoves = getPlayerCombatMoves(player);
-            renderCombatOptions(combatMoves);
-        }
-
-        // === COMBAT button logic ===
-        const combatButton = document.getElementById("combat");
-        combatButton.addEventListener("click", () => {
-            const combatMenu = document.getElementById("combatDisplay");
-            combatMenu.style.display = "block";
-        
-            // TEST ENEMY
-            const testEnemy = new Enemy("Falcon", 12, [
-                { name: "Dive Strike", damage: 3 },
-                { name: "Claw Swipe", damage: 2 }
-            ]);
-            startCombat(testEnemy);
-        });
-
-        document.getElementById("closeCombat").addEventListener("click", function () {
-            document.getElementById("combatDisplay").style.display = "none";
-        });
-    });
+                // === COMBAT SETUP ===
 
 // ---------------------------------------------------------------------------------------
 //   ~Soaren~
-       class Soaren{
-        constructor(){
-            this.combat = ["Screeching Nightwing", "Piercing Claw", "Ointment Of The Forest"];
+class Soaren {
+    constructor() {
+        this.combatMoves = [
+            { name: "Screeching Nightwing", type: "damage", amount: 7 },
+            { name: "Piercing Claw", type: "damage", amount: 4 },
+            { name: "Ointment Of The Forest", type: "healing", amount: 6 }
+        ];
+    }
+
+    assist(player, enemy) {
+        // Randomly select a move
+        const randomMove = this.combatMoves[Math.floor(Math.random() * this.combatMoves.length)];
+        console.log(`Soaren uses ${randomMove.name}!`);
+
+        if (randomMove.type === "damage") {
+            enemy.health -= randomMove.amount;
+            console.log(`Soaren dealt ${randomMove.amount} damage to ${enemy.enemyName}.`);
+        } else if (randomMove.type === "healing") {
+            player.health = Math.min(player.health + randomMove.amount, player.maxHealth);
+            console.log(`Soaren healed the player for ${randomMove.amount} HP.`);
         }
-      }
+
+        // Display feedback in the dialogue box
+        const feedback = `Soaren uses ${randomMove.name}!`;
+        story.activeText = [{ text: feedback }];
+        story.textIndex = 0;
+        story.i = 0;
+        story.writeText();
+
+        updateCombatDisplay();
+    }
+}
+
+const soaren = new Soaren();
 
 // ---------------------------------------------------------------------------------------
 // ~~~ENEMIES ENEMIES ENEMIES ENEMIES ENEMIES~~~
@@ -964,53 +834,347 @@ const enemyCombat = {
     ]
 };
 
-//   General Enemy Class     
-      class Enemy{
-        constructor(enemyName, health, moveKey){
-            this.enemyName = enemyName;
-            this.health = health;
-            this.enemyMoves = enemyCombat[moveKey] || [];
-            this.dodgeTurnsRemaining = 0;
-        }
-        applyMoveEffect(move) {
-            if (move.type === "damage") {
-                // Apply damage to player (you can implement player-specific logic here)
-            } 
-            else if (move.type === "healing") {
-                this.health += move.amount;
-            } 
-            else if (move.type === "evasion") {
-                this.dodgeTurnsRemaining = move.turns;
-            }
-            if (move.poison) {
-                // You can handle poison effects here (e.g., reduce player health over turns)
-            }
-        }
-    
-            EnemyDeath(){
-                if (this.health <= 0){ 
-                     // Handle enemy death (e.g., trigger animations, drop loot, etc.)
-                }
-        }
-        attack() {
-            const randomMove = this.enemyMoves[Math.floor(Math.random() * this.enemyMoves.length)];
-    
-            // Check if the move is a special one like "thunderbolt"
-            if (randomMove.name === "thunderbolt" && this.enemyName !== "Strong Falcon") {
-                return; // Prevent "thunderbolt" unless it's the specific enemy
-            }
-    
-            // If dodge is active, avoid attack
-            if (this.dodgeTurnsRemaining > 0) {
-                this.dodgeTurnsRemaining--;
-                return; // Skip attack
-            }
-    
-            console.log(`${this.enemyName} uses ${randomMove.name}!`);
-            this.applyMoveEffect(randomMove);
+// === GENERAL ENEMY CLASS ===   
+class Enemy {
+    constructor(enemyName, health, moveKey) {
+        this.enemyName = enemyName;
+        this.health = health;
+        this.maxHealth = health; // Set maxHealth equal to initial health
+        this.enemyMoves = enemyCombat[moveKey] || [];
+        this.dodgeTurnsRemaining = 0;
+    }
+
+    applyMoveEffect(move) {
+        if (move.type === "damage") {
+            player.health -= move.amount;
+            console.log(`${this.enemyName} dealt ${move.amount} damage to the player.`);
+        } else if (move.type === "healing") {
+            this.health = Math.min(this.health + move.amount, this.maxHealth);
+            console.log(`${this.enemyName} healed for ${move.amount}.`);
+        } else if (move.type === "evasion") {
+            this.dodgeTurnsRemaining = move.turns;
+            console.log(`${this.enemyName} is dodging for ${move.turns} turns.`);
         }
     }
 
+    attack() {
+        if (this.dodgeTurnsRemaining > 0) {
+            console.log(`${this.enemyName} dodged the attack!`);
+            this.dodgeTurnsRemaining--;
+            return;
+        }
+    
+        const randomMove = this.enemyMoves[Math.floor(Math.random() * this.enemyMoves.length)];
+        console.log(`${this.enemyName} uses ${randomMove.name}!`);
+        this.applyMoveEffect(randomMove);
+    
+        // Use writeText to display the enemy's move
+        const feedback = `${this.enemyName} uses ${randomMove.name}!`;
+        story.activeText = [{ text: feedback }]; // Temporarily set activeText for writeText
+        story.textIndex = 0;
+        story.i = 0;
+        story.writeText();
+    
+        // Update player health display
+        updatePlayerHealthDisplay();
+    }
+}
+
+let currentEnemy = null;
+
+function enemyTurn() {
+    if (currentEnemy) {
+        console.log(`${currentEnemy.enemyName}'s turn.`);
+        currentEnemy.attack(); // Call the enemy's attack method
+
+        // Small chance for Soaren to assist in later fights
+        if (Math.random() < 0.2) { // 20% chance
+            soaren.assist(player, currentEnemy);
+        }
+    } else {
+        console.log("No enemy present for enemy turn.");
+    }
+}
+
+
+function startCombat(enemyInstance) {
+    if (combatActive) return; // Prevent re-triggering combat logic
+
+    const combatDisplay = document.getElementById("combatDisplay");
+    console.log("Combat menu displayed:", combatDisplay.style.display === "block");
+    console.log("Combat started. combatActive:", combatActive);
+
+    currentEnemy = enemyInstance; // Set the current enemy
+    combatActive = true; // Mark combat as active
+    console.log(`A wild ${enemyInstance.enemyName} appears!`);
+
+    // Display the combat menu
+    combatDisplay.style.display = "block";
+
+    updateCombatDisplay(); // Update combat display with enemy info
+}
+
+function playerTurn(moveKey) {
+    const move = playerCombatMoves[moveKey];
+    if (move) {
+        move.execute(currentEnemy);
+
+        // Feedback for player's move
+        const feedback = `You use ${move.name} and deal ${move.baseDamage || move.damage || 0} damage to the enemy. ${currentEnemy.enemyName} is now at ${currentEnemy.health} health.`;
+        story.activeText = [{ text: feedback }];
+        story.textIndex = 0;
+        story.i = 0;
+        story.writeText();
+
+        // Check if the enemy is defeated
+        if (currentEnemy.health <= 0) {
+            endCombat(currentEnemy);
+        } else {
+            // Execute enemy turn after player's move
+            setTimeout(() => {
+                enemyTurn();
+            }, 1000);
+        }
+    }
+}
+
+function endCombat(enemy) {
+    console.log("Dialogue box cleared:", document.getElementById("text").innerHTML === "");
+    // Grant rewards
+    let xpGained = 0;
+    switch (enemy.enemyName) {
+        case "Falcon":
+            xpGained = 4;
+            break;
+        case "Tarantula":
+            xpGained = 5;
+            break;
+        case "Giant Tarantula":
+            xpGained = 20;
+            break;
+        case "Strong Falcon":
+            xpGained = 10;
+            break;
+    }
+    player.exp += xpGained;
+    player.strength += 1;
+    player.levelUp();
+
+    currentEnemy = null;
+    combatActive = false; // Mark combat as inactive
+    updateCombatDisplay();
+}
+
+// Helper function to execute call-to-action text nodes
+function executeCallToAction(nodeName) {
+    if (combatActive) return; // Prevent re-triggering during active combat
+    console.log("Executing call to action. combatActive:", combatActive);
+
+    const callToActionNode = story.gameText.routeOfAcceptance.find(node => node.name === nodeName);
+    if (callToActionNode) {
+        story.activeText = [callToActionNode];
+        story.textIndex = 0;
+        story.i = 0;
+
+        // Use writeText to display the text with typewriter functionality
+        document.getElementById("text").innerHTML = ""; // Clear the dialogue box
+        story.writeText();
+    }
+}
+
+// Update combat display
+function updateCombatDisplay() {
+    console.log("Updating combat display. Current enemy:", currentEnemy);
+    const combatMoves = getPlayerCombatMoves(player);
+    renderCombatOptions(combatMoves);
+
+    // Update enemy health display
+    const enemyHealthElement = document.getElementById("enemyHealth");
+    if (currentEnemy) {
+        enemyHealthElement.textContent = `Enemy Health: ${currentEnemy.health}/${currentEnemy.maxHealth}`;
+    } else {
+        enemyHealthElement.textContent = "No enemy present.";
+    }
+}
+
+// Update player health display
+function updatePlayerHealthDisplay() {
+    const healthElement = document.getElementById("playerHealth");
+    healthElement.textContent = `Health: ${player.health}/${player.maxHealth}`;
+    const healthRatio = player.health / player.maxHealth;
+
+    // Set color based on health ratio
+    if (healthRatio >= 0.8) {
+        healthElement.style.color = "chartreuse";
+    } else if (healthRatio >= 0.35) {
+        healthElement.style.color = "yellow";
+    } else {
+        healthElement.style.color = "red";
+    }
+}
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    // === OTHER BUTTONS ===
+    document.getElementById('nextButton').addEventListener('click', function () {
+        story.skipOrNext();
+    });
+
+    story.writeText();
+
+    // === INVENTORY LOGIC ===
+    const inventoryButton = document.getElementById("inventory");
+    const closeInventoryButton = document.getElementById("closeInventory");
+    const inventoryDisplay = document.getElementById("inventoryDisplay");
+
+    inventoryButton.addEventListener("click", function () {
+        // Update stat values
+        document.getElementById("playerExp").textContent = `EXP: ${player.exp}`;
+        document.getElementById("playerStrength").textContent = `Strength: ${player.strength}`;
+    
+        // Calculate health ratio
+        const healthRatio = player.health / player.maxHealth;
+        const healthElement = document.getElementById("playerHealth");
+        healthElement.textContent = `Health: ${player.health}`;
+    
+        // Set color based on ratio
+        if (healthRatio >= 0.8) {
+            healthElement.style.color = "chartreuse";
+        } else if (healthRatio >= 0.35) {
+            healthElement.style.color = "yellow";
+        } else {
+            healthElement.style.color = "red";
+        }
+    
+        // Update inventory items
+        const itemsList = document.getElementById("playerItems");
+        itemsList.innerHTML = "";
+
+        if (player.inventory.length > 0) {
+            player.inventory.forEach(item => {
+                const li = document.createElement("li");
+                const button = document.createElement("button");
+                button.textContent = item;
+                button.classList.add("inventory-item");
+                // Connect Inventory Items to Combat
+                button.addEventListener("click", () => {
+                    let move;
+                    switch(item) {
+                        case "songBook":
+                            move = playerCombatMoves.song;
+                            break;
+                        case "poison tusk":
+                            move = playerCombatMoves.poison;
+                            break;
+                        case "birdGuidebook":
+                            if (player.canUseFlight) move = playerCombatMoves.flight;
+                            break;
+                        case "venom tusk":
+                            if (player.canUseVenom) move = playerCombatMoves.venom;
+                            break;
+                        default:
+                            return;
+                    }
+                
+                    if (move && currentEnemy) {
+                        move.execute(currentEnemy);
+                        enemyTurn();
+                        updateCombatDisplay();
+                    }
+                });                    li.appendChild(button);
+                itemsList.appendChild(li);
+            });
+        } else {
+            const li = document.createElement("li");
+            const button = document.createElement("button");
+            button.textContent = "(Empty)";
+            button.classList.add("inventory-item");
+            li.appendChild(button);
+            itemsList.appendChild(li);
+        }
+    
+        // check if inventory is open and act accordingly
+        if (inventoryDisplay.style.display === "block") {
+            inventoryDisplay.style.display = "none"; // Hide the inventory display if it is open
+        } else {
+            inventoryDisplay.style.display = "block"; // Show the inventory display if it is not open
+        }
+    });
+
+    closeInventoryButton.addEventListener("click", function () {
+        inventoryDisplay.style.display = "none";
+    });
+
+    // === ACT BUTTON SETUP ===
+    const actButton = document.getElementById("act");
+    const actDisplay = document.getElementById("actDisplay");
+    const actOptions = document.getElementById("actOptions");
+    const closeActDisplay = document.getElementById("closeActDisplay");
+
+    actButton.addEventListener("click", function () {
+        actOptions.innerHTML = ""; // Clear previous options
+        const currentArray = story.activeText || story.gameText.introText;
+        const currentEntry = currentArray[story.textIndex];
+        console.log(currentEntry.choices); // Check the current entry's choices
+
+        let optionsToShow = [];
+// FAST --> Your previous code for reference.
+        // Use currentEntry.name to decide which choices to show
+        // if (currentEntry && currentEntry.name === "callToAction") {
+        //     optionsToShow = story.startChoices;
+        // }
+
+// FAST --> I modified this to use the new variable currentEntry.choices instead of the hard-coded story.startChoices
+        if (currentEntry && currentEntry.name === "callToAction") {
+            optionsToShow = currentEntry.choices;
+        }
+
+        // Reusable logic to add buttons
+        if (optionsToShow.length > 0) {
+            optionsToShow.forEach(choice => {
+                const button = document.createElement("button");
+                // button.textContent = choice;
+// FAST --> I modified this to use the new variable choice[0] to show the text and not both the text and destination key from the new choices array on your story objects.                    
+                button.textContent = choice[0]; 
+                button.classList.add("act-option");
+                button.addEventListener("click", () => {
+                    // console.log(`Player chose: ${choice}`);
+// FAST --> I modified this to use choice as an array variable to show the text and destination key from the new choices array on your story objects.                        
+                    console.log(`Player chose: ${choice[0]}; goto --> ${choice[1]}`);
+                    // Hide the act display
+                    actDisplay.style.display = "none";
+                    
+// FAST --> I modified this section to use the new variable choice[1] to go to the destination key from the choices array on your story objects.
+                    if (story.gameText[choice[1]]) { //check if the destination key exists
+                        story.activeText = story.gameText[choice[1]]; // Set the active text to the new destination key
+                        story.textIndex = 0; // Reset text index
+                        story.i = 0; // Reset character index
+                        document.getElementById('text').innerHTML = ''; // Clear previous text
+                        story.writeText(); // Update the active text
+                        actButton.classList.add("disabled"); // Disable the act button
+                    } else {
+                        // Error handling fpr when the destination key doesn't exist
+                        console.error(`No text found for ${choice[1]}`);
+                    }
+                });
+                actOptions.appendChild(button);
+            });
+            } else {
+                const empty = document.createElement("button");
+                empty.textContent = "(No actions available)";
+                empty.classList.add("act-option");
+                actOptions.appendChild(empty);
+            }
+
+            if(!actButton.classList.contains("disabled")) { // only proceed if actButton is not disabled
+                if (actDisplay.style.display === "block") {
+                    actDisplay.style.display = "none"; // Hide the act display if it is open
+                } else {
+                    actDisplay.style.display = "block"; // Show the act display if it is hidden
+                }
+            }
+        });
+    });
 // ---------------------------------------------------------------------------------------
 //   ~FALCON~  
       // FAST --> I commented out the falcon instance creation to avoid errors since it was not used in the provided code.  

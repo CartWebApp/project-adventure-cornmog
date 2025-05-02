@@ -332,9 +332,11 @@
       }
       
       #combatMovesContainer button {
-          background-color: #222;
-          border: 2px solid #888;
-          border-radius: 6px;
+          font-family: "Pixelify Sans", sans-serif;
+          font-size: 16px;
+          background-color: black;
+          border: 2px solid white;
+          border-radius: 2px;
           padding: 8px 12px;
           color: white;
           cursor: pointer;
@@ -342,7 +344,7 @@
       }
       
       #combatMovesContainer button:hover {
-          background-color: #444;
+          background-color: green;
           transform: scale(1.05);
       }
       
