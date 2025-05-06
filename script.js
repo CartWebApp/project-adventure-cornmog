@@ -7,6 +7,17 @@ function updateCombatDisplay() {
     console.log("Updating combat display. Current enemy:", currentEnemy);
     const combatMoves = getPlayerCombatMoves(player);
     renderCombatOptions(combatMoves);
+    updatePlayerHealthDisplay();
+
+    const testfalcon = {
+        enemyName: "Test Falcon",
+        hp: 20,
+        maxHp: 20,
+        attack: 5
+      };
+      
+      combatActive = false;
+      startCombat(testfalcon);
 
     // Update enemy health display
     const enemyHealthElement = document.getElementById("enemyHealth");
@@ -16,6 +27,12 @@ function updateCombatDisplay() {
     } else {
         enemyHealthElement.textContent = "No enemy present.";
         console.log("No enemy present in combat display.");
+    }
+    if (combatActive) {
+        console.log("Updating combat display.");
+        // Update the combat display with current information
+    } else {
+        console.log("Combat is not active. No update needed.");
     }
 }
 // ---------------------------------------------------------------------------------------
@@ -470,6 +487,11 @@ function updateCombatDisplay() {
                 } else {
                     combatButton.classList.add("disabled");
                 }
+
+                if (combatActive) {
+                    console.log("Combat should be active. Trying to force reset.");
+                    forceResetCombat();
+                }
             
                 // Display the text with typewriter functionality
                 const fullText = currentEntry.text;
@@ -754,29 +776,25 @@ function updateCombatDisplay() {
                 renderCombatOptions(moves);
                 renderInventory(player.inventory);  
             }
-            
+
+            function toggleCombatDisplay() {
+                const combatDisplay = document.getElementById("combatDisplay");
+                combatDisplay.style.display = (combatDisplay.style.display === "block") ? "none" : "block";
+}
 
 
                     // // === ⬇️ Place updateCombatDisplay() HERE ⬇️ ===
-                    // function updateCombatDisplay() {
-                    //     const combatMoves = getPlayerCombatMoves(player);
-                    //     renderCombatOptions(combatMoves);
-                    // }
+                    function updateCombatDisplay() {
+                        const combatMoves = getPlayerCombatMoves(player);
+                        renderCombatOptions(combatMoves);
+                        updatePlayerHealthDisplay();
+                    }
             
                     // === COMBAT button logic ===
                     const combatButton = document.getElementById("combat");
                     combatButton.addEventListener("click", () => {
-                        const combatDisplay = document.getElementById("combatDisplay");
-                    
-                        if (!combatButton.classList.contains("disabled")) {
-                            if (combatDisplay.style.display === "block") {
-                                combatDisplay.style.display = "none";
-                            } else {
-                                // ✅ TEMP: Start a test battle to ensure enemy exists
-                                const testEnemy = new Enemy("Falcon", 12, "falconMoves");
-                                startCombat(testEnemy); // This will also call updateCombatDisplay()
-                            }
-                        }
+                        const testEnemy = new Enemy("Falcon", 12, "falconMoves");
+                        startCombat(testEnemy); // Start fresh combat every time
                     });
             
                     document.getElementById("closeCombat").addEventListener("click", function () {
@@ -811,6 +829,7 @@ class Soaren {
         } else if (randomMove.type === "healing") {
             player.health = Math.min(player.health + randomMove.amount, player.maxHealth);
             console.log(`Soaren healed the player for ${randomMove.amount} HP.`);
+            const testEnemy = new Enemy("Falcon", 12, "falconMoves");
         }
 
         // Display feedback in the dialogue box
@@ -898,6 +917,38 @@ class Enemy {
 }
 
 function enemyTurn() {
+    console.log("== startCombat called ==");
+    console.log("combatActive:", combatActive);
+    console.log("enemyInstance:", JSON.stringify(enemyInstance, null, 2));
+
+    if (combatActive) {
+        console.warn("Combat is already active. Skipping startCombat.");
+        return;
+    }
+
+    const combatDisplay = document.getElementById("combatDisplay");
+    if (!combatDisplay) {
+        console.error("combatDisplay element not found!");
+        return;
+    }
+
+    if (!enemyInstance || !enemyInstance.enemyName) {
+        console.error("Invalid enemyInstance passed to startCombat.");
+        return;
+    }
+
+    currentEnemy = enemyInstance;
+    combatActive = true;
+
+    combatDisplay.style.display = "block";
+    console.log(`Combat started against: ${enemyInstance.enemyName}`);
+
+    try {
+        updateCombatDisplay(); 
+        console.log("Combat display updated.");
+    } catch (e) {
+        console.error("updateCombatDisplay threw an error:", e);
+    }
     if (currentEnemy) {
         console.log(`${currentEnemy.enemyName}'s turn.`);
         currentEnemy.attack(); // Call the enemy's attack method
@@ -916,10 +967,19 @@ function startCombat(enemyInstance) {
     if (combatActive) {
         console.log("Combat is already active. Skipping startCombat.");
         return; // Prevent re-triggering combat logic
+        console.log(combatActive)
+         console.log("currentEnemy:", currentEnemy);
+        console.log("combatDisplay:", document.getElementById("combatDisplay").style.display);
+        console.log("combatActive =", combatActive);
+console.log("currentEnemy =", currentEnemy);
     }
 
     console.log("Starting combat...");
     const combatDisplay = document.getElementById("combatDisplay");
+    currentEnemy = enemyInstance;
+    combatActive = true;
+
+    
 
     currentEnemy = enemyInstance; // Set the current enemy
     console.log("Current enemy set to:", currentEnemy); // Debugging log
@@ -947,6 +1007,7 @@ function playerTurn(moveKey) {
 
         // Check if the enemy is defeated
         if (currentEnemy.health <= 0) {
+            currentEnemy.health = 0;
             endCombat(currentEnemy);
         } else {
             // Execute enemy turn after player's move
@@ -958,6 +1019,15 @@ function playerTurn(moveKey) {
 }
 
 function endCombat(enemy) {
+
+    
+
+    if (!enemy || !enemy.enemyName) {
+        console.error("endCombat called with invalid enemy:", enemy);
+        return;
+    }
+
+
     console.log("Dialogue box cleared:", document.getElementById("text").innerHTML === "");
     // Grant rewards
     let xpGained = 0;
@@ -982,6 +1052,40 @@ function endCombat(enemy) {
     currentEnemy = null;
     combatActive = false; // Mark combat as inactive
     updateCombatDisplay();
+    console.log(">> endCombat CALLED for", enemy.enemyName);
+}
+
+function forceResetCombat() {
+    combatActive = false;
+    currentEnemy = null;
+    combatDisplay.style.display = 'none';
+    console.log("Combat state forcibly reset.");
+    document.getElementById("combatDisplay").style.display = "none";
+    console.log("Force reset combat state.");
+    document.getElementById('combatButton').addEventListener('click', function() {
+        const combatDisplay = document.getElementById('combatDisplay');
+        combatDisplay.style.display = (combatDisplay.style.display === 'block') ? 'none' : 'block';
+        forceResetCombat();    
+    });
+}
+
+combatButton.addEventListener("click", () => {
+    console.log("Combat button clicked. combatActive:", combatActive);
+
+    if (!combatActive) {
+        const testEnemy = new Enemy("Falcon", 12, "falconMoves");
+        startCombat(testEnemy);
+    } else {
+        console.log("Toggling display or skipping due to combatActive.");
+        toggleCombatDisplay();
+    }
+});
+
+function forceResetCombat() {
+    combatActive = false;
+    currentEnemy = null;
+    document.getElementById("combatDisplay").style.display = "none";
+    console.log("Combat state forcibly reset.");
 }
 
 // Helper function to execute call-to-action text nodes
@@ -1179,6 +1283,18 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
+
+    const testfalcon = {
+        enemyName: "Test Falcon",
+        hp: 20,
+        maxHp: 20,
+        attack: 5,
+        // ...anything else
+      };
+      console.log(testfalcon); // Check if it's defined
+
+combatActive = false;
+startCombat(testfalcon);
 // ---------------------------------------------------------------------------------------
 //   ~FALCON~  
       // FAST --> I commented out the falcon instance creation to avoid errors since it was not used in the provided code.  
