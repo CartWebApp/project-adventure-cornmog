@@ -486,6 +486,7 @@ function updateCombatDisplay() {
                     combatButton.classList.remove("disabled");
                 } else {
                     combatButton.classList.add("disabled");
+                    
                 }
 
                 if (combatActive) {
