@@ -530,6 +530,7 @@ function updateCombatDisplay() {
                 }
             }
         };
+
         
         function routeOfAcceptanceLogic() {
             const currentEntry = story.activeText[story.textIndex];
@@ -552,6 +553,8 @@ function updateCombatDisplay() {
             } else if (currentEntry.name === "tarantulaFightCallToAction") {
                 const tarantula = new Enemy("Tarantula", 15, "tarantulaMoves");
                 console.log("Initializing Tarantula enemy:", tarantula);
+
+                
         
                 // Set up the text for "tarantulaFightCallToAction"
                 story.activeText = [{ text: currentEntry.text }];
