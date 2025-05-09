@@ -9,15 +9,15 @@ function updateCombatDisplay() {
     renderCombatOptions(combatMoves);
     updatePlayerHealthDisplay();
 
-    const testfalcon = {
-        enemyName: "Test Falcon",
-        hp: 20,
-        maxHp: 20,
-        attack: 5
-      };
+    // const testfalcon = {
+    //     enemyName: "Test Falcon",
+    //     hp: 20,
+    //     maxHp: 20,
+    //     attack: 5
+    //   };
       
-      combatActive = true;
-      startCombat(testfalcon);
+    //   combatActive = true;
+    //   startCombat(testfalcon);
 
     // Update enemy health display
     const enemyHealthElement = document.getElementById("enemyHealth");
@@ -75,30 +75,30 @@ function updateCombatDisplay() {
             // OBJECT FOR GAME TEXT
             gameText: {
                 "introText": [
-                    {
-                      "name": "introText1",
-                      "text": "Your name is Red. You are a redwing bird who lives in a forest full of other redwing families. Your father and brother go on a quest with a flock of scout birds to find a safe place to migrate."
-                    },
-                    {
-                      "name": "introText2",
-                      "text": "The squadron does not return for two months. Your mother is worried about your father and brother. Rumors spread throughout the forest about the missing redwings."
-                    },
-                    {
-                      "name": "introText3",
-                      "text": "One day, an owl arrives. He flies down to your nest and greets you and your mother. The owl then tells you that he knows where your father and brother are and calls you to go with him and find them:"
-                    },
-                    {
-                      "name": "soarenIntroduction",
-                      "text": "'I know where your brethren reside. Come with me, and we shall find them together.'"
-                    },
-                    {
-                      "name": "motherTalk",
-                      "text": "'Yes, Red,' says your mother. 'Mr. Owl seems like a trustworthy fellow. You should go with him. But pray you keep my child safe, Mr. Owl!'"
-                    },
-                    {
-                      "name": "soarenAnswer",
-                      "text": "'Mrs. Redwing, I can assure you that your son will be safe with me. So, what do you say, little redwing,'  asks the owl, 'will you join me in this journey?'"
-                    },
+                    // {
+                    //   "name": "introText1",
+                    //   "text": "Your name is Red. You are a redwing bird who lives in a forest full of other redwing families. Your father and brother go on a quest with a flock of scout birds to find a safe place to migrate."
+                    // },
+                    // {
+                    //   "name": "introText2",
+                    //   "text": "The squadron does not return for two months. Your mother is worried about your father and brother. Rumors spread throughout the forest about the missing redwings."
+                    // },
+                    // {
+                    //   "name": "introText3",
+                    //   "text": "One day, an owl arrives. He flies down to your nest and greets you and your mother. The owl then tells you that he knows where your father and brother are and calls you to go with him and find them:"
+                    // },
+                    // {
+                    //   "name": "soarenIntroduction",
+                    //   "text": "'I know where your brethren reside. Come with me, and we shall find them together.'"
+                    // },
+                    // {
+                    //   "name": "motherTalk",
+                    //   "text": "'Yes, Red,' says your mother. 'Mr. Owl seems like a trustworthy fellow. You should go with him. But pray you keep my child safe, Mr. Owl!'"
+                    // },
+                    // {
+                    //   "name": "soarenAnswer",
+                    //   "text": "'Mrs. Redwing, I can assure you that your son will be safe with me. So, what do you say, little redwing,'  asks the owl, 'will you join me in this journey?'"
+                    // },
                     {
                       "name": "callToAction",
                       "text": "What is your next move? (Choose an option from ACT)",
@@ -782,7 +782,18 @@ function updateCombatDisplay() {
 
             function toggleCombatDisplay() {
                 const combatDisplay = document.getElementById("combatDisplay");
-                combatDisplay.style.display = (combatDisplay.style.display === "block") ? "none" : "block";
+                if(combatDisplay.classList.contains('hidden')){
+                    console.log("Show Combat");
+                    combatDisplay.classList.remove("hidden");
+                    combatDisplay.classList.add("visible");
+                    
+                } else {
+                    console.log("Hide Combat");
+                    combatDisplay.classList.remove("visible");
+                    combatDisplay.classList.add("hidden");
+                   
+                }
+                // combatDisplay.style.display = (combatDisplay.style.display === "block") ? "none" : "block";
 }
 
 
@@ -1277,14 +1288,14 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-//     const testfalcon = {
-//         enemyName: "Test Falcon",
-//         hp: 20,
-//         maxHp: 20,
-//         attack: 5,
-//         // ...anything else
-//       };
-//       console.log(testfalcon); // Check if it's defined
+    const testfalcon = {
+        enemyName: "Test Falcon",
+        hp: 20,
+        maxHp: 20,
+        attack: 5,
+        // ...anything else
+      };
+      console.log(testfalcon); // Check if it's defined
 
 // combatActive = false;
 // startCombat(testfalcon);

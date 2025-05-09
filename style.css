@@ -7,6 +7,14 @@
      background-color:  black;
 }
 
+.hidden {
+     display: none;
+}
+
+.visible {
+     display: block;
+}
+
 
 /* This contains the title color and its shadow */
 #gameTitle{
