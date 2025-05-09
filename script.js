@@ -967,16 +967,6 @@ function enemyTurn() {
 
 
 function startCombat(enemyInstance) {
-    if (combatActive) {
-        console.log("Combat is already active. Skipping startCombat.");
-        return; // Prevent re-triggering combat logic
-        console.log(combatActive)
-         console.log("currentEnemy:", currentEnemy);
-        console.log("combatDisplay:", document.getElementById("combatDisplay").style.display);
-        console.log("combatActive =", combatActive);
-console.log("currentEnemy =", currentEnemy);
-    }
-
     console.log("Starting combat...");
     const combatDisplay = document.getElementById("combatDisplay");
     currentEnemy = enemyInstance;
@@ -1287,17 +1277,17 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    const testfalcon = {
-        enemyName: "Test Falcon",
-        hp: 20,
-        maxHp: 20,
-        attack: 5,
-        // ...anything else
-      };
-      console.log(testfalcon); // Check if it's defined
+//     const testfalcon = {
+//         enemyName: "Test Falcon",
+//         hp: 20,
+//         maxHp: 20,
+//         attack: 5,
+//         // ...anything else
+//       };
+//       console.log(testfalcon); // Check if it's defined
 
-combatActive = false;
-startCombat(testfalcon);
+// combatActive = false;
+// startCombat(testfalcon);
 // ---------------------------------------------------------------------------------------
 //   ~FALCON~  
       // FAST --> I commented out the falcon instance creation to avoid errors since it was not used in the provided code.  
