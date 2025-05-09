@@ -16,7 +16,7 @@ function updateCombatDisplay() {
         attack: 5
       };
       
-      combatActive = false;
+      combatActive = true;
       startCombat(testfalcon);
 
     // Update enemy health display
