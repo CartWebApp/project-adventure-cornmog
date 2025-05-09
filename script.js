@@ -998,7 +998,7 @@ console.log("currentEnemy =", currentEnemy);
 
 function playerTurn(moveKey) {
     const move = playerCombatMoves[moveKey];
-    if (move) {
+if (move) {
         move.execute(currentEnemy);
 
         // Feedback for player's move
