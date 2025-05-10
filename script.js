@@ -560,6 +560,33 @@ function updateCombatDisplay() {
                 }
             
                 const currentEntry = currentArray[this.textIndex];
+
+                if (story.nodesThatStartCombat.includes(currentEntry.name)) {
+                console.log("Combat node detected:", currentEntry.name);
+
+                let enemy;
+                switch (currentEntry.name) {
+                    case "callToActionFalconFight":
+                        enemy = new Enemy("Falcon", 10, "falconMoves");
+                        break;
+                    case "tarantulaFightCallToAction":
+                        enemy = new Enemy("Tarantula", 15, "tarantulaMoves");
+                        break;
+                    case "strongFalconCallToAction":
+                        enemy = new Enemy("Strong Falcon", 30, "strongFalconMoves");
+                        break;
+                    case "ambushFalconCallToAction":
+                        enemy = new Enemy("Falcon", 10, "falconMoves");
+                        break;
+                }
+
+                if (enemy) {
+                    currentEnemy = enemy;
+                    setTimeout(() => {
+                        startCombat(currentEnemy);
+                    }, currentEntry.text.length * story.speed + 500);
+                }
+            }
             
                 // Clear the dialogue box before displaying new text
                 if (this.i === 0) {
@@ -634,64 +661,33 @@ function updateCombatDisplay() {
 
         
         function routeOfAcceptanceLogic() {
-            const currentEntry = story.activeText[story.textIndex];
-            console.log("routeOfAcceptanceLogic triggered for:", currentEntry.name);
+        const currentEntry = story.activeText[story.textIndex];
+        console.log("routeOfAcceptanceLogic triggered for:", currentEntry.name);
 
-            if (currentEntry.name === "callToActionFalconFight") {
-                // Initialize the Falcon enemy
-                const falcon = new Enemy("Falcon", 10, "falconMoves");
-                console.log("Initializing Falcon enemy:", falcon);
+        if (currentEntry.name === "callToActionFalconFight") {
+            const falcon = new Enemy("Falcon", 10, "falconMoves");
+            console.log("Initializing Falcon enemy:", falcon);
 
-                // Set up the text for "callToActionFalconFight"
-                story.activeText = [{ text: currentEntry.text }];
-                story.textIndex = 0;
-                story.i = 0;
-                story.writeText();
+            // Replace text only (don't overwrite node name!)
+            const fightText = currentEntry.text;
+            document.getElementById("text").innerHTML = "";
 
-                // Delay combat start until after the text is displayed
-                setTimeout(() => {
-                    currentEnemy = falcon; // Set the current enemy
-                    startCombat(currentEnemy); // Start combat with the falcon
-                }, currentEntry.text.length * story.speed + 500); // Delay based on typewriter speed
-            } else if (currentEntry.name === "tarantulaFightCallToAction") {
-                console.log("Initializing Tarantula enemy:", tarantula);
-                
-        
-                // Set up the text for "tarantulaFightCallToAction"
-                story.activeText = [{ text: currentEntry.text }];
-                story.textIndex = 0;
-                story.i = 0;
-                story.writeText();
-        
-                // Delay combat start until after the text is displayed
-                setTimeout(() => {
-                    // Enable the combat button
-                    const combatButton = document.getElementById("combat");
-                    combatButton.classList.remove("disabled");
-        
-                    // Start the combat
-                    startCombat(tarantula);
-                }, currentEntry.text.length * story.speed + 500); // Delay based on typewriter speed
-            } else if (currentEntry.name === "strongFalconCallToAction") {
-                console.log("Initializing Strong Falcon enemy:", strongFalcon);
-        
-                // Set up the text for "strongFalconCallToAction"
-                story.activeText = [{ text: currentEntry.text }];
-                story.textIndex = 0;
-                story.i = 0;
-                story.writeText();
-        
-                // Delay combat start until after the text is displayed
-                setTimeout(() => {
-                    // Enable the combat button
-                    const combatButton = document.getElementById("combat");
-                    combatButton.classList.remove("disabled");
-        
-                    // Start the combat
-                    startCombat(strongFalcon);
-                }, currentEntry.text.length * story.speed + 500); // Delay based on typewriter speed
-            }
+            // Show typewriter text first
+            story.isTyping = true;
+            story.i = 0;
+            const interval = setInterval(() => {
+                if (story.i < fightText.length) {
+                    document.getElementById("text").innerHTML += fightText.charAt(story.i);
+                    story.i++;
+                } else {
+                    clearInterval(interval);
+                    story.isTyping = false;
+                    currentEnemy = falcon;
+                    startCombat(currentEnemy);
+                }
+            }, story.speed);
         }
+    }
 
         if(story.currentEntry === story.nodesThatStartCombat.nodeName){
             combatActive = true;
