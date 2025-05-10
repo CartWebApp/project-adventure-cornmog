@@ -1,3 +1,6 @@
+localStorage.clear();
+console.log("localStorage cleared.");
+
 // IMPORTANT! This tracks wether combat is currently active
 // let combatActive = true;   
 let currentEnemy = null;
@@ -27,80 +30,15 @@ const enemyCombat = {
     ]
 };
 
-// === GENERAL ENEMY CLASS ===   
-class Enemy {
-    constructor(enemyName, health, moveKey) {
-        this.enemyName = enemyName;
-        this.health = health;
-        this.maxHealth = health; // Set maxHealth equal to initial health
-        this.enemyMoves = enemyCombat[moveKey] || [];
-        this.dodgeTurnsRemaining = 0;
-    }
-
-    applyMoveEffect(move) {
-        if (move.type === "damage") {
-            player.health -= move.amount;
-            console.log(`${this.enemyName} dealt ${move.amount} damage to the player.`);
-        } else if (move.type === "healing") {
-            this.health = Math.min(this.health + move.amount, this.maxHealth);
-            console.log(`${this.enemyName} healed for ${move.amount}.`);
-        } else if (move.type === "evasion") {
-            this.dodgeTurnsRemaining = move.turns;
-            console.log(`${this.enemyName} is dodging for ${move.turns} turns.`);
-        }
-    }
-
-    attack() {
-        if (this.dodgeTurnsRemaining > 0) {
-            console.log(`${this.enemyName} dodged the attack!`);
-            this.dodgeTurnsRemaining--;
-            return;
-        }
-    
-        const randomMove = this.enemyMoves[Math.floor(Math.random() * this.enemyMoves.length)];
-        console.log(`${this.enemyName} uses ${randomMove.name}!`);
-        this.applyMoveEffect(randomMove);
-    
-        // Use writeText to display the enemy's move
-        const feedback = `${this.enemyName} uses ${randomMove.name}!`;
-        story.activeText = [{ text: feedback }]; // Temporarily set activeText for writeText
-        story.textIndex = 0;
-        story.i = 0;
-        story.writeText();
-    
-        // Update player health display
-        updatePlayerHealthDisplay();
-    }
-}
-
-
-// IMPORTANT! Update combat display
-function updateCombatDisplay() {
-    console.log("Updating combat display. Current enemy:", currentEnemy);
-    const combatMoves = getPlayerCombatMoves(player);
-    renderCombatOptions(combatMoves);
-    updatePlayerHealthDisplay();
-
-    // Update enemy health display
-    const enemyHealthElement = document.getElementById("enemyHealth");
-    if (currentEnemy) {
-        enemyHealthElement.textContent = `Enemy Health: ${currentEnemy.health}/${currentEnemy.maxHealth}`;
-        console.log(`Enemy health updated: ${currentEnemy.health}/${currentEnemy.maxHealth}`);
-    } else {
-        enemyHealthElement.textContent = "No enemy present.";
-        console.log("No enemy present in combat display.");
-    }
-}
-
 //     updatePlayerHealthDisplay();
 // ---------------------------------------------------------------------------------------
 //   ~STORY LOGIC~
     const story = {
          activeText: null, // This will be set to the current text array
+         currentSceneIndex: 0, //Track the current scene index
 // FAST --> These choices were integrated with the gameText object, please review those changes.        
          //startChoices: ["Accept the owl's request", "Decline the owl's request", "Think about it"], 
-         combat: [],
-         actions: [act, combat, inventory],
+         actions: [act],
 // FAST --> These actions need to be folded into the gameText object where apporpriate for your story         
         //  caveActions: ["explore", "continue"],
         //  finalActions:["follow", "plunge down", "get back"],
@@ -127,11 +65,10 @@ function updateCombatDisplay() {
                 "ambushFalconCallToAction"
             ],
 
-            nodesThatStartCombat: [
-                "callToActionFalconFight",
-                "tarantulaFightCallToAction",
-                "strongFalconCallToAction",
-                "ambushFalconCallToAction"
+            sceneName : [
+                "1.1first-scenes.html",
+                "1.2tarantula-fight.html",
+                // next scene
             ],
             // List of special text node names where the CONTINUE button should hide
 
@@ -199,7 +136,6 @@ function updateCombatDisplay() {
                     {
                       "name": "callToActionFalconFight",
                       "text": "Defend yourself! (Choose a combat move from COMBAT or use an item in INVENTORY.)",
-                      "falcon" : new Enemy("Falcon", 10, "falconMoves"),
                     },
                     // ENABLE CONTINUE BUTTON
 
@@ -545,21 +481,17 @@ function updateCombatDisplay() {
 
             writeText: function () {
                 const currentArray = this.activeText || this.gameText.introText;
-            
+                console.log("Current activeText:", this.activeText); // Debugging log
+                console.log("Current textIndex:", this.textIndex); // Debugging log
+
                 if (this.textIndex >= currentArray.length) {
-                    if (
-                        this.activeText === this.gameText.rejectingTheCall ||
-                        this.activeText === this.gameText.pathOfContemplation
-                    ) {
-                        console.log("You have reached the end of the 'Decline' or 'Think' path.");
-                        specialFunctionForEndOfDeclineOrThink();
-                    } else if (this.activeText === this.gameText.routeOfAcceptance) {
-                        routeOfAcceptanceLogic();
-                    }
+                    console.log("End of text array reached.");
                     return;
                 }
             
                 const currentEntry = currentArray[this.textIndex];
+                console.log("Displaying text for:", currentEntry.name, currentEntry.text); // Debugging log
+
 
                 if (story.nodesThatStartCombat.includes(currentEntry.name)) {
                 console.log("Combat node detected:", currentEntry.name);
@@ -818,6 +750,48 @@ function updateCombatDisplay() {
                 updateCombatAndInventoryDisplays();
             }
 
+            function sceneSwitchAcceptance() {
+            if (!combatActive && player.health > 0) {
+                console.log("Combat has ended, and player is alive. Switching scenes...");
+
+                // Save the current game state to localStorage
+                const gameState = {
+                    currentSceneIndex: story.currentSceneIndex,
+                    activeText: story.activeText,
+                    textIndex: story.textIndex,
+                    player: {
+                        health: player.health,
+                        maxHealth: player.maxHealth,
+                        exp: player.exp,
+                        strength: player.strength,
+                        inventory: player.inventory,
+                        level: player.level,
+                        canUseVenom: player.canUseVenom,
+                        canUseFlight: player.canUseFlight
+                    }
+                };
+                console.log("Saving game state:", gameState); // Debugging log
+                localStorage.setItem("gameState", JSON.stringify(gameState));
+
+                // Transition to the next scene
+                if (story.sceneName && story.currentSceneIndex < story.sceneName.length - 1) {
+                    story.currentSceneIndex++;
+                    const nextScene = story.sceneName[story.currentSceneIndex];
+                    console.log(`Switching to scene: ${nextScene}`);
+                    window.location.href = nextScene;
+                } else {
+                    console.log("No more scenes available. Game completed!");
+                    window.location.href = "game-completed.html";
+                }
+            } else if (player.health <= 0) {
+                console.log("Player has fallen. Game over.");
+                window.location.href = "game-over.html";
+            } else {
+                console.log("Combat is still active. Scene switch aborted.");
+            }
+        }
+
+
             function renderCombatOptions(moves) {
                 const container = document.getElementById("combatMovesContainer");
                 container.innerHTML = ""; // Clear previous buttons
@@ -926,44 +900,6 @@ function updateCombatDisplay() {
                 // === COMBAT SETUP ===
 
 // ---------------------------------------------------------------------------------------
-//   ~Soaren~
-class Soaren {
-    constructor() {
-        this.combatMoves = [
-            { name: "Screeching Nightwing", type: "damage", amount: 7 },
-            { name: "Piercing Claw", type: "damage", amount: 4 },
-            { name: "Ointment Of The Forest", type: "healing", amount: 6 }
-        ];
-    }
-
-    assist(player, enemy) {
-        // Randomly select a move
-        const randomMove = this.combatMoves[Math.floor(Math.random() * this.combatMoves.length)];
-        console.log(`Soaren uses ${randomMove.name}!`);
-
-        if (randomMove.type === "damage") {
-            enemy.health -= randomMove.amount;
-            console.log(`Soaren dealt ${randomMove.amount} damage to ${enemy.enemyName}.`);
-        } else if (randomMove.type === "healing") {
-            player.health = Math.min(player.health + randomMove.amount, player.maxHealth);
-            console.log(`Soaren healed the player for ${randomMove.amount} HP.`);
-            const testEnemy = new Enemy("Falcon", 12, "falconMoves");
-        }
-
-        // Display feedback in the dialogue box
-        const feedback = `Soaren uses ${randomMove.name}!`;
-        story.activeText = [{ text: feedback }];
-        story.textIndex = 0;
-        story.i = 0;
-        story.writeText();
-
-        updateCombatDisplay();
-    }
-}
-
-const soaren = new Soaren();
-
-// ---------------------------------------------------------------------------------------
 // ~~~ENEMIES 2: CONTINUED~~~
 
 function startCombat(enemyInstance) {
@@ -983,48 +919,13 @@ function startCombat(enemyInstance) {
 }   // Update combat display with enemy info
 
 function enemyTurn() {
-    console.log("== startCombat called ==");
-    console.log("combatActive:", combatActive);
-    console.log("currentEnemy:", JSON.stringify(currentEnemy, null, 2));
-
-    // if (combatActive) {
-    //     console.warn("Combat is already active. Skipping startCombat.");
-    //     return;
-    // }
-
-    const combatDisplay = document.getElementById("combatDisplay");
-    if (!combatDisplay) {
-        console.error("combatDisplay element not found!");
-        return;
-    }
-
-    if (!currentEnemy || !currentEnemy.enemyName) {
-        console.error("Invalid currentEnemy passed to startCombat.");
-        return;
-    }
-
-    combatActive = true;
-
-    combatDisplay.style.display = "block";
-    console.log(`Combat started against: ${currentEnemy.enemyName}`);
-
-    try {
-        updateCombatDisplay(); 
-        console.log("Combat display updated.");
-    } catch (e) {
-        console.error("updateCombatDisplay threw an error:", e);
-    }
-    if (currentEnemy) {
-        console.log(`${currentEnemy.enemyName}'s turn.`);
-        currentEnemy.attack(); // Call the enemy's attack method
-
-        // Small chance for Soaren to assist in later fights
-        if (Math.random() < 0.2) { // 20% chance
-            soaren.assist(player, currentEnemy);
-        }
-    } else {
+    if (!currentEnemy) {
         console.log("No enemy present for enemy turn.");
+        return;
     }
+
+    console.log(`${currentEnemy.enemyName}'s turn.`);
+    currentEnemy.attack(); // Call the enemy's attack method
 }
 
 function playerTurn(moveKey) {
@@ -1038,6 +939,11 @@ function playerTurn(moveKey) {
         story.textIndex = 0;
         story.i = 0;
         story.writeText();
+
+        // Clear feedback after displaying it
+        setTimeout(() => {
+            story.activeText = null;
+        }, 2000);
 
         // Check if the enemy is defeated
         if (currentEnemy.health <= 0) {
@@ -1073,12 +979,8 @@ function endCombat(enemy) {
     // Clear combat UI
     document.getElementById("combatDisplay").style.display = "none";
 
-    // Trigger next story segment (custom function or choice)
-    if (enemy.enemyName === "Falcon") {
-        executeCallToAction("postFalconVictory"); // Ensure this exists in story.gameText.routeOfAcceptance
-    }
-
-    updateCombatDisplay(); // Clean up display
+    // Switch to the next scene
+    sceneSwitchAcceptance();
 }
 
 // function forceResetCombat() {
@@ -1115,21 +1017,21 @@ combatButton.addEventListener("click", () => {
 // }
 
 // Helper function to execute call-to-action text nodes
-function executeCallToAction(nodeName) {
-    if (combatActive) return; // Prevent re-triggering during active combat
-    console.log("Executing call to action. combatActive:", combatActive);
+// function executeCallToAction(nodeName) {
+//     if (combatActive) return; // Prevent re-triggering during active combat
+//     console.log("Executing call to action. combatActive:", combatActive);
 
-    const callToActionNode = story.gameText.routeOfAcceptance.find(node => node.name === nodeName);
-    if (callToActionNode) {
-        story.activeText = [callToActionNode];
-        story.textIndex = 0;
-        story.i = 0;
+//     const callToActionNode = story.gameText.routeOfAcceptance.find(node => node.name === nodeName);
+//     if (callToActionNode) {
+//         story.activeText = [callToActionNode];
+//         story.textIndex = 0;
+//         story.i = 0;
 
-        // Use writeText to display the text with typewriter functionality
-        document.getElementById("text").innerHTML = ""; // Clear the dialogue box
-        story.writeText();
-    }
-}
+//         // Use writeText to display the text with typewriter functionality
+//         document.getElementById("text").innerHTML = ""; // Clear the dialogue box
+//         story.writeText();
+//     }
+// }
 
 // Update player health display
 function updatePlayerHealthDisplay() {
@@ -1149,6 +1051,41 @@ function updatePlayerHealthDisplay() {
 
 
 document.addEventListener('DOMContentLoaded', function () {
+    const savedGameState = localStorage.getItem("gameState");
+    if (savedGameState) {
+        const gameState = JSON.parse(savedGameState);
+        console.log("Restoring game state:", gameState); // Debugging log
+
+        // Restore story state
+        story.currentSceneIndex = gameState.currentSceneIndex;
+        story.activeText = gameState.activeText || story.gameText.introText; // Fallback to introText if activeText is null
+        story.textIndex = gameState.textIndex || 0;
+
+        // Restore player state
+        player.health = gameState.player.health;
+        player.maxHealth = gameState.player.maxHealth;
+        player.exp = gameState.player.exp;
+        player.strength = gameState.player.strength;
+        player.inventory = gameState.player.inventory;
+        player.level = gameState.player.level;
+        player.canUseVenom = gameState.player.canUseVenom;
+        player.canUseFlight = gameState.player.canUseFlight;
+
+        console.log("Game state restored successfully.");
+        console.log("Active text:", story.activeText);
+        console.log("Text index:", story.textIndex);
+
+        // Continue writing text from the restored state
+        story.writeText();
+    } else {
+        console.log("No saved game state found. Starting fresh.");
+        story.activeText = story.gameText.introText; // Start with the intro text
+        story.textIndex = 0;
+        story.writeText();
+    }
+
+    // Other initialization logic... 
+
     // === OTHER BUTTONS ===
     document.getElementById('nextButton').addEventListener('click', function () {
         story.skipOrNext();
