@@ -661,8 +661,9 @@ function updateCombatDisplay() {
 
         
         function routeOfAcceptanceLogic() {
-        const currentEntry = story.activeText[story.textIndex];
-        console.log("routeOfAcceptanceLogic triggered for:", currentEntry.name);
+            if (combatActive) return; // Prevent re-initialization
+            const currentEntry = story.activeText[story.textIndex];
+            console.log("routeOfAcceptanceLogic triggered for:", currentEntry.name);
 
         if (currentEntry.name === "callToActionFalconFight") {
             const falcon = new Enemy("Falcon", 10, "falconMoves");
@@ -966,11 +967,6 @@ const soaren = new Soaren();
 // ~~~ENEMIES 2: CONTINUED~~~
 
 function startCombat(enemyInstance) {
-    if (combatActive) {
-        console.log("Combat is already active. Skipping startCombat.");
-        return; // Prevent re-triggering combat logic
-    }
-
     console.log("Starting combat...");
     const combatDisplay = document.getElementById("combatDisplay");
 
@@ -991,10 +987,10 @@ function enemyTurn() {
     console.log("combatActive:", combatActive);
     console.log("currentEnemy:", JSON.stringify(currentEnemy, null, 2));
 
-    if (combatActive) {
-        console.warn("Combat is already active. Skipping startCombat.");
-        return;
-    }
+    // if (combatActive) {
+    //     console.warn("Combat is already active. Skipping startCombat.");
+    //     return;
+    // }
 
     const combatDisplay = document.getElementById("combatDisplay");
     if (!combatDisplay) {
@@ -1057,40 +1053,32 @@ function playerTurn(moveKey) {
 }
 
 function endCombat(enemy) {
-
+    console.log(`${enemy.enemyName} defeated!`);
     
-
-    if (!enemy || !enemy.enemyName) {
-        console.error("endCombat called with invalid enemy:", enemy);
-        return;
-    }
-
-
-    console.log("Dialogue box cleared:", document.getElementById("text").innerHTML === "");
-    // Grant rewards
+    // Give rewards
     let xpGained = 0;
     switch (enemy.enemyName) {
-        case "Falcon":
-            xpGained = 4;
-            break;
-        case "Tarantula":
-            xpGained = 5;
-            break;
-        case "Giant Tarantula":
-            xpGained = 20;
-            break;
-        case "Strong Falcon":
-            xpGained = 10;
-            break;
+        case "Falcon": xpGained = 4; break;
+        case "Tarantula": xpGained = 5; break;
+        case "Giant Tarantula": xpGained = 20; break;
+        case "Strong Falcon": xpGained = 10; break;
     }
     player.exp += xpGained;
     player.strength += 1;
     player.levelUp();
 
     currentEnemy = null;
-    combatActive = false; // Mark combat as inactive
-    updateCombatDisplay();
-    console.log(">> endCombat CALLED for", enemy.enemyName);
+    combatActive = false;
+    
+    // Clear combat UI
+    document.getElementById("combatDisplay").style.display = "none";
+
+    // Trigger next story segment (custom function or choice)
+    if (enemy.enemyName === "Falcon") {
+        executeCallToAction("postFalconVictory"); // Ensure this exists in story.gameText.routeOfAcceptance
+    }
+
+    updateCombatDisplay(); // Clean up display
 }
 
 // function forceResetCombat() {
