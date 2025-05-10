@@ -1,6 +1,78 @@
 // IMPORTANT! This tracks wether combat is currently active
-let combatActive = false;
+// let combatActive = true;   
 let currentEnemy = null;
+
+// ---------------------------------------------------------------------------------------
+// ~~~ENEMIES 1: ENEMY ESSENTIALS~~~
+
+//   Enemy Combat Variable    
+const enemyCombat = {
+    falconMoves: [
+        { name: "slash", type: "damage", amount: 2 },
+        { name: "dodge", type: "evasion", turns: 2 }
+    ], 
+    tarantulaMoves: [   
+        { name: "bite", type: "damage", amount: 2 },
+        { name: "poison2", type: "damage", amount: 10, poison: true }
+    ],
+    giantTarantulaMoves: [
+        { name: "megaBite", type: "damage", amount: 40 },
+        { name: "venom", type: "damage", amount: 25, poison: true },
+        { name: "antiVenom", type: "healing", amount: 30 }
+    ],
+    strongFalconMoves: [
+        { name: "strongSlash", type: "damage", amount: 30 },
+        { name: "healingOintment", type: "healing", amount: 25 },
+        { name: "thunderbolt", type: "damage", amount: 50, special: true }
+    ]
+};
+
+// === GENERAL ENEMY CLASS ===   
+class Enemy {
+    constructor(enemyName, health, moveKey) {
+        this.enemyName = enemyName;
+        this.health = health;
+        this.maxHealth = health; // Set maxHealth equal to initial health
+        this.enemyMoves = enemyCombat[moveKey] || [];
+        this.dodgeTurnsRemaining = 0;
+    }
+
+    applyMoveEffect(move) {
+        if (move.type === "damage") {
+            player.health -= move.amount;
+            console.log(`${this.enemyName} dealt ${move.amount} damage to the player.`);
+        } else if (move.type === "healing") {
+            this.health = Math.min(this.health + move.amount, this.maxHealth);
+            console.log(`${this.enemyName} healed for ${move.amount}.`);
+        } else if (move.type === "evasion") {
+            this.dodgeTurnsRemaining = move.turns;
+            console.log(`${this.enemyName} is dodging for ${move.turns} turns.`);
+        }
+    }
+
+    attack() {
+        if (this.dodgeTurnsRemaining > 0) {
+            console.log(`${this.enemyName} dodged the attack!`);
+            this.dodgeTurnsRemaining--;
+            return;
+        }
+    
+        const randomMove = this.enemyMoves[Math.floor(Math.random() * this.enemyMoves.length)];
+        console.log(`${this.enemyName} uses ${randomMove.name}!`);
+        this.applyMoveEffect(randomMove);
+    
+        // Use writeText to display the enemy's move
+        const feedback = `${this.enemyName} uses ${randomMove.name}!`;
+        story.activeText = [{ text: feedback }]; // Temporarily set activeText for writeText
+        story.textIndex = 0;
+        story.i = 0;
+        story.writeText();
+    
+        // Update player health display
+        updatePlayerHealthDisplay();
+    }
+}
+
 
 // IMPORTANT! Update combat display
 function updateCombatDisplay() {
@@ -8,16 +80,6 @@ function updateCombatDisplay() {
     const combatMoves = getPlayerCombatMoves(player);
     renderCombatOptions(combatMoves);
     updatePlayerHealthDisplay();
-
-    // const testfalcon = {
-    //     enemyName: "Test Falcon",
-    //     hp: 20,
-    //     maxHp: 20,
-    //     attack: 5
-    //   };
-      
-    //   combatActive = true;
-    //   startCombat(testfalcon);
 
     // Update enemy health display
     const enemyHealthElement = document.getElementById("enemyHealth");
@@ -28,13 +90,9 @@ function updateCombatDisplay() {
         enemyHealthElement.textContent = "No enemy present.";
         console.log("No enemy present in combat display.");
     }
-    if (combatActive) {
-        console.log("Updating combat display.");
-        // Update the combat display with current information
-    } else {
-        console.log("Combat is not active. No update needed.");
-    }
 }
+
+//     updatePlayerHealthDisplay();
 // ---------------------------------------------------------------------------------------
 //   ~STORY LOGIC~
     const story = {
@@ -66,7 +124,14 @@ function updateCombatDisplay() {
                 "callToActionFalconFight",
                 "tarantulaFightCallToAction",
                 "strongFalconCallToAction",
-                "combatSequence"
+                "ambushFalconCallToAction"
+            ],
+
+            nodesThatStartCombat: [
+                "callToActionFalconFight",
+                "tarantulaFightCallToAction",
+                "strongFalconCallToAction",
+                "ambushFalconCallToAction"
             ],
             // List of special text node names where the CONTINUE button should hide
 
@@ -75,30 +140,30 @@ function updateCombatDisplay() {
             // OBJECT FOR GAME TEXT
             gameText: {
                 "introText": [
-                    // {
-                    //   "name": "introText1",
-                    //   "text": "Your name is Red. You are a redwing bird who lives in a forest full of other redwing families. Your father and brother go on a quest with a flock of scout birds to find a safe place to migrate."
-                    // },
-                    // {
-                    //   "name": "introText2",
-                    //   "text": "The squadron does not return for two months. Your mother is worried about your father and brother. Rumors spread throughout the forest about the missing redwings."
-                    // },
-                    // {
-                    //   "name": "introText3",
-                    //   "text": "One day, an owl arrives. He flies down to your nest and greets you and your mother. The owl then tells you that he knows where your father and brother are and calls you to go with him and find them:"
-                    // },
-                    // {
-                    //   "name": "soarenIntroduction",
-                    //   "text": "'I know where your brethren reside. Come with me, and we shall find them together.'"
-                    // },
-                    // {
-                    //   "name": "motherTalk",
-                    //   "text": "'Yes, Red,' says your mother. 'Mr. Owl seems like a trustworthy fellow. You should go with him. But pray you keep my child safe, Mr. Owl!'"
-                    // },
-                    // {
-                    //   "name": "soarenAnswer",
-                    //   "text": "'Mrs. Redwing, I can assure you that your son will be safe with me. So, what do you say, little redwing,'  asks the owl, 'will you join me in this journey?'"
-                    // },
+                    {
+                      "name": "introText1",
+                      "text": "Your name is Red. You are a redwing bird who lives in a forest full of other redwing families. Your father and brother go on a quest with a flock of scout birds to find a safe place to migrate."
+                    },
+                    {
+                      "name": "introText2",
+                      "text": "The squadron does not return for two months. Your mother is worried about your father and brother. Rumors spread throughout the forest about the missing redwings."
+                    },
+                    {
+                      "name": "introText3",
+                      "text": "One day, an owl arrives. He flies down to your nest and greets you and your mother. The owl then tells you that he knows where your father and brother are and calls you to go with him and find them:"
+                    },
+                    {
+                      "name": "soarenIntroduction",
+                      "text": "'I know where your brethren reside. Come with me, and we shall find them together.'"
+                    },
+                    {
+                      "name": "motherTalk",
+                      "text": "'Yes, Red,' says your mother. 'Mr. Owl seems like a trustworthy fellow. You should go with him. But pray you keep my child safe, Mr. Owl!'"
+                    },
+                    {
+                      "name": "soarenAnswer",
+                      "text": "'Mrs. Redwing, I can assure you that your son will be safe with me. So, what do you say, little redwing,'  asks the owl, 'will you join me in this journey?'"
+                    },
                     {
                       "name": "callToAction",
                       "text": "What is your next move? (Choose an option from ACT)",
@@ -128,12 +193,17 @@ function updateCombatDisplay() {
                     "name": "falconFightIntro",
                     "text": "As soon as the owl says that, a falcon swoops in and a fight breaks out."
                     },
+
+
                     // DISABLE CONTINUE BUTTON
                     {
                       "name": "callToActionFalconFight",
                       "text": "Defend yourself! (Choose a combat move from COMBAT or use an item in INVENTORY.)",
+                      "falcon" : new Enemy("Falcon", 10, "falconMoves"),
                     },
                     // ENABLE CONTINUE BUTTON
+
+
 
                     {
                     "name": "falconWinOutcome",
@@ -151,12 +221,19 @@ function updateCombatDisplay() {
                     "name": "tarantulaFightIntro",
                     "text": "Soaren then suggests that you stop to get some rest. When you settle under the shade of a tall tree, you spot a tarantula, who crawls up to you, preparing to attack."
                     },
+
+
+
                     // DISABLE CONTINUE BUTTON
                     {
                     "name": "tarantulaFightCallToAction",
                     "text": "Defend yourself! (Choose a combat move from COMBAT or use an item in INVENTORY.)",
+                    "tarantula": new Enemy("Tarantula", 15, "tarantulaMoves")
                     },
                     // ENABLE CONTINUE BUTTON
+
+
+
 
                     {
                     "name": "tarantulaFightOutcomeFail",
@@ -182,12 +259,24 @@ function updateCombatDisplay() {
                     "name": "strongFalconBattleIntro",
                     "text": "Suddenly you see a strong falcon approaching. Unlike in other battles, Soaren deals the first blow to the enemy."
                     },
+
+
+
+
+
                     // DISABLE CONTINUE BUTTON
                     {
                     "name": "strongFalconCallToAction",
                     "text": "Defend yourself! (Choose a combat move from COMBAT or use an item in INVENTORY.)",
+                    "strongFalcon" : new Enemy("Strong Falcon", 30, "strongFalconMoves"),
                     },
                     // ENABLE CONTINUE BUTTON
+
+
+
+
+
+
 
                     {
                     "name": "strongFalconBattleOutcome",
@@ -211,7 +300,20 @@ function updateCombatDisplay() {
                     {
                     "name": "falconAmbushDuringContemplation",
                     "text": "You are currently flying, when suddenly, a falcon swoops down to attack you."
-                    }
+                    },
+
+
+                    
+
+                    // DISABLE CONTINUE BUTTON
+                    {
+                    "name": "ambushFalconCallToAction",
+                    "text": "Defend yourself! (Choose a combat move from COMBAT or use an item in INVENTORY.)",
+                    "falcon" : new Enemy("Falcon", 10, "falconMoves"),
+                    },
+                    // ENABLE CONTINUE BUTTON
+
+
                 ],
                 // The next scenes are the same for both "Think about it" and "Decline the owl's request"
                 "mergingPaths": [
@@ -219,18 +321,18 @@ function updateCombatDisplay() {
                         "name": "falconAmbushDuringContemplation",
                         "text": "You are currently flying, when suddenly, a falcon swoops down to attack you."
                     },
+
+
+
+                    // DISABLE CONTINUE BUTTON
                     {
-                    "name": "rejectCombatIntro",
-                    "text": "Upon choosing the 'combat' action, you use your 'peck' move. However, the game tells you that you are too weak to hurt the falcon. 'Peck' does nothing, and you are returned to the action options."
+                    "name": "ambushFalconCallToAction",
+                    "text": "Defend yourself! (Choose a combat move from COMBAT or use an item in INVENTORY.)",
+                    "falcon" : new Enemy("Falcon", 10, "falconMoves"),
                     },
-                    {
-                    "name": "rejectActFail",
-                    "text": "When you choose the 'act' action, you try to outrun the bird, but in vain. You are too weak to outrun it."
-                    },
-                    {
-                    "name": "rejectEatFail",
-                    "text": "If you choose the 'eat' action, you try to bite the falcon, but it is pointless. You are not strong enough. Either action ends the game: 'You Have Fallen.'"
-                    },
+                    // ENABLE CONTINUE BUTTON,
+
+
                     {
                     "name": "rejectTalk1",
                     "text": "You try to convince the falcon to stop attacking. The falcon snaps: 'Quiet, little redwing. You shall be my supper!'"
@@ -482,17 +584,16 @@ function updateCombatDisplay() {
             
                 // Enable the COMBAT button if the current node is "callToActionFalconFight"
                 const combatButton = document.getElementById("combat");
-                if (currentEntry.name === "callToActionFalconFight") {
+                if (story.nodesThatStartCombat.includes(currentEntry.name)) {
                     combatButton.classList.remove("disabled");
                 } else {
                     combatButton.classList.add("disabled");
-                    
                 }
 
-                if (combatActive) {
-                    console.log("Combat should be active. Trying to force reset.");
-                    forceResetCombat();
-                }
+                // if (combatActive) {
+                //     console.log("Combat should be active. Trying to force reset.");
+                //     forceResetCombat();
+                // }
             
                 // Display the text with typewriter functionality
                 const fullText = currentEntry.text;
@@ -535,23 +636,24 @@ function updateCombatDisplay() {
         function routeOfAcceptanceLogic() {
             const currentEntry = story.activeText[story.textIndex];
             console.log("routeOfAcceptanceLogic triggered for:", currentEntry.name);
-        
+
             if (currentEntry.name === "callToActionFalconFight") {
+                // Initialize the Falcon enemy
                 const falcon = new Enemy("Falcon", 10, "falconMoves");
                 console.log("Initializing Falcon enemy:", falcon);
-        
+
                 // Set up the text for "callToActionFalconFight"
                 story.activeText = [{ text: currentEntry.text }];
                 story.textIndex = 0;
                 story.i = 0;
                 story.writeText();
-        
+
                 // Delay combat start until after the text is displayed
                 setTimeout(() => {
-                    startCombat(falcon); // Start combat with the falcon
-                }, currentEntry.text.length * story.speed + 500); 
+                    currentEnemy = falcon; // Set the current enemy
+                    startCombat(currentEnemy); // Start combat with the falcon
+                }, currentEntry.text.length * story.speed + 500); // Delay based on typewriter speed
             } else if (currentEntry.name === "tarantulaFightCallToAction") {
-                const tarantula = new Enemy("Tarantula", 15, "tarantulaMoves");
                 console.log("Initializing Tarantula enemy:", tarantula);
                 
         
@@ -571,7 +673,6 @@ function updateCombatDisplay() {
                     startCombat(tarantula);
                 }, currentEntry.text.length * story.speed + 500); // Delay based on typewriter speed
             } else if (currentEntry.name === "strongFalconCallToAction") {
-                const strongFalcon = new Enemy("Strong Falcon", 30, "strongFalconMoves");
                 console.log("Initializing Strong Falcon enemy:", strongFalcon);
         
                 // Set up the text for "strongFalconCallToAction"
@@ -591,6 +692,11 @@ function updateCombatDisplay() {
                 }, currentEntry.text.length * story.speed + 500); // Delay based on typewriter speed
             }
         }
+
+        if(story.currentEntry === story.nodesThatStartCombat.nodeName){
+            combatActive = true;
+        }
+
 
         function specialFunctionForEndOfDeclineOrThink() {
             console.log("Extra logic after decline or think path finishes.");
@@ -784,9 +890,10 @@ function updateCombatDisplay() {
                 const combatDisplay = document.getElementById("combatDisplay");
                 if(combatDisplay.classList.contains('hidden')){
                     console.log("Show Combat");
+                    combatActive = true;
                     combatDisplay.classList.remove("hidden");
                     combatDisplay.classList.add("visible");
-                    
+                    updateCombatDisplay();
                 } else {
                     console.log("Hide Combat");
                     combatDisplay.classList.remove("visible");
@@ -806,10 +913,10 @@ function updateCombatDisplay() {
             
                     // === COMBAT button logic ===
                     const combatButton = document.getElementById("combat");
-                    combatButton.addEventListener("click", () => {
-                        const testEnemy = new Enemy("Falcon", 12, "falconMoves");
-                        startCombat(testEnemy); // Start fresh combat every time
-                    });
+                    // combatButton.addEventListener("click", () => {
+                    //     const testEnemy = new Enemy("Falcon", 12, "falconMoves");
+                    //     startCombat(testEnemy); // Start fresh combat every time
+                    // });
             
                     document.getElementById("closeCombat").addEventListener("click", function () {
                         document.getElementById("combatDisplay").style.display = "none";
@@ -860,80 +967,33 @@ class Soaren {
 const soaren = new Soaren();
 
 // ---------------------------------------------------------------------------------------
-// ~~~ENEMIES ENEMIES ENEMIES ENEMIES ENEMIES~~~
+// ~~~ENEMIES 2: CONTINUED~~~
 
-//   Enemy Combat Variable    
-const enemyCombat = {
-    falconMoves: [
-        { name: "slash", type: "damage", amount: 2 },
-        { name: "dodge", type: "evasion", turns: 2 }
-    ], 
-    tarantulaMoves: [   
-        { name: "bite", type: "damage", amount: 2 },
-        { name: "poison2", type: "damage", amount: 10, poison: true }
-    ],
-    giantTarantulaMoves: [
-        { name: "megaBite", type: "damage", amount: 40 },
-        { name: "venom", type: "damage", amount: 25, poison: true },
-        { name: "antiVenom", type: "healing", amount: 30 }
-    ],
-    strongFalconMoves: [
-        { name: "strongSlash", type: "damage", amount: 30 },
-        { name: "healingOintment", type: "healing", amount: 25 },
-        { name: "thunderbolt", type: "damage", amount: 50, special: true }
-    ]
-};
-
-// === GENERAL ENEMY CLASS ===   
-class Enemy {
-    constructor(enemyName, health, moveKey) {
-        this.enemyName = enemyName;
-        this.health = health;
-        this.maxHealth = health; // Set maxHealth equal to initial health
-        this.enemyMoves = enemyCombat[moveKey] || [];
-        this.dodgeTurnsRemaining = 0;
+function startCombat(enemyInstance) {
+    if (combatActive) {
+        console.log("Combat is already active. Skipping startCombat.");
+        return; // Prevent re-triggering combat logic
     }
 
-    applyMoveEffect(move) {
-        if (move.type === "damage") {
-            player.health -= move.amount;
-            console.log(`${this.enemyName} dealt ${move.amount} damage to the player.`);
-        } else if (move.type === "healing") {
-            this.health = Math.min(this.health + move.amount, this.maxHealth);
-            console.log(`${this.enemyName} healed for ${move.amount}.`);
-        } else if (move.type === "evasion") {
-            this.dodgeTurnsRemaining = move.turns;
-            console.log(`${this.enemyName} is dodging for ${move.turns} turns.`);
-        }
-    }
+    console.log("Starting combat...");
+    const combatDisplay = document.getElementById("combatDisplay");
 
-    attack() {
-        if (this.dodgeTurnsRemaining > 0) {
-            console.log(`${this.enemyName} dodged the attack!`);
-            this.dodgeTurnsRemaining--;
-            return;
-        }
-    
-        const randomMove = this.enemyMoves[Math.floor(Math.random() * this.enemyMoves.length)];
-        console.log(`${this.enemyName} uses ${randomMove.name}!`);
-        this.applyMoveEffect(randomMove);
-    
-        // Use writeText to display the enemy's move
-        const feedback = `${this.enemyName} uses ${randomMove.name}!`;
-        story.activeText = [{ text: feedback }]; // Temporarily set activeText for writeText
-        story.textIndex = 0;
-        story.i = 0;
-        story.writeText();
-    
-        // Update player health display
-        updatePlayerHealthDisplay();
-    }
-}
+    currentEnemy = enemyInstance; // Set the current enemy
+    console.log("Current enemy set to:", currentEnemy); // Debugging log
+    combatActive = true; // Mark combat as active
+    console.log(`A wild ${enemyInstance.enemyName} appears!`);
+
+    // Display the combat menu
+    combatDisplay.style.display = "block";
+    console.log("Combat display set to visible.");
+
+    updateCombatDisplay(); // Update combat display with enemy info
+}   // Update combat display with enemy info
 
 function enemyTurn() {
     console.log("== startCombat called ==");
     console.log("combatActive:", combatActive);
-    console.log("enemyInstance:", JSON.stringify(enemyInstance, null, 2));
+    console.log("currentEnemy:", JSON.stringify(currentEnemy, null, 2));
 
     if (combatActive) {
         console.warn("Combat is already active. Skipping startCombat.");
@@ -946,16 +1006,15 @@ function enemyTurn() {
         return;
     }
 
-    if (!enemyInstance || !enemyInstance.enemyName) {
-        console.error("Invalid enemyInstance passed to startCombat.");
+    if (!currentEnemy || !currentEnemy.enemyName) {
+        console.error("Invalid currentEnemy passed to startCombat.");
         return;
     }
 
-    currentEnemy = enemyInstance;
     combatActive = true;
 
     combatDisplay.style.display = "block";
-    console.log(`Combat started against: ${enemyInstance.enemyName}`);
+    console.log(`Combat started against: ${currentEnemy.enemyName}`);
 
     try {
         updateCombatDisplay(); 
@@ -974,27 +1033,6 @@ function enemyTurn() {
     } else {
         console.log("No enemy present for enemy turn.");
     }
-}
-
-
-function startCombat(enemyInstance) {
-    console.log("Starting combat...");
-    const combatDisplay = document.getElementById("combatDisplay");
-    currentEnemy = enemyInstance;
-    combatActive = true;
-
-    
-
-    currentEnemy = enemyInstance; // Set the current enemy
-    console.log("Current enemy set to:", currentEnemy); // Debugging log
-    combatActive = true; // Mark combat as active
-    console.log(`A wild ${enemyInstance.enemyName} appears!`);
-
-    // Display the combat menu
-    combatDisplay.style.display = "block";
-    console.log("Combat display set to visible.");
-
-    updateCombatDisplay(); // Update combat display with enemy info
 }
 
 function playerTurn(moveKey) {
@@ -1059,38 +1097,37 @@ function endCombat(enemy) {
     console.log(">> endCombat CALLED for", enemy.enemyName);
 }
 
-function forceResetCombat() {
-    combatActive = false;
-    currentEnemy = null;
-    combatDisplay.style.display = 'none';
-    console.log("Combat state forcibly reset.");
-    document.getElementById("combatDisplay").style.display = "none";
-    console.log("Force reset combat state.");
-    document.getElementById('combatButton').addEventListener('click', function() {
-        const combatDisplay = document.getElementById('combatDisplay');
-        combatDisplay.style.display = (combatDisplay.style.display === 'block') ? 'none' : 'block';
-        forceResetCombat();    
-    });
-}
+// function forceResetCombat() {
+//     combatActive = false;
+//     currentEnemy = null;
+//     combatDisplay.style.display = 'none';
+//     console.log("Combat state forcibly reset.");
+//     document.getElementById("combatDisplay").style.display = "none";
+//     console.log("Force reset combat state.");
+//     document.getElementById('combatButton').addEventListener('click', function() {
+//         const combatDisplay = document.getElementById('combatDisplay');
+//         combatDisplay.style.display = (combatDisplay.style.display === 'block') ? 'none' : 'block';
+//         forceResetCombat();    
+//     });
+// }
 
 combatButton.addEventListener("click", () => {
     console.log("Combat button clicked. combatActive:", combatActive);
 
-    if (!combatActive) {
-        const testEnemy = new Enemy("Falcon", 12, "falconMoves");
-        startCombat(testEnemy);
+    if (!story.nodesThatStartCombat.includes(story.activeText[story.textIndex].name)) {
+        console.log("COMBAT SHOULD NOT BE ACTIVE RIGHT NOW");
     } else {
-        console.log("Toggling display or skipping due to combatActive.");
         toggleCombatDisplay();
+        console.log("Toggling display or skipping due to combatActive.");
     }
 });
 
-function forceResetCombat() {
-    combatActive = false;
-    currentEnemy = null;
-    document.getElementById("combatDisplay").style.display = "none";
-    console.log("Combat state forcibly reset.");
-}
+// function forceResetCombat() {
+//     combatActive = false;
+//     currentEnemy = null;
+//     document.getElementById("combatDisplay").style.display = "none";
+//     console.log("Combat state forcibly reset.");
+// }
 
 // Helper function to execute call-to-action text nodes
 function executeCallToAction(nodeName) {
@@ -1288,14 +1325,14 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    const testfalcon = {
-        enemyName: "Test Falcon",
-        hp: 20,
-        maxHp: 20,
-        attack: 5,
-        // ...anything else
-      };
-      console.log(testfalcon); // Check if it's defined
+    // const testfalcon = {
+    //     enemyName: "Test Falcon",
+    //     hp: 20,
+    //     maxHp: 20,
+    //     attack: 5,
+    //     // ...anything else
+    //   };
+    //   console.log(testfalcon); // Check if it's defined
 
 // combatActive = false;
 // startCombat(testfalcon);
