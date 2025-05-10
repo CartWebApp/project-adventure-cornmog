@@ -1106,6 +1106,7 @@ combatButton.addEventListener("click", () => {
     }
 });
 
+// ok
 // function forceResetCombat() {
 //     combatActive = false;
 //     currentEnemy = null;
