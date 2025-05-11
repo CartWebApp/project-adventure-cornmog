@@ -1,37 +1,6 @@
 localStorage.clear();
 console.log("localStorage cleared.");
 
-// IMPORTANT! This tracks wether combat is currently active
-// let combatActive = true;   
-let currentEnemy = null;
-
-// ---------------------------------------------------------------------------------------
-// ~~~ENEMIES 1: ENEMY ESSENTIALS~~~
-
-//   Enemy Combat Variable    
-const enemyCombat = {
-    falconMoves: [
-        { name: "slash", type: "damage", amount: 2 },
-        { name: "dodge", type: "evasion", turns: 2 }
-    ], 
-    tarantulaMoves: [   
-        { name: "bite", type: "damage", amount: 2 },
-        { name: "poison2", type: "damage", amount: 10, poison: true }
-    ],
-    giantTarantulaMoves: [
-        { name: "megaBite", type: "damage", amount: 40 },
-        { name: "venom", type: "damage", amount: 25, poison: true },
-        { name: "antiVenom", type: "healing", amount: 30 }
-    ],
-    strongFalconMoves: [
-        { name: "strongSlash", type: "damage", amount: 30 },
-        { name: "healingOintment", type: "healing", amount: 25 },
-        { name: "thunderbolt", type: "damage", amount: 50, special: true }
-    ]
-};
-
-//     updatePlayerHealthDisplay();
-// ---------------------------------------------------------------------------------------
 //   ~STORY LOGIC~
     const story = {
          activeText: null, // This will be set to the current text array
@@ -42,12 +11,13 @@ const enemyCombat = {
 // FAST --> These actions need to be folded into the gameText object where apporpriate for your story         
         //  caveActions: ["explore", "continue"],
         //  finalActions:["follow", "plunge down", "get back"],
-// FAST --> End of actions in need of change         
-            playerDeath: function(){
-                if (Player.health == 0){
-                    console.log("You have fallen..."); 
-                }
-            },
+// FAST --> End of actions in need of change  
+
+            // playerDeath: function(){
+            //     if (Player.health == 0){
+            //         console.log("You have fallen..."); 
+            //     }
+            // },
 
             i: 0,
             textIndex: 0,
@@ -59,16 +29,16 @@ const enemyCombat = {
             // List of special text node names where the CONTINUE button should hide
             nodesThatHideContinue: [
                 "callToAction",
-                "callToActionFalconFight",
-                "tarantulaFightCallToAction",
-                "strongFalconCallToAction",
-                "ambushFalconCallToAction"
-            ],
-
-            sceneName : [
-                "1.1first-scenes.html",
-                "1.2tarantula-fight.html",
-                // next scene
+                "firstFalconEncounter",
+                "tarantulaEncounter",
+                "ambushFalconCallToAction",
+                "mountainApproach",
+                "rejectStart",
+                "contemplationIntro",
+                "soarenMountain",
+                "caveActions",
+                "exploreCave",
+                "watchtowerTalk"
             ],
             // List of special text node names where the CONTINUE button should hide
 
@@ -134,96 +104,283 @@ const enemyCombat = {
 
                     // DISABLE CONTINUE BUTTON
                     {
-                      "name": "callToActionFalconFight",
-                      "text": "Defend yourself! (Choose a combat move from COMBAT or use an item in INVENTORY.)",
+                      "name": "firstFalconEncounter",
+                      "text": "What is your next move? (Choose an option from ACT)",
+                       choices: [["Hit the falcon", "falconOwRunAway"],["Scream to Soaren for help", "soarenHelp"],["Evade The falcon", "evadeFalcon"]]
                     },
                     // ENABLE CONTINUE BUTTON
+                  ],
 
-
-
+                  "falconOwRunAway": [
                     {
-                    "name": "falconWinOutcome",
-                    "text": "If the falcon manages to bring you down to 0 hp, then the game ends with one of its possible endings: 'You Have Fallen.'"
+                        "name": "falconRunsAway",
+                        "text": "You hit the falcon with your little leg. 'OW! OWEE!' the falcon screeches. 'I’m outta here!' The falcon flies away."
                     },
                     {
-                    "name": "falconLossOutcome",
-                    "text": "However, if you manage to defeat the Falcon, you receive a bundle of seeds as an item, which heals you completely when used."
+                        "name": "soarenIntro",
+                        "text": "Your journey continues and you ask the owl for his name. He tells you that his name is Soaren, Guardian of the forest. He reveals that his brothers and sisters are also guardians; they keep watch at night."
                     },
                     {
-                    "name": "soarenIntro",
-                    "text": "Your journey continues and you ask the owl for his name. He tells you that his name is Soaren, Guardian of the forest. He reveals that his brothers and sisters are also guardians; they keep watch at night."
+                        "name": "tarantulaFightIntro",
+                        "text": "Soaren then suggests that you stop to get some rest. When you settle under the shade of a tall tree, you spot a tarantula, who crawls up to you, preparing to attack."
                     },
-                    {
-                    "name": "tarantulaFightIntro",
-                    "text": "Soaren then suggests that you stop to get some rest. When you settle under the shade of a tall tree, you spot a tarantula, who crawls up to you, preparing to attack."
-                    },
-
-
-
                     // DISABLE CONTINUE BUTTON
                     {
-                    "name": "tarantulaFightCallToAction",
-                    "text": "Defend yourself! (Choose a combat move from COMBAT or use an item in INVENTORY.)",
-                    "tarantula": new Enemy("Tarantula", 15, "tarantulaMoves")
-                    },
+                        "name": "tarantulaEncounter",
+                        "text": "What is your next move? (Choose an option from ACT)",
+                        choices: [["Hit the tarantula", "tarantulaOwRunAway"],["Impress Soaren", "impressSoaren"],["Blow a Gust of Wind", "tarantulaFliesAway"]]
+                    }
                     // ENABLE CONTINUE BUTTON
+                  ],
 
-
-
-
+                  "soarenHelp": [
                     {
-                    "name": "tarantulaFightOutcomeFail",
-                    "text": "If the tarantula manages to bring you down to 0 hp, then the game finishes with the 'You Have Fallen' ending."
+                        "name": "soarenHelps",
+                        "text": "You cry to Soaren for help. 'Worry not, little one!' says the owl, 'I am here!' He swoops in and catches the falcon with his talons."
                     },
                     {
-                    "name": "tarantulaFightOutcomeWin",
-                    "text": "However if you defeat the tarantula, you receive another bundle of seeds and you also obtain a new item called 'poisonous tusk.' This item gives you an additional combat move called 'Poison,' which deals 1 damage every turn."
+                        "name": "falconEvade",
+                        "text": "The falcon screeches and tries to escape. Soaren lets go of the falcon, and it flies away."
                     },
                     {
-                    "name": "mountainApproach",
-                    "text": "After getting some rest, you fly off once more. The sun is beginning to set, and Soaren tells you that you are approaching the mountain range, which is sitting right above the forest where your father and brother are."
+                        "name": "soarenIntro",
+                        "text": "Your journey continues and you ask the owl for his name. He tells you that his name is Soaren, Guardian of the forest. He reveals that his brothers and sisters are also guardians; they keep watch at night."
                     },
+                    {
+                        "name": "tarantulaFightIntro",
+                        "text": "Soaren then suggests that you stop to get some rest. When you settle under the shade of a tall tree, you spot a tarantula, who crawls up to you, preparing to attack."
+                    },
+                    // DISABLE CONTINUE BUTTON
+                    {
+                        "name": "tarantulaEncounter",
+                        "text": "What is your next move? (Choose an option from ACT)",
+                        choices: [["Hit the tarantula", "tarantulaOwRunAway"],["Impress Soaren", "impressSoaren"],["Blow a Gust of Wind", "tarantulaFliesAway"]]
+                    }
+                    // ENABLE CONTINUE BUTTON
+                  ],
+
+                  "evadeFalcon": [
+                    {
+                        "name": "evasion",
+                        "text": "You and Soaren evade the falcon and fly away. The falcon doesn't seem to care anymore, and he doesn't chace you."
+                    },
+                    {
+                        "name": "soarenIntro",
+                        "text": "Your journey continues and you ask the owl for his name. He tells you that his name is Soaren, Guardian of the forest. He reveals that his brothers and sisters are also guardians; they keep watch at night."
+                    },
+                    {
+                        "name": "tarantulaFightIntro",
+                        "text": "Soaren then suggests that you stop to get some rest. When you settle under the shade of a tall tree, you spot a tarantula, who crawls up to you, preparing to attack."
+                    },
+                    // DISABLE CONTINUE BUTTON
+                    {
+                        "name": "tarantulaEncounter",
+                        "text": "What is your next move? (Choose an option from ACT)",
+                        choices: [["Hit the tarantula", "tarantulaOwRunAway"],["Impress Soaren", "impressSoaren"],["Blow a Gust of Wind", "tarantulaFliesAway"]]
+                    }
+                    // ENABLE CONTINUE BUTTON
+                  ],
+
+                  "tarantulaOwRunAway": [
+                    {
+                        "name": "tarantulaHit",
+                        "text": "You hit the tarantula with your little leg. 'AHHH!' yells the tarantula."
+                    },
+                    {
+                        "name": "tarantulaWife",
+                        "text": "'Hey Kyle!' screams a voice from below, 'Keep it down up there, will you?'"
+                    },
+                    {
+                        "name": "tarantulaResponse",
+                        "text": "'Honey,' answers the tarantula, 'There's a little bird up there, and he just hit me!'"
+                    },
+                    {
+                        "name": "tarantulaWifeResponse",
+                        "text": "'Well you better quiet down, Kyle! I’m trying to sleep!'"
+                    },
+                    {
+                        "name": "tarantulaSnaps",
+                        "text": "'Man, thanks a lot, pal!' says the tarantula, and crawls away."
+                    },
+                    {
+                        "name": "soarenRemark",
+                        "text": "'That was a close one!' Soaren says. 'But you’re safe. Let's rest a bit more, and then we will proceed our journey.'"
+                    },
+                    {
+                        "name": "mountainApproach",
+                        "text": "After getting some rest, you fly off once more. The sun is beginning to set, and Soaren tells you that you are approaching the mountain range, which is sitting right above the forest where your father and brother are. (Choose an option from ACT).",
+                        choices: [["Approcah the mountain", "approachMountain"]]
+                    },
+                  ],
+
+                  "impressSoaren": [
+                    {
+                        "name": "impressSoarenWithATrick",
+                        "text": "You try to impress Soaren with a trick. You fly up and do a loop-de-loop, but you end up crashing into a tree."
+                    },
+                    {
+                        "name": "tarantulaLaughs",
+                        "text": "'Ha-ha-ha! That was funny!' says the tarantula. 'You should try that again!'"
+                    },
+                    {
+                        "name": "tarantulaLaughs",
+                        "text": "'Man,' says the tarantula, 'I don't even want to attack you anymore. That was hilarious!' The tarantula then crawls away."
+                    },
+                    {
+                        "name": "soarenRemarkToTrick",
+                        "text": "'That was quite remarkable!' Soaren says. 'But you should be careful next time. I promised your mother to keep you safe.'"
+                    },
+                    {
+                        "name": "soarenRest",
+                        "text": "You get down from the tree, and take a quick break from the journey."
+                    },
+                    {
+                        "name": "mountainApproach",
+                        "text": "After getting some rest, you fly off once more. The sun is beginning to set, and Soaren tells you that you are approaching the mountain range, which is sitting right above the forest where your father and brother are. (Choose an option from ACT).",
+                        choices: [["Approcah the mountain", "approachMountain"]]
+                    },
+                  ],
+
+                  "tarantulaFliesAway": [
+                    {
+                        "name": "gustOfWind",
+                        "text": "You fly up and blow a gust of wind at the tarantula with your wings. The tarantula flies away, as if he were a little leaf poofing away. The tarantula vanishes into the distance."
+                    },
+                    {
+                        "name": "soarenRemarkGust",
+                        "text": "'Woah, you are quite the strong one, aren't you?' Soaren says. 'For a little bird like you, you've got quite the wing muscles. But you should give them some rest. We still have a long ways to go!'"
+                    },  
+                    {
+                        "name": "mountainApproach",
+                        "text": "After getting some rest, you fly off once more. The sun is beginning to set, and Soaren tells you that you are approaching the mountain range, which is sitting right above the forest where your father and brother are. (Choose an option from ACT).",
+                        choices: [["Approcah the mountain", "approachMountain"]]
+                    },
+                  ],
+
+                  "approachMountain": [
                     {
                     "name": "soarenRevealsTruth",
-                    "text": "You finally ask Soaren about what really happened to them. He urges you not to panic but to stay calm, and he admits to you that they have been captured by falcons."
+                    "text": "You are now getting closer and closer to the mountain.You finally ask Soaren about what really happened to them. He urges you not to panic but to stay calm, and he admits to you that they have been captured by falcons."
                     },
                     {
                     "name": "soarenEncourages",
-                    "text": "Soaren reveals that the reason why he didn’t explain this earlier was because he didn’t want you to get scared, but the owl encourages you and tells you to cheer up: there is still hope."
-                    },                    
+                    "text": "Soaren reveals that the reason why he didn’t explain this earlier was because he didn’t want you to get scared, but the owl encourages you."
+                    },
+                    {
+                    "name": "soarenEncouragement",
+                    "text": "'Cheer up, little one!' says the owl 'I know that we can save them. You are quite a brave little bird! You've gotten this far! I know you can rescue your brethren!'"
+                    },                      
                     {
                     "name": "strongFalconBattleIntro",
-                    "text": "Suddenly you see a strong falcon approaching. Unlike in other battles, Soaren deals the first blow to the enemy."
+                    "text": "Suddenly you see a strong falcon approaching, and he seems intimidating. He is much bigger than you, and he looks like he has been training for a long time. He is flying towards you, and he seems to be angry."
                     },
-
-
-
-
 
                     // DISABLE CONTINUE BUTTON
                     {
-                    "name": "strongFalconCallToAction",
-                    "text": "Defend yourself! (Choose a combat move from COMBAT or use an item in INVENTORY.)",
-                    "strongFalcon" : new Enemy("Strong Falcon", 30, "strongFalconMoves"),
+                    "name": "callToAction",
+                    "text": "What is your next move? (Choose an option from ACT)",
+                    choices: [["Hit the falcon", "hitStrongFalcon"],["Tell a joke", "joke"]]
                     },
                     // ENABLE CONTINUE BUTTON
+                ],
 
-
-
-
-
-
-
+                 "joke": [
                     {
-                    "name": "strongFalconBattleOutcome",
-                    "text": "Once you successfully defeat the strong falcon, you fly the last few meters to the mountain range. It is now dark."
+                    "name": "tellAJoke",
+                    "text": "You tell the falcon that you would like to tell him a joke.",
+                    },
+                    {
+                    "name": "falconRespondsOutOfCuriosity",
+                    "text": "'What? A joke?' the falcon asks, 'I’m listening. Go ahead, tell me a joke!'",
+                    },
+                    {
+                    "name": "theJoke",
+                    "text": "'Why did the falcon cross the road?'",
+                    },
+                    {
+                    "name": "theAttemptToAnswer",
+                    "text": "I don't know, why?' the falcon asks.",
+                    },
+                    {
+                    "name": "jokeEnd",
+                    "text": "'Because it saw the chicken do it and thought, “Amateur.”'",
+                    },
+                    {
+                    "name": "falconLaugh",
+                    "text": "Suddenly, the falcon bursts out laughing like crazy. 'BWA-HA-HA-HA!' he laughs. 'That was the funniest thing I’ve heard all day!'",
+                    },
+                    {
+                    "name": "falconFall",
+                    "text": "Because he is so focused on laughing, he loses control of his flight and begins to abnoxiously fall to the ground. You watch him descend, laughing, until you hear a loud thud. 'I'm okay...' says the falcon.",
+                    },
+                    {
+                    "name": "soarenRemark3",
+                    "text": "'Wow,' says Soaren, 'you are quite the comedian! Your joke was so effective that it made our enemy abnoxious to his actions, causing him to gradually fall to the ground without a care in the world. Jolly good! Jolly good!'",
+                    },
+                    {
+                    "name": "mountain1",
+                    "text": "You then fly your last few meters of to the mountain, until you finally reach it.",
+                    },
+                    {
+                    "name": "mountain2",
+                    "text": "You notice that the mountain has a giant hole in it. It is a cave system.",
+                    },
+                    {
+                    "name": "soarenMountain",
+                    "text": "'We're almost there, little one. We just have to go through this cave. The mountain is too high for us to go above or around it, so we must go through. Are you ready?' (Choose an option from ACT)",
+                    choices: [["Enter", "enterTheCave"]]
+                    }
+                ],
+
+                "hitStrongFalcon": [
+                    {
+                    "name": "hitTheStrongFalcon",
+                    "text": "You knock on the strong falcon with your beak, but he barely feels it. It's as if he's made of steel.",
+                    },
+                    {
+                    "name": "strongFalconResponce",
+                    "text": "'That did nothing,' the falcon says. He then proceeds to make a slashing movement at you with his big talon.",
+                    },
+                    {
+                    "name": "soarenProtection",
+                    "text": "'AWAY, YOU SCOUNDREL!' says Soaren, coming to your rescue. He then shouts a battle cry: 'SCREECHING NIGHTWING!'",
+                    },
+                    {
+                    "name": "sonicBoom",
+                    "text": "Soaren then yells a shrill screech that peirces through the forest, and makes the mountains rumble. It is so loud, that you shut your ears with your wings for a bit. The screech coming from Soaren's beak makes a sonic boom.",
+                    },
+                    {
+                    "name": "shreikStop",
+                    "text": "The strong falcon's eardrums go numb. He becomes unconscious and falls to the ground.",
+                    },
+                    {
+                    "name": "yourReaction",
+                    "text": "You take your wings off your ears and look at Soaren. You express your sincerest gratitude to him for saving you.",
+                    },
+                    {
+                    "name": "soarenResponse5",
+                    "text": "'You are welcome, little one,' says Soaren. 'You could have been hurt! I'm glad that that pesky bird has been taken care of, but come. Let us proceed.'",
+                    },
+                    {
+                    "name": "mountain1",
+                    "text": "You then fly your last few meters of to the mountain, until you finally reach it.",
+                    },
+                    {
+                    "name": "mountain2",
+                    "text": "You notice that the mountain has a giant hole in it. It is a cave system.",
+                    },
+                    {
+                    "name": "soarenMountain",
+                    "text": "'We're almost there, little one. We just have to go through this cave. The mountain is too high for us to go above or around it, so we must go through. Are you ready?' (Choose an option from ACT)",
+                    choices: [["Enter", "enterTheCave"]]
                     }
                 ],
                 //   If the player chooses "Decline the owl's request" in startChoices, then this text will apply:
                 "rejectingTheCall": [
                     {
                     "name": "rejectStart",
-                    "text": "If you decline the owl’s request to go with him, he flies away, but not before giving you directions on where you can find him if you change your mind. In two days, you decide to follow the owl."
+                    "text": "If you decline the owl’s request to go with him, he flies away, but not before giving you directions on where you can find him if you change your mind. In two days, you decide to follow the owl.",
+                    choices: [["Begin your journey", "mergingPaths"]]
                     }
                 ],
 
@@ -231,25 +388,9 @@ const enemyCombat = {
                 "pathOfContemplation": [
                     {
                     "name": "contemplationIntro",
-                    "text": "You exit the scene, leaving the owl and your mother behind, to take a 'stroll' and get some fresh air while you contemplate the owl’s request."
-                    },
-                    {
-                    "name": "falconAmbushDuringContemplation",
-                    "text": "You are currently flying, when suddenly, a falcon swoops down to attack you."
-                    },
-
-
-                    
-
-                    // DISABLE CONTINUE BUTTON
-                    {
-                    "name": "ambushFalconCallToAction",
-                    "text": "Defend yourself! (Choose a combat move from COMBAT or use an item in INVENTORY.)",
-                    "falcon" : new Enemy("Falcon", 10, "falconMoves"),
-                    },
-                    // ENABLE CONTINUE BUTTON
-
-
+                    "text": "You exit the scene, leaving the owl and your mother behind, to take a 'stroll' and get some fresh air while you contemplate the owl’s request.",
+                    choices: [["Continue thinking", "mergingPaths"]]
+                    }
                 ],
                 // The next scenes are the same for both "Think about it" and "Decline the owl's request"
                 "mergingPaths": [
@@ -257,29 +398,27 @@ const enemyCombat = {
                         "name": "falconAmbushDuringContemplation",
                         "text": "You are currently flying, when suddenly, a falcon swoops down to attack you."
                     },
-
-
-
                     // DISABLE CONTINUE BUTTON
                     {
                     "name": "ambushFalconCallToAction",
-                    "text": "Defend yourself! (Choose a combat move from COMBAT or use an item in INVENTORY.)",
-                    "falcon" : new Enemy("Falcon", 10, "falconMoves"),
-                    },
-                    // ENABLE CONTINUE BUTTON,
-
-
+                    "text": "What is your next move? (Choose an option from ACT)",
+                    choices: [["Dodge The falcon", "hitFalcon"],["Talk to the falcon", "talkToFalcon"],["Evade the falcon", "evadeFalcon2"]]
+                    } 
+                ],
+            
+            // CONTINUE HERE
+            "hitFalcon": [
                     {
                     "name": "rejectTalk1",
                     "text": "You try to convince the falcon to stop attacking. The falcon snaps: 'Quiet, little redwing. You shall be my supper!'"
                     },
                     {
                     "name": "rejectTalk2",
-                    "text": "You try talking again. The falcon replies: 'Why should I stop? You look too tasty!' He prepares to slash—"
+                    "text": "You try talking again. The falcon replies: 'Why should I stop? You look too tasty!' He prepares to slash you with his claw."
                     },
                     {
                     "name": "owlRescue",
-                    "text": "The owl from earlier swoops in, catches you, and escapes while carrying you in his talons."
+                    "text": "Suddenly, the owl from earlier swoops in and catches you. He makes a dodging move, and you both evede the falcon."
                     },
                     {
                     "name": "owlCheckIn",
@@ -287,86 +426,229 @@ const enemyCombat = {
                     },
                     {
                     "name": "talkResponse",
-                    "text": "You tell the owl you're okay and thank him. He replies: 'You are welcome. Relax while I take you to my hideout.'"
-                    },
-                    {
-                    "name": "eatResponse",
-                    "text": "You tell the owl you're hungry. He says: 'You poor child! Let me take you to my nest and feed you.' You faint from fatigue."
-                    },
-                    {
-                    "name": "actResponse",
-                    "text": "You look down and realize you're high above the ground. You faint."
+                    "text": "You tell the owl you're okay, and you thank him for saving you. He replies: 'You are welcome. Relax while I take you to my hideout.' You then begin to shut your eyes from exhaustion. You slowly begin to fade into a deep sleep."
                     },
                     {
                     "name": "wakeUpScene",
-                    "text": "You wake up in a dark, abandoned watchtower. There's a fireplace and a bundle of seeds before you. The owl stares into the night."
+                    "text": "You wake up in a dark, abandoned watchtower. You are confused as to what is happening."
                     },
                     {
-                    "name": "watchtowerAct",
-                    "text": "You explore the room and find a chest with a book titled 'The Redwing’s Song.' You gain 5 XP and learn a tune usable once per battle."
+                    "name": "lookAroundTheWatchtower",
+                    "text": "You look around. There's a fireplace and a bundle of seeds before you. You also see the owl who saved you. He is staring into the night."
                     },
                     {
+                    "name": "callToAction",
+                    "text": "What is your next move? (Choose an option from ACT)",
+                    choices: [["Eat the seeds", "eatTheSeeds"],["Talk to the owl", "talkToOwl"],["Explore the room", "exploreRoom"]]
+                    },
+            ],
+
+            "talkToFalcon": [
+                    {
+                    "name": "rejectTalk1",
+                    "text": "You try to convince the falcon to stop attacking. The falcon snaps: 'Quiet, little redwing. You shall be my supper!'"
+                    },
+                    {
+                    "name": "rejectTalk2",
+                    "text": "You try talking again. The falcon replies: 'Why should I stop? You look too tasty!' He prepares to slash you with his claw."
+                    },
+                    {
+                    "name": "owlRescue",
+                    "text": "Suddenly, the owl from earlier swoops in and catches you. He makes a dodging move, and you both evede the falcon."
+                    },
+                    {
+                    "name": "owlCheckIn",
+                    "text": "The owl asks: 'Are you hurt, little one?'"
+                    },
+                    {
+                    "name": "talkResponse",
+                    "text": "You tell the owl you're okay, and you thank him for saving you. He replies: 'You are welcome. Relax while I take you to my hideout.' You then begin to shut your eyes from exhaustion. You slowly begin to fade into a deep sleep."
+                    },
+                    {
+                    "name": "wakeUpScene",
+                    "text": "You wake up in a dark, abandoned watchtower. You are confused as to what is happening."
+                    },
+                    {
+                    "name": "lookAroundTheWatchtower",
+                    "text": "You look around. There's a fireplace and a bundle of seeds before you. You also see the owl who saved you. He is staring into the night."
+                    },
+                    {
+                    "name": "callToAction",
+                    "text": "What is your next move? (Choose an option from ACT)",
+                    choices: [["Eat the seeds", "eatTheSeeds"],["Talk to the owl", "talkToOwl"],["Explore the room", "exploreRoom"]]
+                    },
+            ],
+
+            // CONTINUE HERE 
+            "evadeFalcon2": [
+                    {
+                    "name": "rejectTalk1",
+                    "text": "You try to convince the falcon to stop attacking. The falcon snaps: 'Quiet, little redwing. You shall be my supper!'"
+                    },
+                    {
+                    "name": "rejectTalk2",
+                    "text": "You try talking again. The falcon replies: 'Why should I stop? You look too tasty!' He prepares to slash you with his claw."
+                    },
+                    {
+                    "name": "owlRescue",
+                    "text": "Suddenly, the owl from earlier swoops in and catches you. He makes a dodging move, and you both evede the falcon."
+                    },
+                    {
+                    "name": "owlCheckIn",
+                    "text": "The owl asks: 'Are you hurt, little one?'"
+                    },
+                    {
+                    "name": "talkResponse",
+                    "text": "You tell the owl you're okay, and you thank him for saving you. He replies: 'You are welcome. Relax while I take you to my hideout.' You then begin to shut your eyes from exhaustion. You slowly begin to fade into a deep sleep."
+                    },
+                    {
+                    "name": "wakeUpScene",
+                    "text": "You wake up in a dark, abandoned watchtower. You are confused as to what is happening."
+                    },
+                    {
+                    "name": "lookAroundTheWatchtower",
+                    "text": "You look around. There's a fireplace and a bundle of seeds before you. You also see the owl who saved you. He is staring into the night."
+                    },
+                    {
+                    "name": "callToAction",
+                    "text": "What is your next move? (Choose an option from ACT)",
+                    choices: [["Eat the seeds", "eatTheSeeds"],["Talk to the owl", "talkToOwl"],["Explore the room", "exploreRoom"]]
+                    },
+            ],
+
+            "eatTheSeeds": [
+                {
                     "name": "watchtowerEat",
-                    "text": "You eat the seeds and regain health. You gain +3 strength."
-                    },
+                    "text": "You eat the seeds and regain strength. You suddenly feel more alive, like a weight has been taken off your back. (Choose an option from ACT)",
+                },
                     {
-                    "name": "watchtowerTalk1",
-                    "text": "You ask: 'Where are we, Mr. Owl?' He replies: 'Ah! You’re awake. We are in my nest. We’ll begin our journey in the morning.'"
+                    "name": "watchtowerTalk",
+                    "text": "The owl hears you eating and turns to you. 'Ah! You’re awake.' he says, 'Welcome to my cozy nest. Make yourself at home! But don't get too comfortable: we’ve got a big journey ahead of us!'",
+                    choices: [["'What is your name?'", "askForName"],["'What journey?'", "askAboutJourney"]]
                     },
-                    {
-                    "name": "watchtowerAct2",
-                    "text": "You move closer and ask what he means by 'start our journey.'"
-                    },
-                    {
-                    "name": "watchtowerTalk2",
-                    "text": "You either compliment his home or ask what he meant. He replies: 'Call me Soaren, guardian of the Forest. I promised your mother you'd be safe.'"
-                    },
-                    {
-                    "name": "watchtowerTalk3",
-                    "text": "If you compliment his home, he responds: 'Why, I appreciate that! But we must not stay too long. The journey is perilous.'"
-                    },
-                    {
-                    "name": "questBegins",
-                    "text": "Soaren says: 'We must leave tonight.' Suddenly, a tarantula jumps at you from a dark corner."
-                    },
-                    {
-                    "name": "tarantulaBattleRejectOutcome",
-                    "text": "You can lose ('You Have Fallen') or win and gain 10 XP."
-                    },
-                    {
-                    "name": "soarenAfterBattle",
-                    "text": "'That was a close one!' Soaren says. 'But you’re safe. Let’s not waste time—we must begin our quest.'"
-                    },
-                    {
-                    "name": "peacefulFlight",
-                    "text": "You fly for 30 minutes in the chilly night. 'Those are my siblings,' says Soaren. 'They keep watch—'"
-                    },
-                    {
-                    "name": "falconAttackMidflight",
-                    "text": "A falcon suddenly attacks. 'WATCH OUT!!!' yells Soaren. The falcon strikes first. Win and gain 10 XP, or fall."
-                    }
-                ],  
+            ],
+
+            "talkToOwl": [
+                {
+                    "name": "watchtowerTalkToOwl",
+                    "text": "You ask the owl about where you are. He turns to you in surprize."
+                },
+                {
+                    "name": "watchtowerTalk",
+                    "text": "'Ah! You’re awake.' he says, 'You are currently in my cozy nest. Make yourself at home! But don't get too comfortable: we’ve got a big journey ahead of us!'",
+                    choices: [["'What is your name?'", "askForName"],["'What journey?'", "askAboutJourney"]]
+                },
+            ],
+
+            "exploreRoom": [
+                {
+                    "name": "watchtowerExplore",
+                    "text": "You look around the room, and you see bookcases, filled to the brim with books of all sorts. 'Quite a wise owl,' you think to yourself. You also see a picture of two owls. One of them is your rescuer, the very same owl who has just saved you from danger."
+                },
+                {
+                    "name": "owlNotice",
+                    "text": "Suddenly you hear him speaking to you from the entrance of the watchtower."
+                },
+                {
+                    "name": "watchtowerTalk",
+                    "text": "'Ah! You’re awake.' he says, 'Welcome to my cozy nest. Make yourself at home! But don't get too comfortable: we’ve got a big journey ahead of us!'",
+                    choices: [["'What is your name?'", "askForName"],["'What journey?'", "askAboutJourney"]]
+                },
+            ],
+            
+  
+                    
+                //     {
+                //     "name": "watchtowerTalk1",
+                //     "text": "'Ah! You’re awake.' says the owl, 'You are currently in my cozy nest. Make yourself at home! But don't get too comfortable: we’ll begin our journey in the morning.'"
+                //     },
+                //     {
+                //     "name": "watchtowerAct2",
+                //     "text": "You move closer and ask what he means by 'start our journey.'"
+                //     },
+                //     {
+                //     "name": "watchtowerTalk2",
+                //     "text": "You either compliment his home or ask what he meant. He replies: 'Call me Soaren, guardian of the Forest. I promised your mother you'd be safe.'"
+                //     },
+                //     {
+                //     "name": "watchtowerTalk3",
+                //     "text": "If you compliment his home, he responds: 'Why, I appreciate that! But we must not stay too long. The journey is perilous.'"
+                //     },
+                //     {
+                //     "name": "questBegins",
+                //     "text": "Soaren says: 'We must leave tonight.' Suddenly, a tarantula jumps at you from a dark corner."
+                //     },
+                //     {
+                //     "name": "tarantulaBattleRejectOutcome",
+                //     "text": "You can lose ('You Have Fallen') or win and gain 10 XP."
+                //     },
+                //     {
+                //     "name": "soarenAfterBattle",
+                //     "text": "'That was a close one!' Soaren says. 'But you’re safe. Let’s not waste time—we must begin our quest.'"
+                //     },
+                //     {
+                //     "name": "peacefulFlight",
+                //     "text": "You fly for 30 minutes in the chilly night. 'Those are my siblings,' says Soaren. 'They keep watch—'"
+                //     },
+                //     {
+                //     "name": "falconAttackMidflight",
+                //     "text": "A falcon suddenly attacks. 'WATCH OUT!!!' yells Soaren. The falcon strikes first. Win and gain 10 XP, or fall."
+                //     }
+                // ],  
                 // Text for The Cave Scene:
-                    "theCaveScene": [
+                    "enterTheCave": [
                     {
                     "name": "caveArrival",
-                    "text": "You finally reach the mountain overlooking your destination. You fly into a cave that goes through the mountain."
+                    "text": "You fly into the cave that goes through the mountain."
                     },
                     {
-                    "name": "newActions",
-                    "text": "You are now presented with two new actions, separate from the regular ones: 'Explore the cave' and 'Continue.'",
-                    caveActions: [["Explore", "Upon selecting the 'Explore the cave' option, you look around. You find a chest with a bundle of seeds (an item which is now stored in your inventory) and a book (also added to inventory). The book allows you to use 'flight,' which can only be used once the player reaches a certain xp threshold."],["Continue", "Upon selecting the 'Continue' option, you move through the cave and skip to the next scene."]]
+                    "name": "caveActions",
+                    "text": "As you enter, you see that there is a little door to the side of the cave, leading into a room. You consider wether you should explore the room or continue through the cave. What will you choose?",
+                    choices: [["Explore", "explore"],["Continue", "giantTarantulaBossfight"]]
                     }
                 ],
+                    "explore": [
+                      {
+                        "name": "exploreCave",
+                        "text": "You decide to open the door and explore the room. You find a treasure chest. You open it and find a book titled 'The Redwing’s Journal.' Would you like to read it?",
+                        choices: [["Yes", "yes"], ["No", "no"]]
+                      },
+                    ],
+                    "yes": [
+                        {
+                            "name": "readJournal",
+                            "text": "You open the book and turn to a random page. You land on page 26 and read an excerpt from it: 'The falcons! They're everywhere! We are hiding from them in this cave, and we beleive that--' You quickly turn a few pages over and continue reading:",
+                        },
+                        {
+                            "name": "readJournal2",
+                            "text": "'...and they seemed to have gone northwards, according to our scouts. However, I felt a slight suspicion in what they said, for it was the falcons, after all. I beleived that we should have stayed in the cave, but our flock leader told us that we should keep moving, despite the fact that-' You close the book, feeling a fear growing in you. Yet, due to your courage, you brushed that feeling off of you like dust."
+                        },
+                        {
+                            "name": "readJournal3",
+                            "text": "You then put the book back in the chest and close it. You decide to tell Soaren what you have found, and what you have read about in the book..."
+                        },
+                        {
+                            "name": "soarenTalk",
+                            "text": "'It is as I have told you,' said the owl, 'They've been captured by the falcons, but take courage! I am with you. I will fight alongside you, and I will help you save them, but before then, we must get out of this cave!'",
+                            choices: ["Continue", "giantTarantulaBossfight"]
+                        }
+                    ],
+                    "no": [
+                        {
+                            "name": "ignoreJournal",
+                            "text": "You ignore the journal and close the chest. You decide to move on.",
+                            choices:["Continue", "giantTarantulaBossfight"]
+                        }
+                    ],
                 // Text for Giant Tarantula Bossfight:
                 "giantTarantulaBossfight": [
                 {
-                "name": "bossfightIntro",
-                "text": "You continue traversing the cave, and you fly into a giant, dark room. It’s quiet at first, but suddenly you hear a loud, coarse screeching noise. You realize that there is a giant tarantula in the room, six times bigger than you and Soaren. (Same story here. You can either end the game with 'You Have Fallen' or win the fight)."
+                "name": "giantTarantulaIntro",
+                "text": "You continue traversing the cave, and you fly into a giant, dark room. It’s quiet at first, but suddenly you hear a loud, coarse screeching noise.",
                 },
                 {
-                "name": "bossfightVictory",
-                "text": "When you deal the final blow to the giant vermin, it lets out a final, deafening screech. The tarantula faints, and falls to the ground. You have defeated it."
+                "name": "giantTarantulaBeforeYou",
+                "text": "You realize that there is a giant tarantula in the room, six times bigger than you and Soaren combined."
                 },
                 {
                 "name": "bossfightReward",
@@ -507,7 +789,7 @@ const enemyCombat = {
             
                 // Enable the ACT button if the current node is "callToAction"
                 const actButton = document.getElementById("act");
-                if (currentEntry.name === "callToAction") {
+                if (currentEntry && story.nodesThatHideContinue.includes(currentEntry.name)) {
                     actButton.classList.remove("disabled");
                 } else {
                     actButton.classList.add("disabled");
@@ -556,10 +838,6 @@ const enemyCombat = {
             console.log("routeOfAcceptanceLogic triggered for:", currentEntry.name);
     }
 
-        if(story.currentEntry === story.nodesThatStartCombat.nodeName){
-            combatActive = true;
-        }
-
 
         function specialFunctionForEndOfDeclineOrThink() {
             console.log("Extra logic after decline or think path finishes.");
@@ -580,7 +858,9 @@ const enemyCombat = {
 //   ~PLAYER LOGIC~
 
             function sceneSwitchAcceptance() {
-            {
+            if (!combatActive && player.health > 0) {
+                console.log("Combat has ended, and player is alive. Proceeding to the next scene...");
+
                 // Save the current game state to localStorage
                 const gameState = {
                     currentSceneIndex: story.currentSceneIndex,
@@ -590,23 +870,28 @@ const enemyCombat = {
                 console.log("Saving game state:", gameState); // Debugging log
                 localStorage.setItem("gameState", JSON.stringify(gameState));
 
-                // Transition to the next scene
+                // Increment the current scene index and update the active text
                 if (story.sceneName && story.currentSceneIndex < story.sceneName.length - 1) {
                     story.currentSceneIndex++;
-                    const nextScene = story.sceneName[story.currentSceneIndex];
-                    console.log(`Switching to scene: ${nextScene}`);
-                    window.location.href = nextScene;
+                    console.log(`Switching to the next scene in the same page: ${story.sceneName[story.currentSceneIndex]}`);
+                    story.activeText = story.gameText[story.sceneName[story.currentSceneIndex]];
+                    story.textIndex = 0;
+                    story.i = 0;
+                    story.writeText();
                 } else {
                     console.log("No more scenes available. Game completed!");
-                    window.location.href = "game-completed.html";
+                    // Handle end-of-game logic here if needed
                 }
+            } else if (player.health <= 0) {
+                console.log("Player has fallen. Game over.");
+                // Handle game over logic here if needed
+            } else {
+                console.log("Combat is still active. Scene switch aborted.");
             }
         }
 
         
-            closeActDisplay.addEventListener("click", function () {
-                actDisplay.style.display = "none";
-            });
+            
 
 
 // ok
@@ -645,8 +930,6 @@ document.addEventListener('DOMContentLoaded', function () {
         story.currentSceneIndex = gameState.currentSceneIndex;
         story.activeText = gameState.activeText || story.gameText.introText; // Fallback to introText if activeText is null
         story.textIndex = gameState.textIndex || 0;
-
-        // Restore player state
 
         console.log("Game state restored successfully.");
         console.log("Active text:", story.activeText);
@@ -690,7 +973,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // }
 
 // FAST --> I modified this to use the new variable currentEntry.choices instead of the hard-coded story.startChoices
-        if (currentEntry && currentEntry.name === "callToAction") {
+        if (currentEntry && currentEntry.name && story.nodesThatHideContinue.includes(currentEntry.name)) {
             optionsToShow = currentEntry.choices;
         }
 
@@ -717,10 +1000,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         document.getElementById('text').innerHTML = ''; // Clear previous text
                         story.writeText(); // Update the active text
                         actButton.classList.add("disabled"); // Disable the act button
-                    } else {
-                        // Error handling fpr when the destination key doesn't exist
-                        console.error(`No text found for ${choice[1]}`);
-                    }
+                    } 
                 });
                 actOptions.appendChild(button);
             });
@@ -738,6 +1018,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     actDisplay.style.display = "block"; // Show the act display if it is hidden
                 }
             }
+            closeActDisplay.addEventListener("click", function () {
+                actDisplay.style.display = "none";
+            });
         });
     });
       document.getElementById("darryl-img").addEventListener("click",()=>{})

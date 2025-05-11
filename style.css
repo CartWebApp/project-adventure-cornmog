@@ -90,7 +90,7 @@
      border-left: 5px solid white; */
 }
 
-#actionsBox{
+#act{
      margin-top: 2rem;
      display: flex;
      flex-flow: row wrap;
@@ -98,9 +98,8 @@
      max-width: 88vw;
      margin: 2rem auto 0;
      position: relative;
-}
-#actionsBox > button {
-     /* TEXT STYLING */
+
+      /* TEXT STYLING */
      color: white;
      font-family: "Pixelify Sans", sans-serif;
      font-size: 2.5rem;
@@ -122,28 +121,29 @@
      align-items: center;
 }
 
-#actionsBox > button:hover{
+
+#act:hover{
      transition-duration: 0.2s;
      color: black;
      background-color: yellow;
 }
 
-#actionsBox > button:focus{
+#act:focus{
      transition-duration: 0.2s;
      color: black;
      background-color: yellow;
      border: 2px solid white;
 }
 
-#actionsBox > button.disabled,
-#actionsBox > button.disabled:hover,
-#actionsBox > button.disabled:focus {
+#act.disabled,
+#act.disabled:hover,
+#act.disabled:focus {
      background-color: #444;
      color: #888;
      cursor: not-allowed;
 }
 
-#actionsBox > button.disabled:focus{
+#act.disabled:focus{
      animation: flashRed 0.33s ease-in-out;
 }
 
@@ -296,7 +296,7 @@ a:focus{
           width: 80vw;
           padding: 1rem;
      }
-     #actionsBox > button {
+     #act {
           width: 100%;
           margin-bottom: 1rem;
      }  
