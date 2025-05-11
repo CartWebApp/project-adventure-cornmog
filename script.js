@@ -38,7 +38,21 @@ console.log("localStorage cleared.");
                 "soarenMountain",
                 "caveActions",
                 "exploreCave",
-                "watchtowerTalk"
+                "watchtowerTalk",
+
+                // CHOICES IN WATCHTOWER CONVERSATION
+                "askForNamE",
+                "clarifyTheJourney",
+                
+                // CHOICES IN CAVE
+                "soarenTalkCave",
+                "tarantulaYourOnYourOwn",
+                "provideAnAnswer",
+                "youEscape",
+
+                // THE CLIMAX
+                "defendYourself",
+
             ],
             // List of special text node names where the CONTINUE button should hide
 
@@ -319,7 +333,7 @@ console.log("localStorage cleared.");
                     },
                     {
                     "name": "mountain1",
-                    "text": "You then fly your last few meters of to the mountain, until you finally reach it.",
+                    "text": "You then fly your last few meters to the mountain, until you finally reach it.",
                     },
                     {
                     "name": "mountain2",
@@ -363,7 +377,7 @@ console.log("localStorage cleared.");
                     },
                     {
                     "name": "mountain1",
-                    "text": "You then fly your last few meters of to the mountain, until you finally reach it.",
+                    "text": "You then fly your last few meters to the mountain, until you finally reach it.",
                     },
                     {
                     "name": "mountain2",
@@ -483,11 +497,11 @@ console.log("localStorage cleared.");
                     },
                     {
                     "name": "silence1",
-                    "text": "..."
+                    "text": ".  .  ."
                     },
                     {
                     "name": "silence2",
-                    "text": "..."
+                    "text": ".  .  ."
                     },
                     {
                     "name": "wakeUpScene",
@@ -544,45 +558,51 @@ console.log("localStorage cleared.");
                 },
             ],
             
-  
-                    
-                //     {
-                //     "name": "watchtowerTalk1",
-                //     "text": "'Ah! You’re awake.' says the owl, 'You are currently in my cozy nest. Make yourself at home! But don't get too comfortable: we’ll begin our journey in the morning.'"
-                //     },
-                //     {
-                //     "name": "watchtowerAct2",
-                //     "text": "You move closer and ask what he means by 'start our journey.'"
-                //     },
-                //     {
-                //     "name": "watchtowerTalk2",
-                //     "text": "You either compliment his home or ask what he meant. He replies: 'Call me Soaren, guardian of the Forest. I promised your mother you'd be safe.'"
-                //     },
-                //     {
-                //     "name": "watchtowerTalk3",
-                //     "text": "If you compliment his home, he responds: 'Why, I appreciate that! But we must not stay too long. The journey is perilous.'"
-                //     },
-                //     {
-                //     "name": "questBegins",
-                //     "text": "Soaren says: 'We must leave tonight.' Suddenly, a tarantula jumps at you from a dark corner."
-                //     },
-                //     {
-                //     "name": "tarantulaBattleRejectOutcome",
-                //     "text": "You can lose ('You Have Fallen') or win and gain 10 XP."
-                //     },
-                //     {
-                //     "name": "soarenAfterBattle",
-                //     "text": "'That was a close one!' Soaren says. 'But you’re safe. Let’s not waste time—we must begin our quest.'"
-                //     },
-                //     {
-                //     "name": "peacefulFlight",
-                //     "text": "You fly for 30 minutes in the chilly night. 'Those are my siblings,' says Soaren. 'They keep watch—'"
-                //     },
-                //     {
-                //     "name": "falconAttackMidflight",
-                //     "text": "A falcon suddenly attacks. 'WATCH OUT!!!' yells Soaren. The falcon strikes first. Win and gain 10 XP, or fall."
-                //     }
-                // ],  
+            "askForName" : [
+                {
+                    "name": "askForNamE",
+                    "text": "You ask the Owl for his name. He replies: 'My name is Soaren, Guardian of the forest. I am here to help you find your father and brother.'",
+                    choices: [["'Good to meet you.'", "mergingPathsWatchtower"]]
+                },
+            ],
+
+             "askAboutJourney" : [
+                {
+                    "name": "clarifyTheJourney",
+                    "text": "You move closer and ask what he means by 'start our journey.' The owl replies: 'I mean that we will begin our journey to find your father and brother, of couse!'",
+                    choices: [["'Oh, alright.'", "mergingPathsWatchtower"]]
+
+                },
+            ],
+            "mergingPathsWatchtower" : [
+                    {
+                    "name": "watchtowerTalk3",
+                    "text": "The owl chuckles. 'It'm glad to have met you, little redwing.'"
+                    },
+                    {
+                    "name": "questBegins",
+                    "text": "'We must leave tonight,' he says, 'The sooner we get to your brethren, the sooner we'll rescue them'."
+                    },
+                    {
+                    "name": "peacefulFlight",
+                    "text": "In a few moments, you begin your journey. After flying for 30 minutes in the chilly night, you approach a mountain."
+                    },
+                    {
+                    "name": "soarenClarifiesLocation",
+                    "text": "'Your brothers are beyond this mountain,' says Soaren, 'They are located in a lush evergreen forest. Come, there's no time to waste!'"
+                    },
+                     {
+                    "name": "strongFalconBattleIntro",
+                    "text": "Suddenly you see a strong falcon approaching, and he seems intimidating. He is much bigger than you, and he looks like he has been training for a long time. He is flying towards you, and he seems to be angry."
+                    },
+
+                    // DISABLE CONTINUE BUTTON
+                    {
+                    "name": "callToAction",
+                    "text": "What is your next move? (Choose an option from ACT)",
+                    choices: [["Hit the falcon", "hitStrongFalcon"],["Tell a joke", "joke"]]
+                    },
+                ],  
                 // Text for The Cave Scene:
                     "enterTheCave": [
                     {
@@ -616,9 +636,9 @@ console.log("localStorage cleared.");
                             "text": "You then put the book back in the chest and close it. You decide to tell Soaren what you have found, and what you have read about in the book..."
                         },
                         {
-                            "name": "soarenTalk",
+                            "name": "soarenTalkCave",
                             "text": "'It is as I have told you,' said the owl, 'They've been captured by the falcons, but take courage! I am with you. I will fight alongside you, and I will help you save them, but before then, we must get out of this cave!'",
-                            choices: ["Continue", "giantTarantulaBossfight"]
+                            choices: [["Continue", "giantTarantulaBossfight"]]
                         }
                     ],
                     "no": [
@@ -630,55 +650,364 @@ console.log("localStorage cleared.");
                     ],
                 // Text for Giant Tarantula Bossfight:
                 "giantTarantulaBossfight": [
-                {
-                "name": "giantTarantulaIntro",
-                "text": "You continue traversing the cave, and you fly into a giant, dark room. It’s quiet at first, but suddenly you hear a loud, coarse screeching noise.",
-                },
-                {
-                "name": "giantTarantulaBeforeYou",
-                "text": "You realize that there is a giant tarantula in the room, six times bigger than you and Soaren combined."
-                },
-                {
-                "name": "bossfightReward",
-                "text": "You then obtain a new item (Venom, can only be used once per battle, deals 10 damage) and exit the cave from the other side. You have flown through the mountain, and now you have reached the final destination."
-                }
+                    {
+                    "name": "giantTarantulaIntro",
+                    "text": "You continue traversing the cave, and you fly into a giant, dark room. It’s quiet at first, but suddenly you hear a loud, coarse screeching noise.",
+                    },
+                    {
+                    "name": "giantTarantulaBeforeYou",
+                    "text": "You realize that there is a giant tarantula in the room, six times bigger than you and Soaren combined."
+                    },
+                    {
+                    "name": "tarantulaSpeaks",
+                    "text": "The tarantula speaks to you: 'To pass through the cave, you must solve my riddle!'"
+                    },
+                    {
+                    "name": "soarenRiddle",
+                    "text": "'Ah, riddles!' says Soaren, 'Solving riddles happens to be my strongpoint.'"
+                    },
+                    {
+                    "name": "webAttack",
+                    "text": "'Don't worry, little one. I will help you solve the-- suddenly, the tarantula shoots a web at Soaren, and he is now attached to the wall.'",
+                    },
+                    {
+                    "name": "soarenRiddle",
+                    "text": "He tries to speak, but his speech is muffled. His beak is stuck in the web.",
+                    },
+                    {
+                    "name": "tarantulaYourOnYourOwn",
+                    "text": "'Your on your own, kid,' says the tarantula. 'Solve my riddle, and I will let you pass. If you fail, I will eat you both! Are you ready?'",
+                    choices: [["Bring it on!", "bringItOn"]]
+                    },
                 ],
+                "bringItOn": [
+                    {
+                    "name": "riddleBegin",
+                    "text": "The tarantula begins his riddle:",
+                    },
+                    {
+                    "name": "tarantulaRiddleInAction",
+                    "text": "'I have no legs, yet I race through the land. I leave no mark, yet I cradle the sand. I whisper by night and howl by day— Catch me if you can, I’ll never stay.'",
+                    },
+                    {
+                    "name": "provideAnAnswer",
+                    "text": "'What am I?' asks the tarantula. You come up with three possible solutions, but only one of them is correct. What will you choose?",
+                    choices: [["Option 1 - A shadow", "shadow"], ["Option 2 - A snake", "snake"], ["Option 3 - The wind", "wind"]], 
+                    },
+                ],
+                "wind": [
+                    {
+                    "name": "riddleAnswer",
+                    "text": "You answer the riddle with 'The wind.'",
+                    },
+                    {
+                    "name": "tarantulaResposeGood",
+                    "text": "The tarantula stands for a few moments, speechless. 'Wow,' he says, 'That was actually correct! I am impressed!'",
+                    },
+                    {
+                    "name": "tarantulaResposeGood2",
+                    "text": "He then turns to your friend, 'Alright, I will let you two pass, but first, I will free your friend.'",
+                    },
+                    {
+                    "name": "tarantulaResposeGood3",
+                    "text": "The tarantula crawls up to Soaren and frees him from the web. 'You are free, wise owl,' he says. 'Now go, and take your friend with you.'",
+                    },
+                    {
+                    "name": "soarenThanks",
+                    "text": "Soaren brushes away the remains of the web. 'Good job, little one!' he says. 'You solved the riddle, and you saved our lives!'",
+                    },
+                    {
+                    "name": "youEscape",
+                    "text": "You then leave the tarantula dissapointed, and leave the giant room. You now approach the extit. 'This is it,' you think to yourself.",
+                    choices: [["Exit the cave", "theClimax"]]
+                    },
+                ],
+                "shadow": [
+                    {
+                    "name": "riddleAnswer",
+                    "text": "You answer the riddle with 'A shadow.'",
+                    },
+                    {
+                    "name": "tarantulaResposeToDeath",
+                    "text": "'Incorrect!' says the tarantula. 'You are wrong! You have failed my riddle, and now I will eat you!'",
+                    },
+                    {
+                    "name": "tarantulaAttacksToDeath",
+                    "text": "The tarantula launches a web at you, and you are stuck. The tarantula then creeps up to you. 'Sorry, kid. I'm just kinda hungry, that's all.'",
+                    },
+                    {
+                    "name": "death",
+                    "text": "At this point, you are certain of death, and the last thing you remember before shutting your eyes is the awful fangs of a giant vermin.",
+                    },
+                ],
+                "snake": [
+                    {
+                    "name": "riddleAnswer",
+                    "text": "You answer the riddle with 'A snake.'",
+                    },
+                    {
+                    "name": "tarantulaResposeToDeath",
+                    "text": "'Incorrect!' says the tarantula. 'You are wrong! You have failed my riddle, and now I will eat you!'",
+                    },
+                    {
+                    "name": "tarantulaAttacksToDeath",
+                    "text": "The tarantula launches a web at you, and you are stuck. The tarantula then creeps up to you. 'Sorry, kid. I'm just kinda hungry, that's all.'",
+                    },
+                    {
+                    "name": "death",
+                    "text": "At this point, you are certain of death, and the last thing you remember before shutting your eyes is the awful fangs of a giant vermin.",
+                    },
+                ],
+                
                 // Text for The Climax
                 "theClimax": [
                 {
+                "name": "exit",
+                "text": "You fly out of the cave, and you look before you.",
+                },
+                {
                 "name": "burningForest",
-                "text": "You approach a forest, but you breathe in a whiff of smoke through your nostrils. You then realize that the forest is burning. Soaren urges you to hurry forward, and the two of you dive down to the forest and find a dry place to land with no fire. \nYou find your father, brother, and the rest of the redwing squadron, but they are wounded by strong falcons, and some are even held captive in wooden cages. You see some of the falcons in the sky, gliding, watching over the scene, and some are bunched around the redwings, who are getting hurt. Some falcons are guarding the jailers. \nYou come closer to your father and brother. Luckily, dad is not hurt, but your brother, who’s name is Featherfoot, is limping. His foot is wounded. \n“Son! You’re here! You should have stayed home, where it was safe.”\n“It’s good to see you, Red,” says your brother (his name is Featherfoot), “but dad’s right. You should have stayed home and helped mom.”"
+                "text": "You approach a forest, but you see that it is burning."
                 },
                 {
-                "name": "climaxTalkOptions",
-                "text": "If you choose to respond with the “talk” action, you are presented with three options. You can either greet your father and brother, tell them that they need to get out of here, or ask what happened to your brother.\nFirst option: “I’m glad to see you too, Featherfoot! And dad, I missed you so much! You look so exhausted!”\nDad: “We are indeed, son. We’ve been breathing fumes for a day and a half now!” \nHe coughs.\nFeatherfoot: “Oh dad, we need to get out of here! There’s too much smoke! I can’t see the sky in this thick fog!”\n“But the sky is watching us, and it sees us clearly! Look!” exclaims Soaren “I see falcons!”"
+                "name": "soarenSurprise",
+                "text": "'Oh no,' exlaims Soaren in surprize, 'What is this!' You both feel a sence immense danger.",
                 },
                 {
-                "name": "climaxSecondThirdOptions",
-                "text": "Second option: “You guys need to hurry and get out of here! The falcons are ruthless!”\nDad: “We’ve been trying to escape since day one, son. It’s not that easy. The falcons have held us captive for months now, and they lit a fire around the forest to end us!”\nSuddenly, Featherfoot looks to the sky.\n“Oh no!” he gasps, “I see falcons! They’re heading down to us!!”\nThird option: “Featherfoot, what happened to you? You’re limping!”\nFeatherfoot: “I’ve been wounded by a big falcon, Red. He came up to dad and started poking him up and mocking him, and I decided to stand up and protect him. Before I could do anything, the falcon picked me up and flew to the sky, and then he dropped me to the ground while I was ten feet above it. I was really hurt at first, but I think I’m healing now.”\nSuddenly, Featherfoot looks to the sky.\n“Oh no!” he gasps, “I see falcons! They’re heading down to us!!”"
+                "name": "dive",
+                "text": "'The two of you dive down and find a dry place to land with no fire. You find your father, brother, and the rest of the redwing squadron, but they are wounded by strong falcons, and some are even held captive in wooden cages."
                 },
                 {
-                "name": "climaxActAndHeal",
-                "text": "If you instead choose to “act,” you tell your brother that you will go find something to patch up his wound. You fly off, but Soaren calls you back.\n“Hold on there, little one!” he exclaims, “I’ve got a better idea.”\nHe then uses “Ointment of The Forest,” which heals your brother completely.\nYour father and brother both gasp in surprise \n“He’s healed!” exclaims the dad, “My son is healed! Oh, thank you kind sir!”\n“Don’t thank me yet, Mr. Redwing,” answers Soaren, “we must get you and your brethren out of this burning heap, and fast! But look, Little Redwing, I think we have company!”"
+                "name": "moveToFam",
+                "text": "You come closer to your father and brother."
                 },
                 {
-                "name": "climaxCombatHeal",
-                "text": "If you choose “combat,” you can only use “Song.” When you use the move, it heals your brother completely.  \nYour father and brother both gasp in surprise.\n“Son, you’re better!”\n“No way! Red, you healed me!” says your brother “How did you do that? That was so cool bro.”\n“That was a very kind deed, little one,” says Soaren, when suddenly he exclaims “Look! I see three falcons coming our way!”"
+                "name": "dialogue",
+                "text": "'Son!' your father exclaims, 'You’re here! You should have stayed home, where it was safe.'"
+                },
+                {
+                "name": "brother",
+                "text": "'It’s good to see you, Red,” says your brother, “but dad’s right. You should have stayed home and helped mom."
                 },
                 {
                 "name": "climaxFalconTrio",
-                "text": "Three big falcons swoop down from the sky and land right next to you. \n“What’s dis?” says one (his name is Screecher) “Some little bird thinks he can just barge in uninvited! \n“You scoundrels!” answered Soaren, “The only ones who barged are you and your team of hooligans! Let the redwings go right this second!”\n“And who’s this old grandpa?” says the second, ignoring Soaren (his name is  Far-Cry)\n“I think it's Gandalf the Grey” says the third (his name is Thundercloud)\n“Is it Gandalf the Grey or Gandalf the White? I can’t tell!” (Far-Cry)\nThe three of them all burst out laughing.\nThe falcons are massive in size, towering over you, but you feel courage in your heart. You don’t seem to be afraid of them or frightened by them in the slightest.\nYou decide to take action."
+                "text": "You suddenly notice three big falcons swooping down from the sky. They land right next to you. They begin to bully you and pick on you."
                 },
                 {
-                "name": "climaxFightSequence",
-                "text": "If you choose to respond with the “talk” action, you stand up to the falcons.\n“Back off, bully! This is my family you’re messing with!” \n“Ah!” exclaims Far-Cry “This little fella thinks he can snap back! No problemo. I’ll just slash him!” (This is a fighting scene with the same possible death ending. In between falcons, your “Song” move resets, and you can heal on the next falcon. If you defeat Far-Cry, you move on to fight Screecher).\nFar-Cry: “Oooh! Help me...” \nHe faints. \nScreecher: “You’ll pay for this!”  (You can get the death ending here; If you defeat Screecher, you move on to fight Thundercloud).\nScreecher: “Ah! That little kid’s got some… skill…”\nHe faints.\nThundercloud: “Well, you ain’t Frodo Baggins, you’re much smaller than him! Imma send thunder over you and you’ll become a mere vapor. Think you got what it takes? Bring it on!”  \n(You can get the death ending here; If you defeat Thundercloud, you win the battle).\nThundercloud: “AAAH!!! You defeated me!”\nThundercloud falls to the ground, trembling.\n“Redwings are much more cunning than I thought. Much stronger too…” \nYou notice that he suddenly feels intimidated by you. It also occurs to you that all the other falcons were watching your fight, and they are also very scared. \nSuddenly Thundercloud begins to scream.\n“EVERYBODY! GET OUT OF HERE! THERE’S A STRONG BIRD HERE!”\nThe fog begins to clear. The cowardly falcons begin escaping and gather into a big, panicking flock, and they move westward. They are all screeching very loudly, fearing that you or Soaren might chase after them. \nThe flock slowly fades into the distance. You and the rest of the group stare at the falcons, shocked at what had just happened."
+                "name": "soarenDisrespect",
+                "text": "'WHAT DISRESPECT!' says Soaren, 'You will pay for your injustice!' He then flies up to them, but one of the falcons slashes him with his claw. Soaren is now unconcious." 
+                },
+                {
+                "name": "ohNo",
+                "text": "'OH NO!' exclaims your father and brother.'" 
+                },
+                {
+                "name": "falconsAreGettingTHere",
+                "text": "The falcons are getting more and more violent. They are picking on you, calling you names." 
+                },
+                {
+                "name": "defendYourself",
+                "text": "Suddenly, you feel a rush of courage in your heart. You want to defend yourself, but how will you do it?",
+                choices: [["Let out a deafening screech","screech"],["Slash the falcons with your talons", "talons"],["Plummet the falcons with your beak", "beak"]]
+                },
+             ],
+
+             "screech":[
+                {
+                "name": "letItOUt",
+                "text": "You fly up to the sky, turn to the falcons, and let out a deafening screech. The sound coming from your beak pierces the sound barrier." 
+                },
+                {
+                "name": "fear",
+                "text": "The three falcons are petrified. The stand there for a few moments, and then they start to scream. 'RUN FOR IT!' they say to each other." 
+                },
+                {
+                "name": "screamFalcons",
+                "text": "The rest of the falcons notice the commotion they are making and begin to scream as well. 'RUN, ESCAPE!' they scream to each other." 
+                },
+                {
+                "name": "falconEscape",
+                "text": "They all frantically gather together into a flock, panicking, and fly away. All of the falcons are now gone."
                 },
                 {
                 "name": "climaxVictoryEscape",
-                "text": "And then… the crowd goes wild. The captive redwings are now free! You saved them all! You are a HERO!\nEveryone flies to you and Soaren, lifting you up from the ground and tossing you into the air. The crowd chants: “Hoorah for Little Red! Hoorah for Little Red!”\n“I’m very proud of you, son,” says your father, “you saved your brethren, and we are grateful for your bravery and determination.”\n“Yeah, Red,” says Featherfoot, “That was sick! I didn’t know you were so good at fighting!”\n“I knew you could do it, little redwing,” says Soaren, “after everything we’ve been through together, this was one of the greatest battles we’ve ever fought. Well done!”\nAs the crowd thanks you, you are reminded of the fact that the tall trees surrounding you are still burning. They are like tall towers, imposing themselves over you and your friends.\nAnd then, realization hits you… the trees are collapsing. \n“THE TREES!” shouts Featherfoot “THEY ARE FALLING ON US!”\nThe flock starts to panic, but in the same instant, everyone goes airborne.\n“Hurry, son!” your father shouts. \nYou follow suit.\nEvery tree in the forest is now crashing, one by one. However, your flock is led by Soaren, who is a master at maneuvering. He directs everyone to follow his movements:\n“This way!” he shouts, as you approach the exit.\nYou are following close behind everybody, and your brother and father are right in front of you. Suddenly, a colossal conifer begins to topple over everyone.\n“HURRY!” shouts the owl, “WE CAN STILL MAKE IT!”\nEverybody gets away, to the other side, but you are behind everybody, trying the best you can to get close to the group, but you are too slow. \nYOU NOW SEE THE TREE FALLING ON YOU. You can still make it across, but you also see a hole in the ground beneath you. \nYOU HAVE SIX SECONDS TO MAKE YOUR NEXT MOVE.\nYou are now presented with three options: you can either get back and fly in the opposite direction, away from the flock; you can plunge down into the hole beneath you, or you can follow the rest and cross to the other side.",
-                finalActions:[["Follow", "If you choose the get back option, you evade the falling tree just in time. It crashes with a loud thump, and a branch from the tree breaks off and hurts you. You faint.\nSuddenly you hear a voice.\n“Wake up.”"], ["Plunge down", "If you choose the plunge down option, you plunge down into the hole beneath you. The tree falls with a loud thump, covering the hole. You are safe inside, but there is no light. You call out for help, but no one hears you. After crying out for about an hour, you decide to explore the hole. It turns out to be a cave system."] ["Get back", "If you choose the follow option, you follow the rest and cross to the other side. You return home a hero. All of the redwing families thank you for saving their children and relatives, and many birds from the forest begin to visit your nest frequently."]]
-                }
-                ],
+                "text": "And then… the crowd goes wild. The captive redwings are now free! You saved them all! You are a HERO! Everyone flies to you, lifting you up from the ground and tossing you into the air. The crowd chants: “Hoorah for Little Red! Hoorah for Little Red!”",
+                },
+                {
+                "name": "climaxVictoryEscape",
+                "text": "“I'm proud of you, son,” says your dad, “You saved us from danger.”",
+                },
+                {
+                "name": "climaxVictoryEscape",
+                "text": "“Yeah, Red,” says your brother, “That was sick! I didn’t know you were so good at fighting!”",
+                },
+                {
+                "name": "climaxVictoryEscape",
+                "text": "You notice Soaren waking up from his uncouncousness. You jump away from the crowd and come up to him, wondering if he's okay.",
+                },
+                {
+                "name": "climaxVictoryEscape",
+                "text": "'I'm all right,' he says, as he gets up. He then calls to the redwings: 'Fellow birds, let's save ourselves! The forest is burning! I can get you all out of here, just follow my lead!' Soaren then gathers up all of the redwings, and together, you all begin to escape the burning forest.",
+                },
+                {
+                "name": "climaxVictoryEscape",
+                "text": "'I'm all right,' he says, as he gets up. He then calls to the redwings: 'Fellow birds, let's save ourselves! The forest is burning! I can get you all out of here, just follow my lead!' Soaren then gathers up all of the redwings, and together, you all begin to escape the burning forest.",
+                },
+                {
+                    "name": "finalVerdict",
+                    "text": "Soaren directs everyone to follow his movements: “This way!” he shouts, as you approach the exit. You are following close behind everybody, and your brother and father are right in front of you. Suddenly, a colossal tree begins to fall on everyone."
+                },
+                {
+                    "name": "finalVerdict",
+                    "text": "“HURRY!” shouts the owl, “WE CAN STILL MAKE IT!” Everybody gets away, to the other side, but you are behind everybody, trying the best you can to get close to the group, but you are too slow."
+                },
+                {
+                    "name": "finalVerdict",
+                    "text": "YOU NOW SEE THE TREE FALLING ON YOU. You can still make it across, but you also see a hole in the ground beneath you."
+                },
+                {
+                    "name": "finalVerdictUltimate",
+                    "text": "You now have three options: you can either get back and fly in the opposite direction, away from the flock; you can plunge down into the hole beneath you, or you can follow the rest and cross to the other side. What will you do?",
+                    finalActions:[["Follow", "If you choose the get back option, you evade the falling tree just in time. It crashes with a loud thump, and a branch from the tree breaks off and hurts you. You faint.\nSuddenly you hear a voice.\n“Wake up.”"], ["Plunge down", "If you choose the plunge down option, you plunge down into the hole beneath you. The tree falls with a loud thump, covering the hole. You are safe inside, but there is no light. You call out for help, but no one hears you. After crying out for about an hour, you decide to explore the hole. It turns out to be a cave system."] ["Get back", "If you choose the follow option, you follow the rest and cross to the other side. You return home a hero. All of the redwing families thank you for saving their children and relatives, and many birds from the forest begin to visit your nest frequently."]]
+                },
+                // TEXT
+                // {
+                //     "“I knew you could do it, little redwing,” says Soaren, “after everything we’ve been through together, this was one of the greatest battles we’ve ever fought. Well done!”\nAs the crowd thanks you, you are reminded of the fact that the tall trees surrounding you are still burning. They are like tall towers, imposing themselves over you and your friends.\nAnd then, realization hits you… the trees are collapsing. \n“THE TREES!” shouts Featherfoot “THEY ARE FALLING ON US!”\nThe flock starts to panic, but in the same instant, everyone goes airborne.\n“Hurry, son!” your father shouts. \nYou follow suit.\nEvery tree in the forest is now crashing, one by one. However, your flock is led by Soaren, who is a master at maneuvering. He directs everyone to follow his movements:\n“This way!” he shouts, as you approach the exit.\nYou are following close behind everybody, and your brother and father are right in front of you. Suddenly, a colossal conifer begins to topple over everyone.\n“HURRY!” shouts the owl, “WE CAN STILL MAKE IT!”\nEverybody gets away, to the other side, but you are behind everybody, trying the best you can to get close to the group, but you are too slow. \nYOU NOW SEE THE TREE FALLING ON YOU. You can still make it across, but you also see a hole in the ground beneath you. \nYOU HAVE SIX SECONDS TO MAKE YOUR NEXT MOVE.\nYou are now presented with three options: you can either get back and fly in the opposite direction, away from the flock; you can plunge down into the hole beneath you, or you can follow the rest and cross to the other side."
+                // }
+             ],
+
+             "talons":[
+                    {
+                "name": "hit",
+                "text": "You jump up and do multiple quick, sharp slashes at the falcons. You are so quick that the falcons cannout fight back. You deal quite a lot of damage to them; they are now bruised and wounded." 
+                },
+                {
+                "name": "fear",
+                "text": "The three falcons are petrified. The stand there for a few moments, and then they start to scream. 'RUN FOR IT!' they say to each other." 
+                },
+                {
+                "name": "screamFalcons",
+                "text": "The rest of the falcons notice the commotion they are making and begin to scream as well. 'RUN, ESCAPE!' they scream to each other." 
+                },
+                {
+                "name": "falconEscape",
+                "text": "They all frantically gather together into a flock, panicking, and fly away. All of the falcons are now gone."
+                },
+                {
+                "name": "climaxVictoryEscape",
+                "text": "And then… the crowd goes wild. The captive redwings are now free! You saved them all! You are a HERO! Everyone flies to you, lifting you up from the ground and tossing you into the air. The crowd chants: “Hoorah for Little Red! Hoorah for Little Red!”",
+                },
+                {
+                "name": "climaxVictoryEscape",
+                "text": "“I'm proud of you, son,” says your dad, “You saved us from danger.”",
+                },
+                {
+                "name": "climaxVictoryEscape",
+                "text": "“Yeah, Red,” says your brother, “That was sick! I didn’t know you were so good at fighting!”",
+                },
+                {
+                "name": "climaxVictoryEscape",
+                "text": "You notice Soaren waking up from his uncouncousness. You jump away from the crowd and come up to him, wondering if he's okay.",
+                },
+                {
+                "name": "climaxVictoryEscape",
+                "text": "'I'm all right,' he says, as he gets up. He then calls to the redwings: 'Fellow birds, let's save ourselves! The forest is burning! I can get you all out of here, just follow my lead!' Soaren then gathers up all of the redwings, and together, you all begin to escape the burning forest.",
+                },
+                {
+                "name": "climaxVictoryEscape",
+                "text": "'I'm all right,' he says, as he gets up. He then calls to the redwings: 'Fellow birds, let's save ourselves! The forest is burning! I can get you all out of here, just follow my lead!' Soaren then gathers up all of the redwings, and together, you all begin to escape the burning forest.",
+                },
+                {
+                    "name": "finalVerdict",
+                    "text": "Soaren directs everyone to follow his movements: “This way!” he shouts, as you approach the exit. You are following close behind everybody, and your brother and father are right in front of you. Suddenly, a colossal tree begins to fall on everyone."
+                },
+                {
+                    "name": "finalVerdict",
+                    "text": "“HURRY!” shouts the owl, “WE CAN STILL MAKE IT!” Everybody gets away, to the other side, but you are behind everybody, trying the best you can to get close to the group, but you are too slow."
+                },
+                {
+                    "name": "finalVerdict",
+                    "text": "YOU NOW SEE THE TREE FALLING ON YOU. You can still make it across, but you also see a hole in the ground beneath you."
+                },
+                {
+                    "name": "finalVerdictUltimate",
+                    "text": "You now have three options: you can either get back and fly in the opposite direction, away from the flock; you can plunge down into the hole beneath you, or you can follow the rest and cross to the other side. What will you do?",
+                    finalActions:[["Follow", "If you choose the get back option, you evade the falling tree just in time. It crashes with a loud thump, and a branch from the tree breaks off and hurts you. You faint.\nSuddenly you hear a voice.\n“Wake up.”"], ["Plunge down", "If you choose the plunge down option, you plunge down into the hole beneath you. The tree falls with a loud thump, covering the hole. You are safe inside, but there is no light. You call out for help, but no one hears you. After crying out for about an hour, you decide to explore the hole. It turns out to be a cave system."] ["Get back", "If you choose the follow option, you follow the rest and cross to the other side. You return home a hero. All of the redwing families thank you for saving their children and relatives, and many birds from the forest begin to visit your nest frequently."]]
+                },
+             ],
+
+            //  "beak":[
+
+            //  ],
+
+            "beak":[
+                    {
+                "name": "hitWithBeak",
+                "text": "You lauch a barrage of beak-pecking madness at the falcons. You hit them over 400 hundred times in a matter of seconds. Your movements are too quick to comprehend, and so you beat up the big bullies." 
+                },
+                {
+                "name": "fear",
+                "text": "The three falcons are petrified. The stand there for a few moments, and then they start to scream. 'RUN FOR IT!' they say to each other." 
+                },
+                {
+                "name": "screamFalcons",
+                "text": "The rest of the falcons notice the commotion they are making and begin to scream as well. 'RUN, ESCAPE!' they scream to each other." 
+                },
+                {
+                "name": "falconEscape",
+                "text": "They all frantically gather together into a flock, panicking, and fly away. All of the falcons are now gone."
+                },
+                {
+                "name": "climaxVictoryEscape",
+                "text": "And then… the crowd goes wild. The captive redwings are now free! You saved them all! You are a HERO! Everyone flies to you, lifting you up from the ground and tossing you into the air. The crowd chants: “Hoorah for Little Red! Hoorah for Little Red!”",
+                },
+                {
+                "name": "climaxVictoryEscape",
+                "text": "“I'm proud of you, son,” says your dad, “You saved us from danger.”",
+                },
+                {
+                "name": "climaxVictoryEscape",
+                "text": "“Yeah, Red,” says your brother, “That was sick! I didn’t know you were so good at fighting!”",
+                },
+                {
+                "name": "climaxVictoryEscape",
+                "text": "You notice Soaren waking up from his uncouncousness. You jump away from the crowd and come up to him, wondering if he's okay.",
+                },
+                {
+                "name": "climaxVictoryEscape",
+                "text": "'I'm all right,' he says, as he gets up. He then calls to the redwings: 'Fellow birds, let's save ourselves! The forest is burning! I can get you all out of here, just follow my lead!' Soaren then gathers up all of the redwings, and together, you all begin to escape the burning forest.",
+                },
+                {
+                "name": "climaxVictoryEscape",
+                "text": "'I'm all right,' he says, as he gets up. He then calls to the redwings: 'Fellow birds, let's save ourselves! The forest is burning! I can get you all out of here, just follow my lead!' Soaren then gathers up all of the redwings, and together, you all begin to escape the burning forest.",
+                },
+                {
+                    "name": "finalVerdict",
+                    "text": "Soaren directs everyone to follow his movements: “This way!” he shouts, as you approach the exit. You are following close behind everybody, and your brother and father are right in front of you. Suddenly, a colossal tree begins to fall on everyone."
+                },
+                {
+                    "name": "finalVerdict",
+                    "text": "“HURRY!” shouts the owl, “WE CAN STILL MAKE IT!” Everybody gets away, to the other side, but you are behind everybody, trying the best you can to get close to the group, but you are too slow."
+                },
+                {
+                    "name": "finalVerdict",
+                    "text": "YOU NOW SEE THE TREE FALLING ON YOU. You can still make it across, but you also see a hole in the ground beneath you."
+                },
+                {
+                    "name": "finalVerdictUltimate",
+                    "text": "You now have three options: you can either get back and fly in the opposite direction, away from the flock; you can plunge down into the hole beneath you, or you can follow the rest and cross to the other side. What will you do?",
+                    finalActions:[["Follow", "If you choose the get back option, you evade the falling tree just in time. It crashes with a loud thump, and a branch from the tree breaks off and hurts you. You faint.\nSuddenly you hear a voice.\n“Wake up.”"], ["Plunge down", "If you choose the plunge down option, you plunge down into the hole beneath you. The tree falls with a loud thump, covering the hole. You are safe inside, but there is no light. You call out for help, but no one hears you. After crying out for about an hour, you decide to explore the hole. It turns out to be a cave system."] ["Get back", "If you choose the follow option, you follow the rest and cross to the other side. You return home a hero. All of the redwing families thank you for saving their children and relatives, and many birds from the forest begin to visit your nest frequently."]]
+                },
+             ],
+             
+                
+                // {
+                // "name": "soarenScreech",
+                // "text": "The screech is so loud, that it petrifies all of the strong falcons in the forest. 'RUN FOR YOUR LIVES!' they scream to each other. They all frantically gather together into a flock, panicking, and fly away. All of the falcons are now gone."
+                // },
+                // {
+                
+                // ],
                 // Text for THE FINALE:
                 // Upon choosing the "getBack" option from finalActions, the user will see this text:
                 "getBack": [
