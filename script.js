@@ -409,12 +409,8 @@ console.log("localStorage cleared.");
             // CONTINUE HERE
             "hitFalcon": [
                     {
-                    "name": "rejectTalk1",
-                    "text": "You try to convince the falcon to stop attacking. The falcon snaps: 'Quiet, little redwing. You shall be my supper!'"
-                    },
-                    {
-                    "name": "rejectTalk2",
-                    "text": "You try talking again. The falcon replies: 'Why should I stop? You look too tasty!' He prepares to slash you with his claw."
+                    "name": "hitFalconFail",
+                    "text": "You try to hit the falcon, but he dodges your attack. He then prepares to slash you with his claw."
                     },
                     {
                     "name": "owlRescue",
@@ -482,28 +478,20 @@ console.log("localStorage cleared.");
             // CONTINUE HERE 
             "evadeFalcon2": [
                     {
-                    "name": "rejectTalk1",
-                    "text": "You try to convince the falcon to stop attacking. The falcon snaps: 'Quiet, little redwing. You shall be my supper!'"
+                    "name": "evadeFail",
+                    "text": "You dodge the falcon, who is diving into you. You look back at the falcon, still flying, and not looking at what is in front of you. Suddenly, you hit a tree. BAM!!!"
                     },
                     {
-                    "name": "rejectTalk2",
-                    "text": "You try talking again. The falcon replies: 'Why should I stop? You look too tasty!' He prepares to slash you with his claw."
+                    "name": "silence1",
+                    "text": "..."
                     },
                     {
-                    "name": "owlRescue",
-                    "text": "Suddenly, the owl from earlier swoops in and catches you. He makes a dodging move, and you both evede the falcon."
-                    },
-                    {
-                    "name": "owlCheckIn",
-                    "text": "The owl asks: 'Are you hurt, little one?'"
-                    },
-                    {
-                    "name": "talkResponse",
-                    "text": "You tell the owl you're okay, and you thank him for saving you. He replies: 'You are welcome. Relax while I take you to my hideout.' You then begin to shut your eyes from exhaustion. You slowly begin to fade into a deep sleep."
+                    "name": "silence2",
+                    "text": "..."
                     },
                     {
                     "name": "wakeUpScene",
-                    "text": "You wake up in a dark, abandoned watchtower. You are confused as to what is happening."
+                    "text": "You wake up in a dark, abandoned watchtower. You are confused as to what is happening. You don't remember how you got here."
                     },
                     {
                     "name": "lookAroundTheWatchtower",
