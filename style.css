@@ -304,7 +304,7 @@ a:focus{
      flex-direction: column;
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (min-width: 800px) {
      #gameTitle{
           font-size: 60px;
           padding: 5rem;
