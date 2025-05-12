@@ -322,7 +322,7 @@ a:focus{
      }
     #imageBox {
         height: 50vh;
-        width: 40vw;
+        width: 600px;
         background-size: contain; /* Ensure the image scales properly */
         background-position: center;
     }
@@ -343,7 +343,7 @@ a:focus{
 @media screen and (max-width: 1800px) {
     #imageBox {
         height: 50vh;
-        width: 40vw;
+        width: 200px;
         background-size: contain; /* Ensure the image scales properly */
         background-position: center;
     }
