@@ -1,23 +1,3 @@
-// IMAGE PRELOAD 
- function preloadImages(imageUrls) {
-    const preloadedImages = [];
-    imageUrls.forEach((url) => {
-        const img = new Image();
-        img.src = url;
-        preloadedImages.push(img);
-    });
-    console.log("Images preloaded:", imageUrls);
-}  
-
-function updateImageBox(imageUrl) {
-    const imageBox = document.getElementById("imageBox");
-    imageBox.innerHTML = ""; // Clear any existing images
-    const img = document.createElement("img");
-    img.src = imageUrl;
-    img.alt = "Scene Image";
-    imageBox.appendChild(img);
-}
-
   //   ~STORY LOGIC~
     const story = {
          activeText: null, // This will be set to the current text array
@@ -761,7 +741,7 @@ function updateImageBox(imageUrl) {
                     {
                     "name": "death",
                     "text": "At this point, you are certain of death, and the last thing you remember before shutting your eyes is the awful fangs of a giant vermin.",
-                    choices:[["Restart Riddle", "bringItOn"], ["End the game", "gameOver"]]
+                    choices:[["Restart Riddle", "bringItOn"]]
                     },
                 ],
                 "snake": [
@@ -780,7 +760,7 @@ function updateImageBox(imageUrl) {
                     {
                     "name": "death",
                     "text": "At this point, you are certain of death, and the last thing you remember before shutting your eyes is the awful fangs of a giant vermin.",
-                    choices:[["Restart Riddle", "bringItOn"], ["End the game", "gameOver"]]
+                    choices:[["Restart Riddle", "bringItOn"]]
                     },
                 ],
                 
@@ -1147,7 +1127,6 @@ function updateImageBox(imageUrl) {
 
                         "falconAmbushDuringContemplation": "FarCry.png",
                         "owlRescue": "Owl.png",
-                        "silence1": "silence.avif",
 
                         // WATCHTOWER SCENE
                         "wakeUpScene": "watchtower.jpg.png",
@@ -1399,40 +1378,6 @@ function updateImageBox(imageUrl) {
 
 
 document.addEventListener('DOMContentLoaded', function () {
-    // List of image paths to preload
-    const imagePaths = [
-        "img/forest.jpg",
-        "img/Owl.png",
-        "img/mom.jpg",
-        "img/FarCry.png",
-        "img/big.png",
-        "img/small-tarantula-pixel.png",
-        "img/mountain.webp",
-        "img/Thundercloud.png",
-        "img/watchtower.jpg.png",
-        "img/seeds2.avif",
-        "img/book.jpg",
-        "img/cave.png",
-        "img/Giant-Tarantula-pixel.png",
-        "img/cobweb.jpg",
-        "img/bunring.png",
-        "img/three-falcons.webp",
-        "img/redwing.png",
-        "img/fflock.png",
-        "img/crowd-goes-wild.webp",
-        "img/escape.jpg",
-        "img/fallingTree.png",
-        "img/silence.avif",
-        "img/fireSilence.webp",
-        "img/fire-falcon.png",
-        "img/cave2.png",
-        "img/Stcuk_In_a_whole.png"
-    ];
-
-    // Preload images
-    preloadImages(imagePaths);
-
-    // Restore game state or start fresh
     const savedGameState = localStorage.getItem("gameState");
     if (savedGameState) {
         const gameState = JSON.parse(savedGameState);
@@ -1476,102 +1421,68 @@ document.addEventListener('DOMContentLoaded', function () {
     const closeActDisplay = document.getElementById("closeActDisplay");
 
     actButton.addEventListener("click", function () {
-    actOptions.innerHTML = ""; // Clear previous options
-    const currentArray = story.activeText || story.gameText.introText;
+        actOptions.innerHTML = ""; // Clear previous options
+        const currentArray = story.activeText || story.gameText.introText;
 
-    // Ensure textIndex is within bounds
-    if (!currentArray || story.textIndex >= currentArray.length || story.textIndex < 0) {
-        console.error("textIndex is out of bounds or currentArray is invalid. Cannot access currentEntry.");
-        return; // Exit the function to prevent further errors
-    }
-
-    const currentEntry = currentArray[story.textIndex];
-
-    // Ensure currentEntry is defined before accessing its properties
-    if (!currentEntry) {
-        console.error("Invalid textIndex or activeText. Cannot access currentEntry.");
-        return; // Exit the function to prevent further errors
-    }
-
-    let optionsToShow = [];
-
-    if (currentEntry && currentEntry.name && story.nodesThatHideContinue.includes(currentEntry.name)) {
-        optionsToShow = currentEntry.choices;
-    }
-
-    // Reusable logic to add buttons
-    if (optionsToShow.length > 0) {
-        optionsToShow.forEach(choice => {
-            const button = document.createElement("button");
-            button.textContent = choice[0];
-            button.classList.add("act-option");
-            button.addEventListener("click", () => {
-                console.log(`Player chose: ${choice[0]}; goto --> ${choice[1]}`);
-                actDisplay.style.display = "none";
-
-                // Check if the choice is "End the game"
-                if (choice[1] === "gameOver") {
-                    window.location.href = "game-over.html"; // Redirect to the game-over page
-                    return;
-                }
-
-                if (story.gameText[choice[1]]) { // Check if the destination key exists
-                    story.activeText = story.gameText[choice[1]]; // Set the active text to the new destination key
-                    story.textIndex = 0; // Reset text index
-                    story.i = 0; // Reset character index
-                    document.getElementById('text').innerHTML = ''; // Clear previous text
-                    story.writeText(); // Update the active text
-                    actButton.classList.add("disabled"); // Disable the act button
-                }
-            });
-            actOptions.appendChild(button);
-        });
-    } else {
-        const empty = document.createElement("button");
-        empty.textContent = "(No actions available)";
-        empty.classList.add("act-option");
-        actOptions.appendChild(empty);
-    }
-
-    if (!actButton.classList.contains("disabled")) { // Only proceed if actButton is not disabled
-        if (actDisplay.style.display === "block") {
-            actDisplay.style.display = "none"; // Hide the act display if it is open
-        } else {
-            actDisplay.style.display = "block"; // Show the act display if it is hidden
+        // Ensure textIndex is within bounds
+        if (!currentArray || story.textIndex >= currentArray.length || story.textIndex < 0) {
+            console.error("textIndex is out of bounds or currentArray is invalid. Cannot access currentEntry.");
+            return; // Exit the function to prevent further errors
         }
-    }
 
-    closeActDisplay.addEventListener("click", function () {
-        actDisplay.style.display = "none";
+        const currentEntry = currentArray[story.textIndex];
+
+        // Ensure currentEntry is defined before accessing its properties
+        if (!currentEntry) {
+            console.error("Invalid textIndex or activeText. Cannot access currentEntry.");
+            return; // Exit the function to prevent further errors
+        }
+
+        let optionsToShow = [];
+
+        if (currentEntry && currentEntry.name && story.nodesThatHideContinue.includes(currentEntry.name)) {
+            optionsToShow = currentEntry.choices;
+        }
+
+        // Reusable logic to add buttons
+        if (optionsToShow.length > 0) {
+            optionsToShow.forEach(choice => {
+                const button = document.createElement("button");
+                button.textContent = choice[0];
+                button.classList.add("act-option");
+                button.addEventListener("click", () => {
+                    console.log(`Player chose: ${choice[0]}; goto --> ${choice[1]}`);
+                    actDisplay.style.display = "none";
+
+                    if (story.gameText[choice[1]]) { // Check if the destination key exists
+                        story.activeText = story.gameText[choice[1]]; // Set the active text to the new destination key
+                        story.textIndex = 0; // Reset text index
+                        story.i = 0; // Reset character index
+                        document.getElementById('text').innerHTML = ''; // Clear previous text
+                        story.writeText(); // Update the active text
+                        actButton.classList.add("disabled"); // Disable the act button
+                    }
+                });
+                actOptions.appendChild(button);
+            });
+        } else {
+            const empty = document.createElement("button");
+            empty.textContent = "(No actions available)";
+            empty.classList.add("act-option");
+            actOptions.appendChild(empty);
+        }
+
+        if (!actButton.classList.contains("disabled")) { // Only proceed if actButton is not disabled
+            if (actDisplay.style.display === "block") {
+                actDisplay.style.display = "none"; // Hide the act display if it is open
+            } else {
+                actDisplay.style.display = "block"; // Show the act display if it is hidden
+            }
+        }
+
+        closeActDisplay.addEventListener("click", function () {
+            actDisplay.style.display = "none";
         });
     });
 });
-
-function handleEndingRedirect() {
-    const currentEntry = story.activeText[story.textIndex];
-
-    if (!currentEntry || !currentEntry.name) {
-        console.error("Invalid currentEntry or missing name property.");
-        return;
-    }
-
-    // Check the currentEntry name and redirect to the appropriate ending page
-    switch (currentEntry.name) {
-        case "followEnding4":
-            window.location.href = "followEnding.html";
-            break;
-        case "ending3":
-            window.location.href = "plungeDownEnding.html";
-            break;
-        case "faintAgain":
-            window.location.href = "getBackEnding.html";
-            break;
-        default:
-            console.warn("No matching ending found for currentEntry:", currentEntry.name);
-            break;
-    }
-}
-
-// Attach the function to the nextButton click event
-document.getElementById("nextButton").addEventListener("click", handleEndingRedirect);
     //   document.getElementById("darryl-img").addEventListener("click",()=>{})

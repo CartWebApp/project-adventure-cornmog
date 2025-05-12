@@ -28,28 +28,6 @@
 
 }
 
-#gameOver{
-     display: flex;
-     flex-direction: column;
-     align-items: center;
-     padding: 5rem;
-}
-
-#gameOver h1{
-     color: red;
-     font-family: "Jacquard 12";
-     font-size: 100px;
-}
-
-#gameOver h2{
-     display: flex;
-     color: white;
-     font-family: "Pixelify sans";
-     justify-content: center;
-     padding: 1.5rem;
-     font-size: 40px;
-}
-
 #nextButton {
      user-select: none;
      -webkit-user-select: none; /* For Safari/old browsers */
@@ -66,24 +44,19 @@
  }
 
 /* Content box for images and scene changes */
-#imageBox {
-    margin: 0 auto;
-    border-top: 5px solid white;
-    border-bottom: 5px solid white;
-    border-right: 5px solid white;
-    border-left: 5px solid white;
-    height: 60vh;
-    width: 90vw;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden; /* Ensure the image fits within the box */
-}
+#imageBox{
+     /* padding: 18rem; */
+     margin: 0 auto;
+     border-top: 5px solid white;
+     border-bottom: 5px solid white;
+     border-right: 5px solid white;
+     border-left: 5px solid white;
+     background-image: url(img/watchtower.jpg.png);
+     background-size: cover;
+     background-position: top center;
+     height: 60vh;
+     width: 90vw;
 
-#imageBox img {
-    max-height: 100%;
-    max-width: 100%;
-    object-fit: contain; /* Ensure the image scales properly */
 }
 
 #interFace{
@@ -309,17 +282,6 @@ a:focus{
           font-size: 60px;
           padding: 5rem;
      }
-     #gameOver{
-          padding: 5rem;
-     }
-     #gameOver h1{
-          font-size: 60px;
-     }
-
-     #gameOver h2{
-          padding: 0.3rem;
-          font-size: 10px;
-     }
      #imageBox{
           height: 40vh;
           width: 90vw;
@@ -335,18 +297,4 @@ a:focus{
      #closeActDisplay {
           display: none;
      }  
-}
-
-@media screen and (max-width: 1800px) {
-    #imageBox {
-        height: 50vh;
-        width: 40vw;
-        background-size: contain; /* Ensure the image scales properly */
-        background-position: center;
-    }
-
-    #dialogueBox{
-          width: 80vw;
-          margin-top: 3rem;
-     }
 }
