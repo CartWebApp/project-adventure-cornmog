@@ -1574,4 +1574,4 @@ function handleEndingRedirect() {
 
 // Attach the function to the nextButton click event
 document.getElementById("nextButton").addEventListener("click", handleEndingRedirect);
-    //   document.getElementById("darryl-img").addEventListener("click",()=>{})
+      document.getElementById("darryl-img").addEventListener("click",()=>{})
