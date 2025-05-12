@@ -330,6 +330,7 @@ a:focus{
         width: 70vw;
         margin-top: 3rem;
         border-top: 5px solid white;
+        font-size: small;
     }
      #act {
           width: 100%;
