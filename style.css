@@ -66,19 +66,19 @@
  }
 
 /* Content box for images and scene changes */
-#imageBox {
-    margin: 0 auto;
-    border-top: 5px solid white;
-    border-bottom: 5px solid white;
-    border-right: 5px solid white;
-    border-left: 5px solid white;
-    height: 60vh;
-    width: 90vw;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden; /* Ensure the image fits within the box */
+#imageBox{
+     /* padding: 18rem; */
+     margin: 0 auto;
+     border-top: 5px solid white;
+     border-bottom: 5px solid white;
+     border-right: 5px solid white;
+     border-left: 5px solid white;
+     background-size: cover;
+     background-position: top center;
+     height: 60vh;
+     width: 90vw;
 }
+
 
 #imageBox img {
     max-height: 100%;
