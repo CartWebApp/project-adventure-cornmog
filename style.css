@@ -329,7 +329,7 @@ a:focus{
     #dialogueBox {
         width: 70vw;
         margin-top: 3rem;
-        border-top: none !important;
+        border-top: 5px solid white;
     }
      #act {
           width: 100%;
