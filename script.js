@@ -10,7 +10,7 @@ console.log("localStorage cleared.");
          actions: [act],
 // FAST --> These actions need to be folded into the gameText object where apporpriate for your story         
         //  caveActions: ["explore", "continue"],
-        //  finalActions:["follow", "plunge down", "get back"],
+        //  choices:["follow", "plunge down", "get back"],
 // FAST --> End of actions in need of change  
 
             // playerDeath: function(){
@@ -50,8 +50,14 @@ console.log("localStorage cleared.");
                 "provideAnAnswer",
                 "youEscape",
 
+                // DEATH IN CAVE (ENDING 1)
+                "death",
+
                 // THE CLIMAX
                 "defendYourself",
+
+                // FINALE
+                "finalVerdictUltimate"
 
             ],
             // List of special text node names where the CONTINUE button should hide
@@ -738,6 +744,7 @@ console.log("localStorage cleared.");
                     {
                     "name": "death",
                     "text": "At this point, you are certain of death, and the last thing you remember before shutting your eyes is the awful fangs of a giant vermin.",
+                    choices:[["Restart Riddle", "bringItOn"]]
                     },
                 ],
                 "snake": [
@@ -756,6 +763,7 @@ console.log("localStorage cleared.");
                     {
                     "name": "death",
                     "text": "At this point, you are certain of death, and the last thing you remember before shutting your eyes is the awful fangs of a giant vermin.",
+                    choices:[["Restart Riddle", "bringItOn"]]
                     },
                 ],
                 
@@ -868,7 +876,7 @@ console.log("localStorage cleared.");
                 {
                     "name": "finalVerdictUltimate",
                     "text": "You now have three options: you can either get back and fly in the opposite direction, away from the flock; you can plunge down into the hole beneath you, or you can follow the rest and cross to the other side. What will you do?",
-                    finalActions:[["Follow", "If you choose the get back option, you evade the falling tree just in time. It crashes with a loud thump, and a branch from the tree breaks off and hurts you. You faint.\nSuddenly you hear a voice.\n“Wake up.”"], ["Plunge down", "If you choose the plunge down option, you plunge down into the hole beneath you. The tree falls with a loud thump, covering the hole. You are safe inside, but there is no light. You call out for help, but no one hears you. After crying out for about an hour, you decide to explore the hole. It turns out to be a cave system."] ["Get back", "If you choose the follow option, you follow the rest and cross to the other side. You return home a hero. All of the redwing families thank you for saving their children and relatives, and many birds from the forest begin to visit your nest frequently."]]
+                    choices: [["Follow the flock", "follow"], ["Plunge down into the hole", "plungeDown"], ["Get back", "getBack"]]
                 },
                 // TEXT
                 // {
@@ -932,13 +940,9 @@ console.log("localStorage cleared.");
                 {
                     "name": "finalVerdictUltimate",
                     "text": "You now have three options: you can either get back and fly in the opposite direction, away from the flock; you can plunge down into the hole beneath you, or you can follow the rest and cross to the other side. What will you do?",
-                    finalActions:[["Follow", "If you choose the get back option, you evade the falling tree just in time. It crashes with a loud thump, and a branch from the tree breaks off and hurts you. You faint.\nSuddenly you hear a voice.\n“Wake up.”"], ["Plunge down", "If you choose the plunge down option, you plunge down into the hole beneath you. The tree falls with a loud thump, covering the hole. You are safe inside, but there is no light. You call out for help, but no one hears you. After crying out for about an hour, you decide to explore the hole. It turns out to be a cave system."] ["Get back", "If you choose the follow option, you follow the rest and cross to the other side. You return home a hero. All of the redwing families thank you for saving their children and relatives, and many birds from the forest begin to visit your nest frequently."]]
+                    choices: [["Follow the flock", "follow"], ["Plunge down into the hole", "plungeDown"], ["Get back", "getBack"]]
                 },
              ],
-
-            //  "beak":[
-
-            //  ],
 
             "beak":[
                     {
@@ -996,7 +1000,7 @@ console.log("localStorage cleared.");
                 {
                     "name": "finalVerdictUltimate",
                     "text": "You now have three options: you can either get back and fly in the opposite direction, away from the flock; you can plunge down into the hole beneath you, or you can follow the rest and cross to the other side. What will you do?",
-                    finalActions:[["Follow", "If you choose the get back option, you evade the falling tree just in time. It crashes with a loud thump, and a branch from the tree breaks off and hurts you. You faint.\nSuddenly you hear a voice.\n“Wake up.”"], ["Plunge down", "If you choose the plunge down option, you plunge down into the hole beneath you. The tree falls with a loud thump, covering the hole. You are safe inside, but there is no light. You call out for help, but no one hears you. After crying out for about an hour, you decide to explore the hole. It turns out to be a cave system."] ["Get back", "If you choose the follow option, you follow the rest and cross to the other side. You return home a hero. All of the redwing families thank you for saving their children and relatives, and many birds from the forest begin to visit your nest frequently."]]
+                    choices: [["Follow the flock", "follow"], ["Plunge down into the hole", "plungeDown"], ["Get back", "getBack"]]
                 },
              ],
              
@@ -1048,6 +1052,7 @@ console.log("localStorage cleared.");
                     "plungeDown": [
                     {
                         "name": "meetGlydeAndClancy",
+                        "name2": "If you choose the plunge down option, you plunge down into the hole beneath you. The tree falls with a loud thump, covering the hole. You are safe inside, but there is no light. You call out for help, but no one hears you. After crying out for about an hour, you decide to explore the hole. It turns out to be a cave system.",
                         "text": "After exploring for a while, you find an old owl and a crow.\n“Greetings, little one,” says the owl, “I am Glyde, brother of Soaren. And this crow sitting in front of me is Clancy, my companion. We have been waiting for someone important to arrive.”"
                     },
                     {
@@ -1060,15 +1065,15 @@ console.log("localStorage cleared.");
                 "follow": [
                     {
                         "name": "followEnding1",
-                        "text": "If you choose the follow option, you follow the rest and cross to the other side. You return home a hero. All of the redwing families thank you for saving their children and relatives, and many birds from the forest begin to visit your nest frequently."
+                        "text": "You follow the flock and cross to the other side, just in time before the tree falls. You fly the rest of your way home, past the mountain, past the giant tree where you met the tarantula, past Soaren's watchtower. Finally, you return home, and become an instant local icon. All of the redwing families thank you for saving their children and relatives."
                     },
                     {
                         "name": "followEnding2",
-                        "text": "You make many friends and spend quality time with Featherfoot, your father, and your mother, who is forever indebted to you for saving her husband, as well as her son."
+                        "text": "You make many friends and spend quality time with your brother, your father, and your mother, who is forever indebted to you for saving her husband, as well as her son."
                     },
                     {
                         "name": "followEnding3",
-                        "text": "In all of this, Soaren becomes your full-time mentor, who teaches you new techniques, and tells you stories. You become best friends with him."
+                        "text": "In all of this, Soaren becomes your full-time mentor, who teaches you new skills, and tells you stories. You become best friends with him."
                     },
                     {
                         "name": "followEnding4",
