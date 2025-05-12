@@ -1016,49 +1016,64 @@ console.log("localStorage cleared.");
                 // Upon choosing the "getBack" option from finalActions, the user will see this text:
                 "getBack": [
                     {
+                        "name": "getBackAction",
+                        "text": "You quickly change direction, and you fly away just in time to escape the falling tree, but many of the branches break off! You see one of them falling on you, and!--"
+                    },
+                    {
+                        "name": "fireSilence1",
+                        "text": ". . ."
+                    },
+                    {
+                        "name": "fireSilence2",
+                        "text": ". . ."
+                    },
+                    {
                         "name": "wakeInFire",
-                        "text": "You open your eyes, and your vision is blurred. You can make out, however, that you are surrounded by flames. You are coughing.\n“The smoke is really hitting you, huh?” says the voice.\nYour vision clears and you try to get a closer look at the speaker.\nIt is a falcon.\nWhat should you do?"
+                        "text": "'Wake up.'"
                     },
                     {
-                        "name": "actFails",
-                        "text": "If you choose to act, you try to get up, but you tremble and fall back to the ground.\n“Don’t try that,” says the falcon, “you are too weak. But you will soon be strengthened. Come with me.”"
+                        "name": "openEyes",
+                        "text": "You open your eyes, and your vision is blurred. You can make out, however, that you are surrounded by flames. You are coughing."
                     },
                     {
-                        "name": "talkPrompt",
-                        "text": "If you choose to talk, you are presented with two options."
-                    },
-                    {
-                        "name": "talkOption1",
-                        "text": "“Why aren’t you trying to kill me?”" 
-                    },
-                    {
-                        "name": "outcome1",
-                        "text": "“I do not want you to die,” the falcon says, “because you are my prisoner. Come with me.”"
-                    },
-                    {
-                        "name": "talkOption2",
-                        "text": "“Get Away!”" 
+                        "name": "falconVoice",
+                        "text": "'The smoke is really hitting you, huh?' says a voice. Your vision clears and you try to get a closer look at the speaker. It is a falcon."
                     },
                     {
                         "name": "outcome2",
-                        "text": "“Why should I?” says the falcon, “I am only here to help you. Come with me.”"
+                        "text": "'You're coming with me,” says the falcon.'"
                     },
                     {
                         "name": "faintAgain",
-                        "text": "You shut your eyes again, and your strength is failing. You faint once again, but you feel yourself being lifted from the ground.\nAnd then you feel the air. It is fresh air. But you feel a certain chill in your feathers. A chill… of winter…"
+                        "text": "You shut your eyes again, and your strength is failing. You fall asleep, but you feel yourself being lifted from the ground. And then you feel the air. It is fresh air. But you feel a certain chill in your feathers. A chill… of winter…"
                     }
                     ],
                 // Upon choosing the "plungeDown" option from finalActions, the user will see this text:
                     "plungeDown": [
                     {
                         "name": "meetGlydeAndClancy",
-                        "name2": "If you choose the plunge down option, you plunge down into the hole beneath you. The tree falls with a loud thump, covering the hole. You are safe inside, but there is no light. You call out for help, but no one hears you. After crying out for about an hour, you decide to explore the hole. It turns out to be a cave system.",
-                        "text": "After exploring for a while, you find an old owl and a crow.\n“Greetings, little one,” says the owl, “I am Glyde, brother of Soaren. And this crow sitting in front of me is Clancy, my companion. We have been waiting for someone important to arrive.”"
+                        "text": "You plunge down into the hole beneath you. The tree falls with a loud thump, covering the hole. You are safe inside, but there is no light.",
                     },
                     {
                         "name": "stayInCave",
-                        "text": "“Yes,” says the crow, “we’ve been sitting here, in this cave, for two months now, with no sunlight, and we are quite lonesome. You look like a friendly fellow. Would you care to stay with us until our awaited traveler returns?”\nYou decide to keep them company and stay with them until the traveler comes back."
-                    }
+                        "text": "You call out for help, but no one hears you. After crying out for about an hour, you decide to explore the hole. It turns out to be a cave system."
+                    },
+                    {
+                        "name": "stayInCave2",
+                        "text": "After exploring for a while, you find an old owl and a crow." 
+                    },
+                    {
+                        "name": "meetGlydeAndClancy",
+                        "text": "“Greetings, little one,” says the owl, “I am Glyde, brother of Soaren. And this crow sitting in front of me is Clancy, my companion. We have been waiting for someone important to arrive.”" 
+                    },
+                    {
+                        "name": "clancy",
+                        "text": "“Yes,” says the crow, “we’ve been sitting here, in this cave, for two months now, with no sunlight, and we are quite lonesome. You look like a friendly fellow. Would you care to stay with us until our awaited traveler returns?”"
+                    },
+                    {
+                        "name": "ending3",
+                        "text": "You agree and decide to keep them company and stay with them until the traveler comes back. You don't know however, who that traveller is, and how long you will wait for him to return."
+                    },
                     ],
                 
                 // Upon choosing the "follow" option from finalActions, the user will see this text:
