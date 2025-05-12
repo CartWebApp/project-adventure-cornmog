@@ -323,8 +323,8 @@ a:focus{
           font-size: 10px;
      }
     #imageBox {
-        width: 30vh;
-        height: 40vw;
+        width: 32vh;
+        height: 42vh;
         background-size: contain; /* Ensure the image scales properly */
     }
 
