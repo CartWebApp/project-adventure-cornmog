@@ -323,7 +323,7 @@ a:focus{
      }
     #imageBox {
         width: 32vh;
-        height: 42vh;
+        height: 21vh;
         background-size: contain; /* Ensure the image scales properly */
     }
 
