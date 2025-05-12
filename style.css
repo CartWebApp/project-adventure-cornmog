@@ -304,7 +304,7 @@ a:focus{
      flex-direction: column;
 }
 
-@media screen and (min-width: 800px) {
+@media screen and (min-width: 800px) and (max-width: 1800px) {
      #gameTitle{
           font-size: 60px;
           padding: 5rem;
@@ -320,14 +320,17 @@ a:focus{
           padding: 0.3rem;
           font-size: 10px;
      }
-     #imageBox{
-          height: 40vh;
-          width: 90vw;
-     }
-     #dialogueBox{
-          width: 80vw;
-          padding: 1rem;
-     }
+    #imageBox {
+        height: 50vh;
+        width: 40vw;
+        background-size: contain; /* Ensure the image scales properly */
+        background-position: center;
+    }
+
+    #dialogueBox {
+        width: 80vw;
+        margin-top: 3rem;
+    }
      #act {
           width: 100%;
           margin-bottom: 1rem;
