@@ -16,6 +16,13 @@
 }
 
 
+#text {
+     color: white;
+     font-size: x-large;
+     font-family: "Pixelify Sans", sans-serif;
+}
+
+
 /* This contains the title color and its shadow */
 #gameTitle{
      display: flex;
@@ -330,8 +337,12 @@ a:focus{
         width: 70vw;
         margin-top: 3rem;
         border-top: 5px solid white;
-        font-size: small;
     }
+
+    #text {
+     font-size: small;
+     }
+
      #act {
           width: 100%;
           margin-bottom: 1rem;
