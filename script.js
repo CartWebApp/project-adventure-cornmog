@@ -1,7 +1,4 @@
-localStorage.clear();
-console.log("localStorage cleared.");
-
-//   ~STORY LOGIC~
+  //   ~STORY LOGIC~
     const story = {
          activeText: null, // This will be set to the current text array
          currentSceneIndex: 0, //Track the current scene index
@@ -68,15 +65,15 @@ console.log("localStorage cleared.");
             gameText: {
                 "introText": [
                     {
-                      "name": "introText1",
+                      "name": "introText",
                       "text": "Your name is Red. You are a redwing bird who lives in a forest full of other redwing families. Your father and brother go on a quest with a flock of scout birds to find a safe place to migrate."
                     },
                     {
-                      "name": "introText2",
+                      "name": "introText",
                       "text": "The squadron does not return for two months. Your mother is worried about your father and brother. Rumors spread throughout the forest about the missing redwings."
                     },
                     {
-                      "name": "introText3",
+                      "name": "introText",
                       "text": "One day, an owl arrives. He flies down to your nest and greets you and your mother. The owl then tells you that he knows where your father and brother are and calls you to go with him and find them:"
                     },
                     {
@@ -348,7 +345,7 @@ console.log("localStorage cleared.");
                     {
                     "name": "soarenMountain",
                     "text": "'We're almost there, little one. We just have to go through this cave. The mountain is too high for us to go above or around it, so we must go through. Are you ready?' (Choose an option from ACT)",
-                    choices: [["Enter", "enterTheCave"]]
+                    choices: [["Enter the cave", "enterTheCave"]]
                     }
                 ],
 
@@ -392,7 +389,7 @@ console.log("localStorage cleared.");
                     {
                     "name": "soarenMountain",
                     "text": "'We're almost there, little one. We just have to go through this cave. The mountain is too high for us to go above or around it, so we must go through. Are you ready?' (Choose an option from ACT)",
-                    choices: [["Enter", "enterTheCave"]]
+                    choices: [["Enter the cave", "enterTheCave"]]
                     }
                 ],
                 //   If the player chooses "Decline the owl's request" in startChoices, then this text will apply:
@@ -527,7 +524,7 @@ console.log("localStorage cleared.");
             "eatTheSeeds": [
                 {
                     "name": "watchtowerEat",
-                    "text": "You eat the seeds and regain strength. You suddenly feel more alive, like a weight has been taken off your back. (Choose an option from ACT)",
+                    "text": "You eat the seeds and regain strength. You suddenly feel more alive, like a weight has been taken off your back.",
                 },
                     {
                     "name": "watchtowerTalk",
@@ -677,7 +674,7 @@ console.log("localStorage cleared.");
                     "text": "'Don't worry, little one. I will help you solve the-- suddenly, the tarantula shoots a web at Soaren, and he is now attached to the wall.'",
                     },
                     {
-                    "name": "soarenRiddle",
+                    "name": "soarenStuck",
                     "text": "He tries to speak, but his speech is muffled. His beak is stuck in the web.",
                     },
                     {
@@ -783,7 +780,7 @@ console.log("localStorage cleared.");
                 },
                 {
                 "name": "dive",
-                "text": "'The two of you dive down and find a dry place to land with no fire. You find your father, brother, and the rest of the redwing squadron, but they are wounded by strong falcons, and some are even held captive in wooden cages."
+                "text": "The two of you dive down and find a dry place to land with no fire. You find your father, brother, and the rest of the redwing squadron, but they are wounded by strong falcons, and some are even held captive in wooden cages."
                 },
                 {
                 "name": "moveToFam",
@@ -838,35 +835,31 @@ console.log("localStorage cleared.");
                 "text": "They all frantically gather together into a flock, panicking, and fly away. All of the falcons are now gone."
                 },
                 {
-                "name": "climaxVictoryEscape",
+                "name": "crowdGoesWild",
                 "text": "And then… the crowd goes wild. The captive redwings are now free! You saved them all! You are a HERO! Everyone flies to you, lifting you up from the ground and tossing you into the air. The crowd chants: “Hoorah for Little Red! Hoorah for Little Red!”",
                 },
                 {
-                "name": "climaxVictoryEscape",
+                "name": "proud",
                 "text": "“I'm proud of you, son,” says your dad, “You saved us from danger.”",
                 },
                 {
-                "name": "climaxVictoryEscape",
+                "name": "yeahRed",
                 "text": "“Yeah, Red,” says your brother, “That was sick! I didn’t know you were so good at fighting!”",
                 },
                 {
-                "name": "climaxVictoryEscape",
+                "name": "noticeSoaren",
                 "text": "You notice Soaren waking up from his uncouncousness. You jump away from the crowd and come up to him, wondering if he's okay.",
                 },
                 {
-                "name": "climaxVictoryEscape",
+                "name": "soarenWake",
                 "text": "'I'm all right,' he says, as he gets up. He then calls to the redwings: 'Fellow birds, let's save ourselves! The forest is burning! I can get you all out of here, just follow my lead!' Soaren then gathers up all of the redwings, and together, you all begin to escape the burning forest.",
                 },
                 {
-                "name": "climaxVictoryEscape",
-                "text": "'I'm all right,' he says, as he gets up. He then calls to the redwings: 'Fellow birds, let's save ourselves! The forest is burning! I can get you all out of here, just follow my lead!' Soaren then gathers up all of the redwings, and together, you all begin to escape the burning forest.",
-                },
-                {
-                    "name": "finalVerdict",
+                    "name": "flockRush",
                     "text": "Soaren directs everyone to follow his movements: “This way!” he shouts, as you approach the exit. You are following close behind everybody, and your brother and father are right in front of you. Suddenly, a colossal tree begins to fall on everyone."
                 },
                 {
-                    "name": "finalVerdict",
+                    "name": "soarenShoutHurry",
                     "text": "“HURRY!” shouts the owl, “WE CAN STILL MAKE IT!” Everybody gets away, to the other side, but you are behind everybody, trying the best you can to get close to the group, but you are too slow."
                 },
                 {
@@ -885,7 +878,7 @@ console.log("localStorage cleared.");
              ],
 
              "talons":[
-                    {
+                {
                 "name": "hit",
                 "text": "You jump up and do multiple quick, sharp slashes at the falcons. You are so quick that the falcons cannout fight back. You deal quite a lot of damage to them; they are now bruised and wounded." 
                 },
@@ -902,35 +895,31 @@ console.log("localStorage cleared.");
                 "text": "They all frantically gather together into a flock, panicking, and fly away. All of the falcons are now gone."
                 },
                 {
-                "name": "climaxVictoryEscape",
+                "name": "crowdGoesWild",
                 "text": "And then… the crowd goes wild. The captive redwings are now free! You saved them all! You are a HERO! Everyone flies to you, lifting you up from the ground and tossing you into the air. The crowd chants: “Hoorah for Little Red! Hoorah for Little Red!”",
                 },
                 {
-                "name": "climaxVictoryEscape",
+                "name": "proud",
                 "text": "“I'm proud of you, son,” says your dad, “You saved us from danger.”",
                 },
                 {
-                "name": "climaxVictoryEscape",
+                "name": "yeahRed",
                 "text": "“Yeah, Red,” says your brother, “That was sick! I didn’t know you were so good at fighting!”",
                 },
                 {
-                "name": "climaxVictoryEscape",
+                "name": "noticeSoaren",
                 "text": "You notice Soaren waking up from his uncouncousness. You jump away from the crowd and come up to him, wondering if he's okay.",
                 },
                 {
-                "name": "climaxVictoryEscape",
+                "name": "soarenWake",
                 "text": "'I'm all right,' he says, as he gets up. He then calls to the redwings: 'Fellow birds, let's save ourselves! The forest is burning! I can get you all out of here, just follow my lead!' Soaren then gathers up all of the redwings, and together, you all begin to escape the burning forest.",
                 },
                 {
-                "name": "climaxVictoryEscape",
-                "text": "'I'm all right,' he says, as he gets up. He then calls to the redwings: 'Fellow birds, let's save ourselves! The forest is burning! I can get you all out of here, just follow my lead!' Soaren then gathers up all of the redwings, and together, you all begin to escape the burning forest.",
-                },
-                {
-                    "name": "finalVerdict",
+                    "name": "flockRush",
                     "text": "Soaren directs everyone to follow his movements: “This way!” he shouts, as you approach the exit. You are following close behind everybody, and your brother and father are right in front of you. Suddenly, a colossal tree begins to fall on everyone."
                 },
                 {
-                    "name": "finalVerdict",
+                    "name": "soarenShoutHurry",
                     "text": "“HURRY!” shouts the owl, “WE CAN STILL MAKE IT!” Everybody gets away, to the other side, but you are behind everybody, trying the best you can to get close to the group, but you are too slow."
                 },
                 {
@@ -942,6 +931,10 @@ console.log("localStorage cleared.");
                     "text": "You now have three options: you can either get back and fly in the opposite direction, away from the flock; you can plunge down into the hole beneath you, or you can follow the rest and cross to the other side. What will you do?",
                     choices: [["Follow the flock", "follow"], ["Plunge down into the hole", "plungeDown"], ["Get back", "getBack"]]
                 },
+                // TEXT
+                // {
+                //     "“I knew you could do it, little redwing,” says Soaren, “after everything we’ve been through together, this was one of the greatest battles we’ve ever fought. Well done!”\nAs the crowd thanks you, you are reminded of the fact that the tall trees surrounding you are still burning. They are like tall towers, imposing themselves over you and your friends.\nAnd then, realization hits you… the trees are collapsing. \n“THE TREES!” shouts Featherfoot “THEY ARE FALLING ON US!”\nThe flock starts to panic, but in the same instant, everyone goes airborne.\n“Hurry, son!” your father shouts. \nYou follow suit.\nEvery tree in the forest is now crashing, one by one. However, your flock is led by Soaren, who is a master at maneuvering. He directs everyone to follow his movements:\n“This way!” he shouts, as you approach the exit.\nYou are following close behind everybody, and your brother and father are right in front of you. Suddenly, a colossal conifer begins to topple over everyone.\n“HURRY!” shouts the owl, “WE CAN STILL MAKE IT!”\nEverybody gets away, to the other side, but you are behind everybody, trying the best you can to get close to the group, but you are too slow. \nYOU NOW SEE THE TREE FALLING ON YOU. You can still make it across, but you also see a hole in the ground beneath you. \nYOU HAVE SIX SECONDS TO MAKE YOUR NEXT MOVE.\nYou are now presented with three options: you can either get back and fly in the opposite direction, away from the flock; you can plunge down into the hole beneath you, or you can follow the rest and cross to the other side."
+                // }
              ],
 
             "beak":[
@@ -949,7 +942,7 @@ console.log("localStorage cleared.");
                 "name": "hitWithBeak",
                 "text": "You lauch a barrage of beak-pecking madness at the falcons. You hit them over 400 hundred times in a matter of seconds. Your movements are too quick to comprehend, and so you beat up the big bullies." 
                 },
-                {
+               {
                 "name": "fear",
                 "text": "The three falcons are petrified. The stand there for a few moments, and then they start to scream. 'RUN FOR IT!' they say to each other." 
                 },
@@ -962,35 +955,31 @@ console.log("localStorage cleared.");
                 "text": "They all frantically gather together into a flock, panicking, and fly away. All of the falcons are now gone."
                 },
                 {
-                "name": "climaxVictoryEscape",
+                "name": "crowdGoesWild",
                 "text": "And then… the crowd goes wild. The captive redwings are now free! You saved them all! You are a HERO! Everyone flies to you, lifting you up from the ground and tossing you into the air. The crowd chants: “Hoorah for Little Red! Hoorah for Little Red!”",
                 },
                 {
-                "name": "climaxVictoryEscape",
+                "name": "proud",
                 "text": "“I'm proud of you, son,” says your dad, “You saved us from danger.”",
                 },
                 {
-                "name": "climaxVictoryEscape",
+                "name": "yeahRed",
                 "text": "“Yeah, Red,” says your brother, “That was sick! I didn’t know you were so good at fighting!”",
                 },
                 {
-                "name": "climaxVictoryEscape",
+                "name": "noticeSoaren",
                 "text": "You notice Soaren waking up from his uncouncousness. You jump away from the crowd and come up to him, wondering if he's okay.",
                 },
                 {
-                "name": "climaxVictoryEscape",
+                "name": "soarenWake",
                 "text": "'I'm all right,' he says, as he gets up. He then calls to the redwings: 'Fellow birds, let's save ourselves! The forest is burning! I can get you all out of here, just follow my lead!' Soaren then gathers up all of the redwings, and together, you all begin to escape the burning forest.",
                 },
                 {
-                "name": "climaxVictoryEscape",
-                "text": "'I'm all right,' he says, as he gets up. He then calls to the redwings: 'Fellow birds, let's save ourselves! The forest is burning! I can get you all out of here, just follow my lead!' Soaren then gathers up all of the redwings, and together, you all begin to escape the burning forest.",
-                },
-                {
-                    "name": "finalVerdict",
+                    "name": "flockRush",
                     "text": "Soaren directs everyone to follow his movements: “This way!” he shouts, as you approach the exit. You are following close behind everybody, and your brother and father are right in front of you. Suddenly, a colossal tree begins to fall on everyone."
                 },
                 {
-                    "name": "finalVerdict",
+                    "name": "soarenShoutHurry",
                     "text": "“HURRY!” shouts the owl, “WE CAN STILL MAKE IT!” Everybody gets away, to the other side, but you are behind everybody, trying the best you can to get close to the group, but you are too slow."
                 },
                 {
@@ -1002,6 +991,10 @@ console.log("localStorage cleared.");
                     "text": "You now have three options: you can either get back and fly in the opposite direction, away from the flock; you can plunge down into the hole beneath you, or you can follow the rest and cross to the other side. What will you do?",
                     choices: [["Follow the flock", "follow"], ["Plunge down into the hole", "plungeDown"], ["Get back", "getBack"]]
                 },
+                // TEXT
+                // {
+                //     "“I knew you could do it, little redwing,” says Soaren, “after everything we’ve been through together, this was one of the greatest battles we’ve ever fought. Well done!”\nAs the crowd thanks you, you are reminded of the fact that the tall trees surrounding you are still burning. They are like tall towers, imposing themselves over you and your friends.\nAnd then, realization hits you… the trees are collapsing. \n“THE TREES!” shouts Featherfoot “THEY ARE FALLING ON US!”\nThe flock starts to panic, but in the same instant, everyone goes airborne.\n“Hurry, son!” your father shouts. \nYou follow suit.\nEvery tree in the forest is now crashing, one by one. However, your flock is led by Soaren, who is a master at maneuvering. He directs everyone to follow his movements:\n“This way!” he shouts, as you approach the exit.\nYou are following close behind everybody, and your brother and father are right in front of you. Suddenly, a colossal conifer begins to topple over everyone.\n“HURRY!” shouts the owl, “WE CAN STILL MAKE IT!”\nEverybody gets away, to the other side, but you are behind everybody, trying the best you can to get close to the group, but you are too slow. \nYOU NOW SEE THE TREE FALLING ON YOU. You can still make it across, but you also see a hole in the ground beneath you. \nYOU HAVE SIX SECONDS TO MAKE YOUR NEXT MOVE.\nYou are now presented with three options: you can either get back and fly in the opposite direction, away from the flock; you can plunge down into the hole beneath you, or you can follow the rest and cross to the other side."
+                // }
              ],
              
                 
@@ -1051,7 +1044,7 @@ console.log("localStorage cleared.");
                 // Upon choosing the "plungeDown" option from finalActions, the user will see this text:
                     "plungeDown": [
                     {
-                        "name": "meetGlydeAndClancy",
+                        "name": "plungeIntoHoleYes",
                         "text": "You plunge down into the hole beneath you. The tree falls with a loud thump, covering the hole. You are safe inside, but there is no light.",
                     },
                     {
@@ -1098,6 +1091,130 @@ console.log("localStorage cleared.");
 
             },
 
+            updateImageBox: function (textName = "", imageName = "") {
+                try {
+                    // Map of game text names to image file names
+                    const imageMap = {
+                        // ~INTRO~
+                        "introText": "forest.jpg",
+                        "soarenIntroduction": "Owl.png",
+                        "motherTalk": "mom.jpg",
+                        "soarenAnswer": "Owl.png",
+
+                    //---ROUTE OF ACCEPTANCE---
+                        "acceptStart": "forest.jpg",
+                        "soarenLine1": "Owl.png",
+                        //FIRST FALCON 
+                        "falconFightIntro": "FarCry.png", 
+                        "soarenHelps": "Owl.png",
+                        "falconEvade": "FarCry.png", 
+                        
+                        // TARANTULA
+                        "soarenIntro": "forest.jpg",
+                        "tarantulaFightIntro": "big.png",
+                        "tarantulaEncounter": "small-tarantula-pixel.png",
+                        "soarenRemark": "Owl.png",
+                        "soarenRemarkGust": "Owl.png",
+
+                        //STRONG FALCON
+                        "mountainApproach": "mountain.webp",
+                        "soarenEncouragement": "Owl.png",
+                    //---ROUTE OF ACCEPTANCE---
+
+                    //---CONTEMPLATION AND REJECTING THE CALL
+                        "rejectStart": "forest.jpg",
+                        "contemplationIntro": "forest.jpg",
+
+                        "falconAmbushDuringContemplation": "FarCry.png",
+                        "owlRescue": "Owl.png",
+
+                        // WATCHTOWER SCENE
+                        "wakeUpScene": "watchtower.jpg.png",
+                        "watchtowerEat": "seeds2.avif",
+                        "watchtowerTalk": "Owl.png",
+
+                        "peacefulFlight": "forest-night.png",
+                        "soarenClarifiesLocation": "Owl.png",
+
+                        
+                        // APPROACH MOUNTAIN
+                        "mountain1": "mountain.webp",
+                        "soarenMountain": "Owl.png",
+
+                        // MERGING STRONG FALCON FIGHT
+                        "strongFalconBattleIntro": "Thundercloud.png",
+                        "soarenProtection": "Owl.png",
+                        "soarenRemark3": "Owl.png",
+                        "shreikStop": "Thundercloud.png",
+                        "soarenResponse5": "Owl.png",
+
+                        // CAVE SCENE
+                        "caveArrival": "cave.png",
+                        "exploreCave": "book.jpg",
+                        "soarenTalkCave": "Owl.png",
+                        "giantTarantulaIntro": "cave.png",
+                        "giantTarantulaBeforeYou": "Giant-Tarantula-pixel.png",
+                        "soarenRiddle": "Owl.png",
+                        "soarenStuck": "cobweb.jpg",
+                        "tarantulaYourOnYourOwn": "Giant-Tarantula-pixel.png",
+                        "soarenThanks": "Owl.png",
+                        "youEscape": "cave.png",
+
+                        // CLIMAX
+                        "exit": "bunring.png", 
+                        "dialogue": "two.png",
+                        "climaxFalconTrio": "three-falcons.webp",
+                        "soarenDisrespect": "Owl.png",
+                        "ohNo": "two.png",
+                        "falconsAreGettingTHere": "three-falcons.webp",
+                        "letItOUt": "redwing.png",
+                        "fear": "three-falcons.webp",
+                        "screamFalcons": "fflock.png",
+                        "crowdGoesWild": "crowd-goes-wild.webp",
+                        "proud": "two.png",
+                        "soarenWake": "Owl.png",
+                        "flockRush": "escape.jpg",
+                        "finalVerdict": "fallingTree.png",
+                        "hit": "redwing.png",
+                        "hitWithBeak": "redwing.png",
+
+                        // GET BACK
+                        "fireSilence1": "silence.avif",
+                        "openEyes": "fireSilence.webp",
+                        "falconVoice": "fire-falcon.png",
+                        "faintAgain": "silence.avif",
+
+                        // PLUNGE DOWN
+                        "plungeIntoHoleYes": "silence.avif",
+                        "stayInCave": "cave2.png",
+                        "stayInCave2": "Stcuk_In_a_whole.png",
+                        // FOLLOW
+                        "followEnding1": "escape.jpg",
+                        "followEnding2": "forest.jpg"
+                    };
+
+                    // Validate textName and imageName
+                    if (!textName && !imageName) {
+                        console.warn("Both textName and imageName are missing. No image will be updated.");
+                        return;
+                    }
+
+                    // Allow customization: override the default image if a specific imageName is provided
+                    const selectedImage = imageName || imageMap[textName];
+
+                    // Get the imageBox element
+                    const imageBox = document.getElementById("imageBox");
+
+                    // Update the background image of the imageBox
+                    if (selectedImage) {
+                        imageBox.style.backgroundImage = `url('img/${selectedImage}')`;
+                    } 
+                } catch (error) {
+                    console.error("Error in updateImageBox:", error);
+                }
+            },
+            
+
             writeText: function () {
                 const currentArray = this.activeText || this.gameText.introText;
                 console.log("Current activeText:", this.activeText); // Debugging log
@@ -1110,6 +1227,9 @@ console.log("localStorage cleared.");
             
                 const currentEntry = currentArray[this.textIndex];
                 console.log("Displaying text for:", currentEntry.name, currentEntry.text); // Debugging log
+
+                // *** Call updateImageBox here ***
+                this.updateImageBox(currentEntry.name); // Dynamically update the image based on the current text node
             
                 // Clear the dialogue box before displaying new text
                 if (this.i === 0) {
@@ -1268,6 +1388,12 @@ document.addEventListener('DOMContentLoaded', function () {
         story.activeText = gameState.activeText || story.gameText.introText; // Fallback to introText if activeText is null
         story.textIndex = gameState.textIndex || 0;
 
+        // Ensure textIndex is within bounds
+        if (!story.activeText || story.textIndex >= story.activeText.length || story.textIndex < 0) {
+            console.warn("textIndex is out of bounds or activeText is invalid. Resetting to 0.");
+            story.textIndex = 0;
+        }
+
         console.log("Game state restored successfully.");
         console.log("Active text:", story.activeText);
         console.log("Text index:", story.textIndex);
@@ -1280,8 +1406,6 @@ document.addEventListener('DOMContentLoaded', function () {
         story.textIndex = 0;
         story.writeText();
     }
-
-    // Other initialization logic... 
 
     // === OTHER BUTTONS ===
     document.getElementById('nextButton').addEventListener('click', function () {
@@ -1299,17 +1423,23 @@ document.addEventListener('DOMContentLoaded', function () {
     actButton.addEventListener("click", function () {
         actOptions.innerHTML = ""; // Clear previous options
         const currentArray = story.activeText || story.gameText.introText;
+
+        // Ensure textIndex is within bounds
+        if (!currentArray || story.textIndex >= currentArray.length || story.textIndex < 0) {
+            console.error("textIndex is out of bounds or currentArray is invalid. Cannot access currentEntry.");
+            return; // Exit the function to prevent further errors
+        }
+
         const currentEntry = currentArray[story.textIndex];
-        console.log(currentEntry.choices); // Check the current entry's choices
+
+        // Ensure currentEntry is defined before accessing its properties
+        if (!currentEntry) {
+            console.error("Invalid textIndex or activeText. Cannot access currentEntry.");
+            return; // Exit the function to prevent further errors
+        }
 
         let optionsToShow = [];
-// FAST --> Your previous code for reference.
-        // Use currentEntry.name to decide which choices to show
-        // if (currentEntry && currentEntry.name === "callToAction") {
-        //     optionsToShow = story.startChoices;
-        // }
 
-// FAST --> I modified this to use the new variable currentEntry.choices instead of the hard-coded story.startChoices
         if (currentEntry && currentEntry.name && story.nodesThatHideContinue.includes(currentEntry.name)) {
             optionsToShow = currentEntry.choices;
         }
@@ -1318,46 +1448,41 @@ document.addEventListener('DOMContentLoaded', function () {
         if (optionsToShow.length > 0) {
             optionsToShow.forEach(choice => {
                 const button = document.createElement("button");
-                // button.textContent = choice;
-// FAST --> I modified this to use the new variable choice[0] to show the text and not both the text and destination key from the new choices array on your story objects.                    
-                button.textContent = choice[0]; 
+                button.textContent = choice[0];
                 button.classList.add("act-option");
                 button.addEventListener("click", () => {
-                    // console.log(`Player chose: ${choice}`);
-// FAST --> I modified this to use choice as an array variable to show the text and destination key from the new choices array on your story objects.                        
                     console.log(`Player chose: ${choice[0]}; goto --> ${choice[1]}`);
-                    // Hide the act display
                     actDisplay.style.display = "none";
-                    
-// FAST --> I modified this section to use the new variable choice[1] to go to the destination key from the choices array on your story objects.
-                    if (story.gameText[choice[1]]) { //check if the destination key exists
+
+                    if (story.gameText[choice[1]]) { // Check if the destination key exists
                         story.activeText = story.gameText[choice[1]]; // Set the active text to the new destination key
                         story.textIndex = 0; // Reset text index
                         story.i = 0; // Reset character index
                         document.getElementById('text').innerHTML = ''; // Clear previous text
                         story.writeText(); // Update the active text
                         actButton.classList.add("disabled"); // Disable the act button
-                    } 
+                    }
                 });
                 actOptions.appendChild(button);
             });
-            } else {
-                const empty = document.createElement("button");
-                empty.textContent = "(No actions available)";
-                empty.classList.add("act-option");
-                actOptions.appendChild(empty);
-            }
+        } else {
+            const empty = document.createElement("button");
+            empty.textContent = "(No actions available)";
+            empty.classList.add("act-option");
+            actOptions.appendChild(empty);
+        }
 
-            if(!actButton.classList.contains("disabled")) { // only proceed if actButton is not disabled
-                if (actDisplay.style.display === "block") {
-                    actDisplay.style.display = "none"; // Hide the act display if it is open
-                } else {
-                    actDisplay.style.display = "block"; // Show the act display if it is hidden
-                }
+        if (!actButton.classList.contains("disabled")) { // Only proceed if actButton is not disabled
+            if (actDisplay.style.display === "block") {
+                actDisplay.style.display = "none"; // Hide the act display if it is open
+            } else {
+                actDisplay.style.display = "block"; // Show the act display if it is hidden
             }
-            closeActDisplay.addEventListener("click", function () {
-                actDisplay.style.display = "none";
-            });
+        }
+
+        closeActDisplay.addEventListener("click", function () {
+            actDisplay.style.display = "none";
         });
     });
-      document.getElementById("darryl-img").addEventListener("click",()=>{})
+});
+    //   document.getElementById("darryl-img").addEventListener("click",()=>{})
